@@ -6,20 +6,49 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:57:31 by msoriano          #+#    #+#             */
-/*   Updated: 2024/06/12 21:31:22 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/06/13 14:18:25 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
-/*
-typedef struct s_files
+
+typedef enum e_in_type
 {
-	int		fdin;
-	char	**outfiles;
-	char	**appoutfiles;
-}	t_files;
-*/
+	F_IN,
+	F_HEREDOC
+}	t_in_type;
+
+typedef enum e_out_type
+{
+	F_OUT,
+	F_APPEND
+}	t_out_type;
+
+
+typedef struct s_infile
+{
+	char		*filename;
+	t_in_type	type;		
+}	t_infile;
+
+typedef struct s_outfile
+{
+	char		*filename;
+	t_out_type	type;		
+}	t_outfile;
+
+typedef struct s_redir
+{
+
+	int			n_in;
+	t_infile	*infiles;		// list of infiles
+	int 		n_out;
+	t_outfile	*outfiles;		// list of outfiles
+}	t_redir;
+
+
+
 //UTILS
 void	my_exit(char *msg);
 char	*find_path(char *cmd, char *env[]);

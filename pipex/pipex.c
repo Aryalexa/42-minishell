@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/06/12 21:31:42 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:25:24 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,25 +20,24 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
-void	my_exec(char *cmd, char *env[])
+/**
+ * diferenciar entre:
+ * - ruta relativa o absoluta (empieza con /)
+ * - si es comando built-in o no
+ * 
+ */
+void	my_exec(t_node node, char *env[])
 {
-	char	**cmd_args;
 	char	*cmd_path;
-	char	*cmd_name;
 
-	if (!cmd | !*cmd)
-		my_exit("unexpected command, null or empty");
-	cmd_args = ft_split(cmd, ' ');
-	cmd_name = cmd_args[0];
-	cmd_path = find_path(cmd_name, env);
+	cmd_path = find_path(node.cmd, env);
 	if (!cmd_path)
 	{
-		ft_free_arrstr(cmd_args);
-		printerr_cur_cmd(cmd);
+		// free??
+		printerr_cur_cmd(node.cmd);
 		my_exit("command path not found");
 	}
-	cmd_args[0] = cmd_path;
-	execve(cmd_args[0], cmd_args, (char *const *)env);
+	execve(node.cmd, node.argv, (char *const *)env);
 	my_exit("exec error");
 }
 
@@ -50,7 +49,7 @@ void	my_exec(char *cmd, char *env[])
  * child: > pipe, exec
  * parent: < pipe, wait
 */
-void	my_piped_exec(char *cmd, char *env[])
+void	my_piped_exec(t_node node, char *env[])
 {
 	int	pipefd[2];
 	int	pid;
@@ -64,7 +63,7 @@ void	my_piped_exec(char *cmd, char *env[])
 	if (pid == 0)
 	{
 		close_and_dup(pipefd, 1);
-		my_exec(cmd, env);
+		my_exec(node, env);
 	}
 	else
 	{
@@ -73,13 +72,13 @@ void	my_piped_exec(char *cmd, char *env[])
 			my_exit("wait error");
 		if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
 		{
-			printerr_cur_cmd(cmd);
+			printerr_cur_cmd(node.cmd);
 			my_exit("child did not success");
 		}
 	}
 }
 
-//void	my_pipex(t_files files, char *cmds[], char *envp[])
+//void	my_pipex(t_node *nodes[], char *envp[])
 void	my_pipex(char *infile, char *outfile, char *cmds[], char *envp[])
 {
 	int		fdin;
