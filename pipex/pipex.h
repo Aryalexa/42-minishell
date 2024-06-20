@@ -47,6 +47,13 @@ typedef struct s_redir
 	t_outfile	*outfiles;		// list of outfiles
 }	t_redir;
 
+typedef struct s_node
+{
+	char 	*cmd;		// one command
+	int 	argc;		// num of args
+	char	**argv;		// list of args
+	t_redir	redir;
+}	t_node;
 
 
 //UTILS

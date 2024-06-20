@@ -10,6 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../pipex/pipex.h"
-#include "../libft/libft.h"
-
+typedef struct s_node
+{
+	char 	*cmd;		// one command
+	int 	argc;		// num of args
+	char	**argv;		// list of args
+	t_redir	redir;
+}	t_node;

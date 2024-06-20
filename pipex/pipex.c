@@ -15,8 +15,9 @@
 // #include <string.h>
 // #include <unistd.h>
 //#include <sys/types.h>
-#include "../../libft/libft.h"
-#include "../pipex.h"
+#include "../libft/libft.h"
+#include "../main/minishell.h"
+#include "pipex.h"
 #include <sys/wait.h>
 #include <fcntl.h>
 
@@ -78,8 +79,43 @@ void	my_piped_exec(t_node node, char *env[])
 	}
 }
 
-//void	my_pipex(t_node *nodes[], char *envp[])
-void	my_pipex(char *infile, char *outfile, char *cmds[], char *envp[])
+void	process_infiles(int n, t_infile	*infiles)
+{
+	int	j;
+	int	fdin;
+
+	j = 0;
+	while (j < n)
+	{
+		if (infiles[j].type == F_HEREDOC)
+		{
+			//heredoc!
+		}
+		else
+		{
+			fdin = open(infiles[j].filename, O_RDONLY);
+			if (fdin < 0)
+				my_exit("input file error at open");
+			dup2(fdin, STDIN_FILENO);
+			close(fdin);
+		}
+		j++;
+	}
+}
+
+void	my_pipex(t_node nodes[], char *envp[])
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (&nodes[i])
+	{
+		i++;
+	}
+}
+
+void	my_pipex2(char *infile, char *outfile, char *cmds[], char *envp[])
 {
 	int		fdin;
 	int		fdout;
@@ -92,14 +128,15 @@ void	my_pipex(char *infile, char *outfile, char *cmds[], char *envp[])
 	close(fdin);
 	i = 0;
 	while (cmds[i] && cmds[i + 1])
-		my_piped_exec(cmds[i++], envp);
+		my_piped_exec2(cmds[i++], envp);
 	fdout = open(outfile, O_RDWR | O_CREAT, 0777);
 	if (fdout < 0)
 		my_exit("output file error at open");
 	dup2(fdout, STDOUT_FILENO);
 	close(fdout);
-	my_exec(cmds[i], envp);
+	my_exec2(cmds[i], envp);
 }
+
 /*
 int	main(int argc, char *argv[], char *envp[])
 {
