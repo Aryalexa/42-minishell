@@ -15,7 +15,7 @@
 
 
 
-/* Función para comparar env y envp */
+/* Compares env and envp */
 int compare_env(char **env, char **envp) 
 {
     int i;
@@ -59,7 +59,7 @@ int	main(int argc, char *argv[], char *envp[])
     
     env = create_env(envp);
 
-    /* Comparar envs */
+    /* Condition that compares envs */
     if (compare_env(env, envp)) 
         printf("env y envp son iguales.\n");
     else
