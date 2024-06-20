@@ -7,22 +7,24 @@ CFLAGS	= -Wall -Wextra -Werror $(FT_SAN)
 AR		= ar -rcs
 RM		= /bin/rm -rf
 
-NAME_S	= pipex
+NAME	= minishell
 
-SRCS_S	=	src/pipex.c \
-			src/utils.c
+SRCS_S	=	builtin/echo.c \
+			main/main.c \
+			pipex/pipex.c \
+			pipex/utils.c
 
 OBJS_S	=  $(SRCS_S:.c=.o)
 
-LIBFT_PATH  = ../libft
+LIBFT_PATH  = libft
 LIBFT	= $(LIBFT_PATH)/libft.a
 
-all:		$(NAME_S) 
+all:		$(NAME) 
 
 
-${NAME_S}: ${OBJS_S}
+${NAME}: ${OBJS_S}
 	@${MAKE} -C $(LIBFT_PATH)
-	@${CC} ${CFLAGS} $(OBJS_S) $(LIBFT) -o ${NAME_S}
+	@${CC} ${CFLAGS} $(OBJS_S) $(LIBFT) -o ${NAME}
 
 # bonus:		$(NAME_C)
 
@@ -38,7 +40,7 @@ clean:
 
 fclean:		clean
 			make -C $(LIBFT_PATH) fclean
-			$(RM) $(NAME_S)
+			$(RM) $(NAME)
 
 re:			fclean all
 

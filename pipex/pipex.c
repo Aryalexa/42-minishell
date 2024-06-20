@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/06/13 13:25:24 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/06/21 01:04:50 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,31 +15,47 @@
 // #include <string.h>
 // #include <unistd.h>
 //#include <sys/types.h>
-#include "../libft/libft.h"
-#include "../main/minishell.h"
 #include "pipex.h"
 #include <sys/wait.h>
 #include <fcntl.h>
 
+
+
 /**
  * diferenciar entre:
  * - ruta relativa o absoluta (empieza con /)
- * - si es comando built-in o no
+ * - si es relativo: si es comando built-in o no
+ * - argv[0] falta
  * 
  */
-void	my_exec(t_node node, char *env[])
+void	my_exec(t_cmdnode node, char *env[])
 {
-	char	*cmd_path;
+	char		*cmd_path;
+	const FP	built_ins[1] = {&exec_echo};
+	const char	built_ins_names[7][7] = {"echo", "cd", "pwd", "export",
+		"unset", "env", "exit"};
+	int			i;
 
-	cmd_path = find_path(node.cmd, env);
-	if (!cmd_path)
+	if (node.cmd[0] == '/')
+		execve(node.cmd, node.argv, (char *const *)env);
+	else
 	{
-		// free??
-		printerr_cur_cmd(node.cmd);
-		my_exit("command path not found");
+		i = 0;
+		while (i < 7)
+		{
+			if (ft_strcmp(node.cmd, (char *)built_ins_names[i]) == 0)
+			{
+				built_ins[i](node, env);
+				return ;
+			}
+			i++;
+		}
+		cmd_path = find_path(node.cmd, env);
+
+		if (!cmd_path)
+			exit(1); //my_exit("command path not found");
+		execve(cmd_path, node.argv, (char *const *)env);
 	}
-	execve(node.cmd, node.argv, (char *const *)env);
-	my_exit("exec error");
 }
 
 /**
@@ -50,17 +66,17 @@ void	my_exec(t_node node, char *env[])
  * child: > pipe, exec
  * parent: < pipe, wait
 */
-void	my_piped_exec(t_node node, char *env[])
+void	my_piped_exec(t_cmdnode node, char *env[])
 {
 	int	pipefd[2];
 	int	pid;
 	int	status;
 
 	if (pipe(pipefd) == -1)
-		my_exit("pipe could not be created");
+		exit(1); //my_exit("pipe could not be created");
 	pid = fork();
 	if (pid < 0)
-		my_exit("fork error");
+		exit(1); //my_exit("fork error");
 	if (pid == 0)
 	{
 		close_and_dup(pipefd, 1);
@@ -73,29 +89,38 @@ void	my_piped_exec(t_node node, char *env[])
 			my_exit("wait error");
 		if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
 		{
-			printerr_cur_cmd(node.cmd);
-			my_exit("child did not success");
+			exit(1);////printerr_cur_cmd(node.cmd); // error handlingmy_exit("child did not success");
 		}
 	}
 }
 
 void	process_infiles(int n, t_infile	*infiles)
 {
-	int	j;
-	int	fdin;
+	int			j;
+	int			fdin;
 
+	///// save heredoc fds
+	j = 0;
+	while (j < n)
+	{
+		if (infiles[j].type == F_HEREDOC)
+			infiles[j].fd = here_doc(infiles[j].filename_delim);
+		j++;
+	}
+	/////
 	j = 0;
 	while (j < n)
 	{
 		if (infiles[j].type == F_HEREDOC)
 		{
-			//heredoc!
+			dup2(infiles[j].fd, STDIN_FILENO);
+			close(infiles[j].fd);
 		}
 		else
 		{
-			fdin = open(infiles[j].filename, O_RDONLY);
+			fdin = open(infiles[j].filename_delim, O_RDONLY);
 			if (fdin < 0)
-				my_exit("input file error at open");
+				my_exit("*input file error at open");
 			dup2(fdin, STDIN_FILENO);
 			close(fdin);
 		}
@@ -103,60 +128,39 @@ void	process_infiles(int n, t_infile	*infiles)
 	}
 }
 
-void	my_pipex(t_node nodes[], char *envp[])
+void	process_outfiles(int n, t_outfile *outfiles)
+{
+	int	j;
+	int	fdout;
+
+	j = 0;
+	while (j < n)
+	{
+		if (outfiles[j].type == F_APPEND)
+			fdout = open(outfiles[j].filename,
+					O_RDWR | O_CREAT | O_APPEND, 0777);
+		else
+			fdout = open(outfiles[j].filename,
+					O_RDWR | O_CREAT | O_TRUNC, 0777);
+		if (fdout < 0)
+			my_exit("error at open an outfile");
+		dup2(fdout, STDOUT_FILENO);
+		close(fdout);
+		j++;
+	}
+}
+
+void	my_pipex(int n_nodes, t_cmdnode nodes[], char *env[])
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	while (&nodes[i])
+	while (i < n_nodes)
 	{
+		process_infiles(nodes[i].redir.n_in, nodes[i].redir.infiles);
+		process_outfiles(nodes[i].redir.n_out, nodes[i].redir.outfiles);
+
+		my_exec(nodes[i], env);
 		i++;
 	}
-}
-
-void	my_pipex2(char *infile, char *outfile, char *cmds[], char *envp[])
-{
-	int		fdin;
-	int		fdout;
-	int		i;
-
-	fdin = open(infile, O_RDONLY);
-	if (fdin < 0)
-		my_exit("input file error at open");
-	dup2(fdin, STDIN_FILENO);
-	close(fdin);
-	i = 0;
-	while (cmds[i] && cmds[i + 1])
-		my_piped_exec2(cmds[i++], envp);
-	fdout = open(outfile, O_RDWR | O_CREAT, 0777);
-	if (fdout < 0)
-		my_exit("output file error at open");
-	dup2(fdout, STDOUT_FILENO);
-	close(fdout);
-	my_exec2(cmds[i], envp);
-}
-
-/*
-int	main(int argc, char *argv[], char *envp[])
-{
-	t_files files;
-
-	if (argc >= 2)
-		my_pipex(files, &argv[1], envp);
-}
-*/
-
-int	main(int argc, char *argv[], char *envp[])
-{
-	char	*outfile;
-
-	if (argc >= 5)
-	{
-		outfile = argv[argc - 1];
-		argv[argc - 1] = NULL;
-		my_pipex(argv[1], outfile, &argv[2], envp);
-	}
-	else
-		ft_printf("Usage: ./pipex infile cmd1 cmd2 [.. cmdn] outfile");
 }
