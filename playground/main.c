@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:22:41 by marvin            #+#    #+#             */
-/*   Updated: 2024/06/20 12:32:03 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/03 19:33:56 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //#include "../main/minishell.h"
-#include "../libft/libft.h"
+#include "../1_libft/libft.h"
 
 
 
