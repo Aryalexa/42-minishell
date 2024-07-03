@@ -161,6 +161,6 @@ int main()
 
 
 /**
- * gcc 4_parsing/parsing.c 3_error/error.c 1_libft/libft.a 
+ * gcc 5_parsing/parsing.c 3_error/error.c 1_libft/libft.a 
 
  */
