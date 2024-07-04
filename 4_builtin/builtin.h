@@ -4,6 +4,6 @@
 #include "../2_structs/structs.h"
 
 void    exec_echo(t_cmdnode node, char *env[]);
-
+void    expand(char *val);
 
 #endif

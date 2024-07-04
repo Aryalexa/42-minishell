@@ -2,144 +2,10 @@
 
 #include "parsing.h"
 
-/**
- * return the word without wrapping quotes
- */
-char	*consume_quote(const char *input, int *i)
+void print_tokens(t_token *tokens, int n)
 {
-	char	*word;
-	char	q;
-	int		j;
-
-	q = input[*i];
-	j = *i + 1;
-	while (input[j] && input[j] != q)
-		j++;
-	if (input[j] == q)
-	{
-		word = ft_strndup(&input[*i + 1], j - *i - 1);
-		*i = j;
-		if (!word)
-			perror_exit("strndup failed.\n"); //
-		return (word);
-	}
-	perror_exit("quote not finished.\n");
-}
-
-char	*consume_word(const char *input, int *i)
-{
-	char	*word;
-	int		j;
-
-	j = *i;
-	while (input[j] && !ft_isspace(input[j]))
-		j++;
-	word = ft_strndup(&input[*i], j - *i);
-	*i = j;
-	return (word);
-}
-
-/**
- * ", ', $
- * 
- */
-int lexer_aux1(const char *input, t_token *tokens, int *_i, int idx)
-{
-	int	i;
-
-	i = *_i;
-	if (input[i] == '"')
-	{
-		tokens[idx].type = WORD_Q;
-		tokens[idx].val = consume_quote(input, &i);
-		i++;
-	}
-	else if (input[i] == '\'')
-	{
-		tokens[idx].type = WORD;
-		tokens[idx].val = consume_quote(input, &i);
-		i++;
-	}
-	else if (input[i] == '$')
-	{
-		i++;
-		tokens[idx].type = ENVAR;
-		tokens[idx].val = consume_word(input, &i);
-	}
-	idx++;
-	*_i = i;
-	return (idx);
-}
-
-int	lexer_aux2(const char *input, t_token *tokens, int *_i, int idx)
-{
-	int	i;
-
-	i = *_i;
-	if (input[i] == '<')
-	{
-		if (input[++i] == '<')
-		{
-			tokens[idx].type = TKN_HRDC;
-			i++;
-		}
-		else
-			tokens[idx].type = TKN_LT;
-	}
-	else if (input[i] == '>')
-	{
-		if (input[++i] == '>')
-		{
-			tokens[idx].type = TKN_APPD;
-			i++;
-		}
-		else
-			tokens[idx].type = TKN_GT;
-	}
-	*_i = i;
-	return (++idx);
-}
-
-int	lexer(const char *input, t_token *tokens)
-{
-	int	i;
-	int	idx;
-
-	i = 0;
-	idx = 0;
-	while (input[i])
-	{
-		while (ft_isspace(input[i]))
-			i++;
-		ft_printf("%i:%c\n", i, input[i]);
-		if (input[i] == '"' || input[i] == '\'' || input[i] == '$')
-			idx = lexer_aux1(input, tokens, &i, idx);
-		else if (input[i] == '|')
-		{
-			tokens[idx++].type = TKN_PIPE;
-			i++;
-		}
-		else if (input[i] == '<' || input[i] == '>')
-			idx = lexer_aux2(input, tokens, &i, idx);
-		else if (input[i])
-		{
-			tokens[idx].type = WORD;
-			tokens[idx++].val = consume_word(input, &i);
-		}
-	}
-	return (idx);
-}
-
-void main_parser()
-{
-
-	char *input = "  <in  \"'ls$USER'\" 'arg1 '$arg2'  |  543 'arg3' =fgf >> appendhere we $fd < file1 <<lim arg   ";
-	ft_printf("%c\n",input[0]);
-	t_token tokens[MAX_TKNS];
-
-	int n = lexer(input, tokens);
 	int i = 0;
-	ft_printf("tokens %i\n", n);
+	ft_printf("#tokens %i\n", n);
 	while (i < n)
 	{
 		ft_printf("%i:", i);
@@ -151,6 +17,75 @@ void main_parser()
 		ft_printf("\n");
 		i++;
 	}
+}
+
+void print_nodes(t_cmdnode *nodes, int n)
+{
+	int i = 0;
+	int j;
+	ft_printf("#nodes %i----\n", n);
+	while (i < n)
+	{
+		ft_printf("nodes #%i\n", i);
+
+		// cmd
+		if (nodes[i].cmd)
+			ft_printf("cmd:%s\n", nodes[i].cmd);
+		else
+			ft_printf("no cmd\n");
+		// args
+		j = 0;
+		while (j < nodes[i].argc)
+		{
+			ft_printf("arg %i:%s\n", j, nodes[i].argv[j]);
+			j++;
+		}
+		// redirs in
+		j = 0;
+		while (j < nodes[i].redir.n_in)
+		{
+			ft_printf("inf %i:%s", j, nodes[i].redir.infiles[j].filename_delim);
+			if (nodes[i].redir.infiles[j].type == F_HEREDOC)
+				ft_printf("(<<)\n");
+			else if (nodes[i].redir.infiles[j].type == F_IN)
+				ft_printf("(<)\n");
+			else
+				ft_printf("error\n");
+			j++;
+		}
+		// redirs out
+		j = 0;
+		while (j < nodes[i].redir.n_out)
+		{
+			ft_printf("outf %i:%s", j, nodes[i].redir.outfiles[j].filename);
+			if (nodes[i].redir.outfiles[j].type == F_APPEND)
+				ft_printf("(>>)\n");
+			else if (nodes[i].redir.outfiles[j].type == F_OUT)
+				ft_printf("(>)\n");
+			else
+				ft_printf("error\n");
+			j++;
+		}
+
+
+		i++;
+	}
+}
+void main_parser()
+{
+	t_token tokens[MAX_TKNS];
+	t_cmdnode nodes[MAX_CMDS];
+
+	//char *input = "  <in  \"'ls$USER'\" 'arg1 '$arg2'  |  543 'arg3' =fgf >> appendhere we $fd < file1 <<lim arg   ";
+	char *input = " ls . $ass '< inf' | <    inf2 <<a cmd2 > s >s2 >>append arg11";
+	//ft_printf("%c\n",input[0]);
+
+	int n_t = lexer(input, tokens);
+	print_tokens(tokens, n_t);
+
+	int n_n = parse_tokens(tokens, n_t, nodes);
+	print_nodes(nodes, n_n);
+
 
 }
 
@@ -161,6 +96,8 @@ int main()
 
 
 /**
- * gcc 5_parsing/parsing.c 3_error/error.c 1_libft/libft.a 
+ * 
+ * gcc 5_parsing/parsing.c 5_parsing/lexer.c 5_parsing/parser.c 4_builtin/builtin.c 3_error/error.c 1_libft/libft.a
+
 
  */

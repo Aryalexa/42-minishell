@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/03 19:32:06 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/04 12:30:40 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,19 @@
 
 
 # define MAX_CMDS   100
+# define MAX_ARGS   100
 # define MAX_FILES   100
 
 typedef enum e_built_ins
 {
 	ECHO,		// 0
-	CD,		// 1
+	CD,			// 1
 	PWD,		// 2
-	EXPORT,	// 3
-	UNSET,	// 4
+	EXPORT,		// 3
+	UNSET,		// 4
 	ENV,		// 5
-	EXIT		// 6
+	EXIT,		// 6
+	N_BUILTINS
 }	t_built_ins;
 
 typedef enum e_in_type
@@ -69,7 +71,7 @@ typedef struct s_cmdnode
 {
 	char	*cmd;		// one command
 	int		argc;		// num of args
-	char	**argv;		// list of args
+	char	*argv[MAX_ARGS];		// list of args
 	t_redir	redir;
 }	t_cmdnode;
 
