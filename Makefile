@@ -2,6 +2,7 @@ CC		= gcc
 
 # FT_SAN = -fsanitize=address
 FT_SAN 	= 
+EXCFLGS = -lreadline -lncurses
 CFLAGS	= -Wall -Wextra -Werror $(FT_SAN)
 
 AR		= ar -rcs
@@ -9,22 +10,26 @@ RM		= /bin/rm -rf
 
 NAME	= minishell
 
-SRCS_S	=	builtin/echo.c \
-			main/main.c \
-			pipex/pipex.c \
-			pipex/utils.c
+SRCS_S	=	3_error/error.c \
+			4_builtin/builtin.c \
+			4_builtin/echo.c \
+			5_parsing/lexer.c \
+			5_parsing/parser.c \
+			5_parsing/parsing_print.c \
+			6_pipex/pipex.c \
+			6_pipex/utils.c \
+			main/main.c
 
 OBJS_S	=  $(SRCS_S:.c=.o)
 
-LIBFT_PATH  = libft
+LIBFT_PATH  = 1_libft
 LIBFT	= $(LIBFT_PATH)/libft.a
 
 all:		$(NAME) 
 
-
 ${NAME}: ${OBJS_S}
-	@${MAKE} -C $(LIBFT_PATH)
-	@${CC} ${CFLAGS} $(OBJS_S) $(LIBFT) -o ${NAME}
+	${MAKE} -C $(LIBFT_PATH)
+	${CC} ${CFLAGS} $(OBJS_S) $(LIBFT) $(EXCFLGS) -o ${NAME}
 
 # bonus:		$(NAME_C)
 
@@ -44,4 +49,4 @@ fclean:		clean
 
 re:			fclean all
 
-.PHONY:		all clean fclean re pipex bonus
+.PHONY:		all clean fclean re

@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/06/21 01:04:50 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/05 19:25:21 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	my_exec(t_cmdnode node, char *env[])
 
 	if (node.cmd[0] == '/')
 		execve(node.cmd, node.argv, (char *const *)env);
+	// cmd null ???
 	else
 	{
 		i = 0;

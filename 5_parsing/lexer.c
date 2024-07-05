@@ -20,10 +20,11 @@ char	*read_quote(const char *input, int *i)
 		word = ft_strndup(&input[*i + 1], j - *i - 1);
 		*i = j;
 		if (!word)
-			perror_exit("strndup failed.\n");
+			perror_exit("strndup: mem error.");
 		return (word);
 	}
-	perror_exit("quote not finished.\n");
+	my_perror("syntax error: quote not finished.");
+	return (NULL);
 }
 
 char	*read_word(const char *input, int *i)
@@ -32,15 +33,17 @@ char	*read_word(const char *input, int *i)
 	int		j;
 
 	j = *i;
-	while (input[j] && !ft_isspace(input[j]))
+	while (input[j] && !ft_isspace(input[j]) && input[j] != '|')
 		j++;
 	word = ft_strndup(&input[*i], j - *i);
+	if (!word)
+		perror_exit("strndup: mem error.");
 	*i = j;
 	return (word);
 }
 
 /**
- * ", ', $
+ * tokenize ", ', $
  * 
  */
 int	lexer_aux1(const char *input, t_token *tokens, int *_i, int idx)
@@ -65,13 +68,15 @@ int	lexer_aux1(const char *input, t_token *tokens, int *_i, int idx)
 		tokens[idx].type = TKN_ENVAR;
 		tokens[idx].val = read_word(input, &i);
 	}
+	if (tokens[idx].val == NULL)
+		return (-1);
 	idx++;
 	*_i = i;
 	return (idx);
 }
 
 /**
- * < << > >>
+ * tokenize < << > >>
  */
 int	lexer_aux2(const char *input, t_token *tokens, int *_i, int idx)
 {
@@ -102,33 +107,37 @@ int	lexer_aux2(const char *input, t_token *tokens, int *_i, int idx)
 	return (++idx);
 }
 
+void	update_token(t_token *tokens, int t_i, t_tokenType type, char *value)
+{
+	tokens[t_i].type = type;
+	tokens[t_i].val = value;
+}
+
 int	lexer(const char *input, t_token *tokens)
 {
 	int	i;
-	int	idx;
+	int	t_i;
 
 	i = 0;
-	idx = 0;
-	while (input[i])
+	t_i = 0;
+	while (input[i] && t_i != -1)
 	{
 		while (ft_isspace(input[i]))
 			i++;
-		// ft_printf("%i:%c\n", i, input[i]);
 		if (input[i] == '"' || input[i] == '\'' || input[i] == '$')
-			idx = lexer_aux1(input, tokens, &i, idx);
+			t_i = lexer_aux1(input, tokens, &i, t_i);
 		else if (input[i] == '|')
 		{
-			tokens[idx++].type = TKN_PIPE;
+			tokens[t_i++].type = TKN_PIPE;
 			i++;
 		}
 		else if (input[i] == '<' || input[i] == '>')
-			idx = lexer_aux2(input, tokens, &i, idx);
+			t_i = lexer_aux2(input, tokens, &i, t_i);
 		else if (input[i])
-		{
-			tokens[idx].type = TKN_WORD;
-			tokens[idx++].val = read_word(input, &i);
-		}
+			update_token(tokens, t_i++, TKN_WORD, read_word(input, &i));
+		if (t_i >= MAX_TKNS)
+			return (my_perror("error: too many tokens!"), -1);
 	}
-	return (idx);
+	return (t_i);
 }
 

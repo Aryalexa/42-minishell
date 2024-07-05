@@ -1,31 +1,36 @@
+
+
 #include "minishell.h"
 
 
-void main_parser()
+int run_parser(char *input, t_cmdnode *nodes)
 {
-	t_token tokens[MAX_TKNS];
+	int		n_t;
+	int		n_n;
+	t_token	tokens[MAX_TKNS];
 
 	//char *input = "  <in  \"'ls$USER'\" 'arg1 '$arg2'  |  543 'arg3' =fgf >> appendhere we $fd < file1 <<lim arg   ";
-	char *input = " ls . $ass '< inf' | <    inf2 <<a cmd2 > s >s2 >>append arg11";
-	//ft_printf("%c\n",input[0]);
+	//char *input = " ls . $ass '< inf' | <    inf2 <<a cmd2 > s >s2 >>append arg11";
 
-	int n_t = lexer(input, tokens);
-	print_tokens(tokens, n_t);
-
-	int n_n = parse_tokens(tokens, n_t, nodes);
+	n_t = lexer(input, tokens);
+	if (n_t < 0)
+		return (-1);
+	
+	//print_tokens(tokens, n_t);
+	n_n = parse_tokens(tokens, n_t, nodes);
 	print_nodes(nodes, n_n);
-
-
+	return (n_n);
 }
 
-
 /*Begins minishell and checks the input*/
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	char	*input;
-		t_cmdnode nodes[MAX_CMDS];
+	char		*input;
+	t_cmdnode	nodes[MAX_NODES];
+	int			n_nodes;
 
-
+	(void)argc;
+	(void)argv;
 	while (1)
 	{
 		input = readline("minishell> ");
@@ -34,10 +39,14 @@ int main(int argc, char **argv)
 
 		//Ctrl+D and NULL management to exit program
 		//if (input == NULL)
-
-
-		
+		n_nodes = run_parser(input, nodes);
+		// ya tengo los nodos para ejecutar!
+		if (n_nodes < 0)
+			ft_printf("syntax error: no exec\n");
+		else
+			ft_printf("execution call\n");
 		free(input);
 	}
 	return (0);
 }
+

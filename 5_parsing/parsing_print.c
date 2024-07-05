@@ -2,24 +2,30 @@
 
 #include "parsing.h"
 
-void print_tokens(t_token *tokens, int n)
+void	print_token(t_token token)
+{
+	if (token.type > 2)
+		ft_printf("no val");
+	else
+		ft_printf(token.val);
+	ft_printf(" ");
+	ft_printf("%i", token.type);
+	ft_printf("\n");
+}
+
+void	print_tokens(t_token *tokens, int n)
 {
 	int i = 0;
 	ft_printf("#tokens %i\n", n);
 	while (i < n)
 	{
 		ft_printf("%i:", i);
-		if (tokens[i].type > 2)
-			ft_printf("no val");
-		else ft_printf(tokens[i].val);
-		ft_printf(" ");
-		ft_printf("%i", tokens[i].type);
-		ft_printf("\n");
+		print_token(tokens[i]);
 		i++;
 	}
 }
 
-void print_nodes(t_cmdnode *nodes, int n)
+void	print_nodes(t_cmdnode *nodes, int n)
 {
 	int i = 0;
 	int j;
@@ -71,28 +77,7 @@ void print_nodes(t_cmdnode *nodes, int n)
 		i++;
 	}
 }
-void main_parser()
-{
-	t_token tokens[MAX_TKNS];
-	t_cmdnode nodes[MAX_CMDS];
 
-	//char *input = "  <in  \"'ls$USER'\" 'arg1 '$arg2'  |  543 'arg3' =fgf >> appendhere we $fd < file1 <<lim arg   ";
-	char *input = " ls . $ass '< inf' | <    inf2 <<a cmd2 > s >s2 >>append arg11";
-	//ft_printf("%c\n",input[0]);
-
-	int n_t = lexer(input, tokens);
-	print_tokens(tokens, n_t);
-
-	int n_n = parse_tokens(tokens, n_t, nodes);
-	print_nodes(nodes, n_n);
-
-
-}
-
-int main()
-{
-	main_parser();
-}
 
 
 /**

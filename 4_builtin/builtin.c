@@ -2,7 +2,8 @@
 
 #include "builtin.h"
 
-void    expand(char *val)
+void	expand(char *val)
 {
-    ft_printf("expand not implemented\n");
+	(void) val;
+	ft_printf("expand not implemented\n");
 }

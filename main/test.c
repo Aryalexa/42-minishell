@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:44:11 by msoriano          #+#    #+#             */
-/*   Updated: 2024/06/21 01:00:56 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/05 19:15:58 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /**
  * ls 
  */
-void    crea_ls(t_cmdnode nodes[MAX_CMDS])
+void    crea_ls(t_cmdnode nodes[MAX_NODES])
 {
     nodes[0].cmd = "ls";
     nodes[0].argc = 1;
@@ -25,7 +25,7 @@ void    crea_ls(t_cmdnode nodes[MAX_CMDS])
     
 }
 
-void    crea_ls_out(t_cmdnode nodes[MAX_CMDS])
+void    crea_ls_out(t_cmdnode nodes[MAX_NODES])
 {
     nodes[0].cmd = "ls";
     nodes[0].argc = 1;
@@ -37,7 +37,7 @@ void    crea_ls_out(t_cmdnode nodes[MAX_CMDS])
     
 }
 
-void    crea_cmd_solo(t_cmdnode nodes[MAX_CMDS])
+void    crea_cmd_solo(t_cmdnode nodes[MAX_NODES])
 {
     //nodes[0].cmd = "echo";
     nodes[0].cmd = "/usr/bin/echo";
@@ -51,7 +51,7 @@ void    crea_cmd_solo(t_cmdnode nodes[MAX_CMDS])
 /*
 << a cat
 */
-void    crea_heredoc(t_cmdnode nodes[MAX_CMDS])
+void    crea_heredoc(t_cmdnode nodes[MAX_NODES])
 {
     nodes[0].cmd = "cat";
     nodes[0].argc = 1;
@@ -67,7 +67,7 @@ void    crea_heredoc(t_cmdnode nodes[MAX_CMDS])
  * infiles y outfiles - complicado
  * < f1 < f2 << a wc >> f3 > f4 > f5
  */
-void    crea_inoutfiles(t_cmdnode nodes[MAX_CMDS])
+void    crea_inoutfiles(t_cmdnode nodes[MAX_NODES])
 {
     nodes[0].cmd = "wc";
     nodes[0].argc = 1;
@@ -139,7 +139,7 @@ char **create_env(char *envp2[])
 int	main(int argc, char *argv[], char *envp[])
 {
     char **env;
-    t_cmdnode nodes[MAX_CMDS];
+    t_cmdnode nodes[MAX_NODES];
 
     (void) argc;
     (void) argv;
