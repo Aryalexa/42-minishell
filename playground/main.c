@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:22:41 by marvin            #+#    #+#             */
-/*   Updated: 2024/07/03 19:33:56 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/05 15:24:40 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char **create_env(char *envp2[])
     return(env);
 }
 /*Copies envp and checks its the same*/
-int	main(int argc, char *argv[], char *envp[])
+int	main_env(int argc, char *argv[], char *envp[])
 {
     char **env;
     

@@ -6,11 +6,13 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/03 19:33:51 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/05 15:27:56 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../6_pipex/pipex.h"
+#include "../5_parsing/parsing.h"
+
 
 
 void    perror_exit(char *msg);
