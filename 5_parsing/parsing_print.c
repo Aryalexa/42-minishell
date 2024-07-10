@@ -77,12 +77,3 @@ void	print_nodes(t_cmdnode *nodes, int n)
 		i++;
 	}
 }
-
-
-
-/**
- * 
- * gcc 5_parsing/parsing.c 5_parsing/lexer.c 5_parsing/parser.c 4_builtin/builtin.c 3_error/error.c 1_libft/libft.a
-
-
- */

@@ -14,6 +14,7 @@ SRCS_S	=	3_error/error.c \
 			4_builtin/builtin.c \
 			4_builtin/echo.c \
 			5_parsing/lexer.c \
+			5_parsing/lexer_utils.c \
 			5_parsing/parser.c \
 			5_parsing/parsing_print.c \
 			6_pipex/pipex.c \

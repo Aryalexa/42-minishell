@@ -31,11 +31,14 @@ typedef struct s_token
 	char		*val;
 }	t_token;
 
-
 int		lexer(const char *input, t_token *tokens);
 int		parse_tokens(t_token *tokens, int n_tokens, t_cmdnode *nodes);
 void	print_nodes(t_cmdnode *nodes, int n);
 void	print_tokens(t_token *tokens, int n);
 void	print_token(t_token token);
+char	*read_quote(const char *input, int *i);
+int		is_reserved(char c);
+char	*read_word(const char *input, int *i);
+
 
 #endif

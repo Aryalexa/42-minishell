@@ -33,7 +33,7 @@ int	main(int argc, char **argv)
 	(void)argv;
 	while (1)
 	{
-		input = readline("minishell> ");
+		input = readline(ANSI_COLOR_MAGENTA "minishell> " ANSI_COLOR_RESET);
 		if (input)
 			add_history(input);
 

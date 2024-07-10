@@ -6,8 +6,7 @@ int	check_word_and_vars(t_token token, t_cmdnode *node)
 	if (token.type == TKN_WORD || token.type == TKN_WORD_Q
 		|| token.type == TKN_ENVAR)
 	{
-		if (token.type == TKN_WORD_Q || token.type == TKN_ENVAR)
-			expand(token.val);
+		expand(token.val);
 		if (!node->cmd)
 		{
 			// ft_printf("cmd found: %s\n", token.val); //
