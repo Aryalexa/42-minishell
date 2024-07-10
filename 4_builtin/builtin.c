@@ -6,19 +6,20 @@
 /**
  * return len
  */
-int	expand_dollar(char *code, int *i, char *val)
+int	expand_dollar(char *code, int *i, char **val)
 {
 	if (!code[*i + 1] || ft_isspace(code[*i + 1]))
 	{
-		val = ft_strdup("$");
+		*val = ft_strdup("$");
+		(*i)++;
 		return (1);
 	}
 	// USAR ENV
 	(*i)++;
-	while ((!code[*i] || ft_isspace(code[*i])))
+	while (code[*i] && !ft_isspace(code[*i]))
 		(*i)++;
-	val = ft_strdup("DOLLAR"); //
-	return (ft_strlen(val));
+	*val = ft_strdup("DOLLAR"); //
+	return (ft_strlen(*val));
 }
 
 /**
@@ -33,13 +34,13 @@ int	expand_quotes(char *code, int *i, char	*val)
 	j = 0;
 	start = ++(*i);
 	dollar_val = NULL;
-	val = my_calloc(ft_strchri(&code[*i], '"'), 1);
+	val = my_calloc(ft_strchri(&code[*i], '"') + 1, 1);
 	ft_printf("---expand_quotes\n"); //
 	while (code[*i] != '"')
 	{
 		if (code[*i] == '$')
 		{
-			j += expand_dollar(code, i, dollar_val);
+			j += expand_dollar(code, i, &dollar_val);
 			val = ft_strjoin_inplace(val, dollar_val);
 		}
 		else
@@ -76,11 +77,11 @@ void	expand_token_val(char *code)
 	char	*aux_val;
 	int		j;
 
-	ft_printf("---expanding %s\n", code); //
 	i = 0;
 	j = 0;
-	val = my_calloc(ft_strlen(code), 1);
+	val = my_calloc(ft_strlen(code) + 1 , 1);
 	aux_val = NULL;
+	ft_printf("---begin expanding (%s)\n", code); //
 	while (code[i])
 	{
 		if (code[i] == '"')
@@ -96,13 +97,18 @@ void	expand_token_val(char *code)
 		}
 		else if (code[i] == '$')
 		{
-			j += expand_dollar(code, &i, aux_val);
+			ft_printf("ENTRO\n");
+			j += expand_dollar(code, &i, &aux_val);
+			ft_printf("SALGO %i\n", i);
+			// ft_printf(val);
+			// ft_printf(aux_val);
 			val = ft_strjoin_inplace(val, aux_val);
 		}
 		else
 			val[j++] = code[i++];
+		
 	}
-	ft_printf("end while\n"); //
-	swap_and_free_strings(code, val);
-	ft_printf("---end expanding %s\n", code); //
+	ft_printf("end while. result val (%s)\n", val); //
+	swap_and_free_strings(code, val); // BAD
+	ft_printf("---end expanding (%s)\n", code); //
 }
