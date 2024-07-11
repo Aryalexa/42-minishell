@@ -3,9 +3,9 @@
 #ifndef PARSING_H
 # define PARSING_H
 
-# include "../3_error/error.h"
 # include "../1_libft/libft.h"
 # include "../2_structs/structs.h"
+# include "../3_utils/utils.h"
 # include "../4_builtin/builtin.h"
 
 
@@ -37,7 +37,6 @@ void	print_nodes(t_cmdnode *nodes, int n);
 void	print_tokens(t_token *tokens, int n);
 void	print_token(t_token token);
 char	*read_quote(const char *input, int *i);
-int		is_reserved(char c);
 char	*read_word(const char *input, int *i);
 
 

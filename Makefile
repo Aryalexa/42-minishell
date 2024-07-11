@@ -10,7 +10,8 @@ RM		= /bin/rm -rf
 
 NAME	= minishell
 
-SRCS_S	=	3_error/error.c \
+SRCS_S	=	3_utils/utils.c \
+			3_utils/error.c \
 			4_builtin/builtin.c \
 			4_builtin/echo.c \
 			5_parsing/lexer.c \

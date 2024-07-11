@@ -8,59 +8,74 @@
  */
 int	expand_dollar(char *code, int *i, char **val)
 {
-	if (!code[*i + 1] || ft_isspace(code[*i + 1]))
+	ft_printf("---🍇in:expand_dollar code:%s\n", code);
+
+	if (!code[*i + 1] || is_reserved_all(code[*i + 1]))
 	{
-		*val = ft_strdup("$");
+		ft_printf("----just one dollar!\n");
+		if (is_quote(code[*i + 1]))
+			*val = ft_strdup("");
+		else
+			*val = ft_strdup("$");
 		(*i)++;
+		ft_printf("---🍇out:expand_dollar\n");
 		return (1);
 	}
 	// USAR ENV
 	(*i)++;
-	while (code[*i] && !ft_isspace(code[*i]))
+	while (code[*i] && !is_reserved_all(code[*i]))
+	{
+		ft_printf("--expand_dollar--i:%i code[i]:%c\n", *i, code[*i]);
 		(*i)++;
+	}
 	*val = ft_strdup("DOLLAR"); //
+	ft_printf("---🍇out:expand_dollar val:%s\n", *val);
+
 	return (ft_strlen(*val));
 }
 
 /**
  * return len
  */
-int	expand_quotes(char *code, int *i, char	*val)
+int	expand_quotes(char *code, int *i, char	**val)
 {
-	int		start;
 	int		j;
 	char	*dollar_val;
+	char	q_char;
 
 	j = 0;
-	start = ++(*i);
+	q_char = code[*i];
+	(*i)++;
 	dollar_val = NULL;
-	val = my_calloc(ft_strchri(&code[*i], '"') + 1, 1);
-	ft_printf("---expand_quotes\n"); //
-	while (code[*i] != '"')
+	*val = my_calloc(ft_strchri(&code[*i], q_char) + 1, 1);
+	ft_printf("---🍏in: expand_quotes\n"); //
+	while (code[*i] != q_char)
 	{
-		if (code[*i] == '$')
+		ft_printf("code[*i] en bucle:%c\n", code[*i]);
+		if (q_char == '"' && code[*i] == '$')
 		{
 			j += expand_dollar(code, i, &dollar_val);
-			val = ft_strjoin_inplace(val, dollar_val);
+			*val = ft_strjoin_inplace(*val, dollar_val);
 		}
 		else
-			val[j++] = code[*i++];
+			(*val)[j++] = code[(*i)++];
 	}
-	ft_printf("---expand_quotes\n"); //
-	val = ft_strndup((const char *)&code[start], *i - start);
-	return (ft_strlen(val));
+	(*val)[j] = '\0';
+	(*i)++;
+	ft_printf("---🍏out: expand_quotes, val:%s\n", *val); //
+	return (ft_strlen(*val));
 }
 
 /**
  * s1 new value is the onw s2 is pointing
  * frees old s1 value
  */
-void	swap_and_free_strings(char *s1, char *s2)
+void	swap_and_free_strings(char **s1, char **s2)
 {
 	char	*aux;
 
-	aux = s1;
-	s1 = s2;
+	aux = *s1;
+	*s1 = *s2;
 	free(aux);
 }
 /**
@@ -70,7 +85,7 @@ void	swap_and_free_strings(char *s1, char *s2)
  * - $
  * - no nulo
  */
-void	expand_token_val(char *code)
+void	expand_token_val(char **code)
 {
 	int		i;
 	char	*val;
@@ -79,36 +94,24 @@ void	expand_token_val(char *code)
 
 	i = 0;
 	j = 0;
-	val = my_calloc(ft_strlen(code) + 1 , 1);
-	aux_val = NULL;
-	ft_printf("---begin expanding (%s)\n", code); //
-	while (code[i])
+	val = my_calloc(ft_strlen(*code) + 1, 1);
+	ft_printf("----------------------------begin expanding (%s)\n", *code); //
+	while ((*code)[i])
 	{
-		if (code[i] == '"')
+		if (is_quote((*code)[i]))
 		{
-			j += expand_quotes(code, &i, aux_val);
-			ft_printf("end expand quotes\n"); //
-			ft_printf("ini val %s\n", val); //
-			ft_printf("ini aux_val %s\n", aux_val); //
-
+			j += expand_quotes(*code, &i, &aux_val);
 			val = ft_strjoin_inplace(val, aux_val);
-			ft_printf("joined %s\n", val); //
-
 		}
-		else if (code[i] == '$')
+		else if ((*code)[i] == '$')
 		{
-			ft_printf("ENTRO\n");
-			j += expand_dollar(code, &i, &aux_val);
-			ft_printf("SALGO %i\n", i);
-			// ft_printf(val);
-			// ft_printf(aux_val);
+			j += expand_dollar(*code, &i, &aux_val);
 			val = ft_strjoin_inplace(val, aux_val);
 		}
 		else
-			val[j++] = code[i++];
-		
+			val[j++] = (*code)[i++];
 	}
-	ft_printf("end while. result val (%s)\n", val); //
-	swap_and_free_strings(code, val); // BAD
-	ft_printf("---end expanding (%s)\n", code); //
+	val[j] = '\0';
+	swap_and_free_strings(code, &val);
+	ft_printf("----------------------------end expanding (%s)\n", (*code)); //
 }

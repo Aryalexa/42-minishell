@@ -6,7 +6,9 @@ int	check_word_and_vars(t_token token, t_cmdnode *node)
 	if (token.type == TKN_WORD || token.type == TKN_WORD_Q
 		|| token.type == TKN_ENVAR)
 	{
-		expand_token_val(token.val);
+		ft_printf("token BEFORE: %s, %i\n", token.val, token.type);
+		expand_token_val(&token.val);
+		ft_printf("token AFTER: %s\n", token.val);
 		if (!node->cmd)
 		{
 			// ft_printf("cmd found: %s\n", token.val); //
@@ -31,7 +33,7 @@ int	check_word_and_vars(t_token token, t_cmdnode *node)
 void	read_file(t_token token, t_cmdnode *node, int is_infile)
 {
 	if (token.type == TKN_WORD_Q || token.type == TKN_ENVAR)
-		expand_token_val(token.val);
+		expand_token_val(&token.val);
 	if (is_infile)
 	{
 		ft_printf("infile found: %s\n", token.val);

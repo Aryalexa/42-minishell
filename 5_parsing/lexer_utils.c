@@ -7,16 +7,16 @@ char	*read_quote(const char *input, int *i)
 {
 	char	*word;
 	char	q;
-	int		j;
+	int		final;
 
 	q = input[*i];
-	j = *i + 1;
-	while (input[j] && input[j] != q)
-		j++;
-	if (input[j] == q)
+	final = (*i) + 1 ;
+	while (input[final] && input[final] != q)
+		final++;
+	if (input[final] == q)
 	{
-		word = ft_strndup(&input[*i + 1], j - *i - 1);
-		*i = j;
+		word = ft_strndup(&input[*i], final - *i + 1);
+		*i = final + 1;
 		if (!word)
 			perror_exit("strndup: mem error.");
 		return (word);
@@ -25,41 +25,34 @@ char	*read_quote(const char *input, int *i)
 	return (NULL);
 }
 
-int	is_reserved(char c)
-{
-	if (c == '<' || c == '>' || c == '|')
-		return (1);
-	return (0);
-}
+// char	*dup_clean_simplequotes(const char *str, int len)
+// {
+// 	char	*res;
+// 	int		i;
+// 	int		j;
 
-char	*dup_clean_simplequotes(const char *str, int len)
-{
-	char	*res;
-	int		i;
-	int		j;
-
-	if (ft_strchri(str, '\'') < len && ft_strchri(str, '\'') != -1)
-	{
-		if (len < 0)
-			perror_exit("fatal error 345.");
-		res = (char *)malloc(sizeof(char) * (len - 1));
-		if (!res)
-			perror_exit("malloc: mem error.");
-		i = 0;
-		j = 0;
-		while (str[i] && i < len)
-		{
-			if (str[i] != '\'')
-				res[j++] = str[i++];
-			else
-				i++;
-		}
-		res[j] = '\0';
-		return (res);
-	}
-	else
-		return (ft_strndup(str, len));
-}
+// 	if (ft_strchri(str, '\'') < len && ft_strchri(str, '\'') != -1)
+// 	{
+// 		if (len < 0)
+// 			perror_exit("fatal error 345.");
+// 		res = (char *)malloc(sizeof(char) * (len - 1));
+// 		if (!res)
+// 			perror_exit("malloc: mem error.");
+// 		i = 0;
+// 		j = 0;
+// 		while (str[i] && i < len)
+// 		{
+// 			if (str[i] != '\'')
+// 				res[j++] = str[i++];
+// 			else
+// 				i++;
+// 		}
+// 		res[j] = '\0';
+// 		return (res);
+// 	}
+// 	else
+// 		return (ft_strndup(str, len));
+// }
 
 char	*read_word(const char *input, int *i)
 {
@@ -84,7 +77,7 @@ char	*read_word(const char *input, int *i)
 		my_perror("syntax error: quote not finished.");
 		return (*i = j, NULL);
 	}
-	word = dup_clean_simplequotes(&input[*i], j - *i);
+	word = ft_strndup(&input[*i], j - *i);
 	if (!word)
 		perror_exit("strndup: mem error.");
 	return (*i = j, word);

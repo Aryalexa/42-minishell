@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/05 19:25:21 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/11 11:54:16 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 void	my_exec(t_cmdnode node, char *env[])
 {
 	char		*cmd_path;
-	const FP	built_ins[1] = {&exec_echo};
+	const t_FP	built_ins[1] = {&exec_echo};
 	const char	built_ins_names[7][7] = {"echo", "cd", "pwd", "export",
 		"unset", "env", "exit"};
 	int			i;

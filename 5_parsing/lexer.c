@@ -11,19 +11,7 @@ int	lexer_aux1(const char *input, t_token *tokens, int *_i, int idx)
 	int	i;
 
 	i = *_i;
-	if (input[i] == '"')
-	{
-		tokens[idx].type = TKN_WORD_Q;
-		tokens[idx].val = read_quote(input, &i);
-		i++;
-	}
-	else if (input[i] == '\'')
-	{
-		tokens[idx].type = TKN_WORD;
-		tokens[idx].val = read_quote(input, &i);
-		i++;
-	}
-	else if (input[i] == '$')
+	if (input[i] == '$')
 	{
 		tokens[idx].type = TKN_ENVAR;
 		tokens[idx].val = read_word(input, &i);
@@ -81,13 +69,14 @@ int	lexer(const char *input, t_token *tokens)
 	int	i;
 	int	t_i;
 
+	ft_memset(tokens, '\0', sizeof(t_token) * MAX_TKNS);
 	i = 0;
 	t_i = 0;
 	while (input[i] && t_i != -1)
 	{
 		while (ft_isspace(input[i]))
 			i++;
-		if (input[i] == '"' || input[i] == '\'' || input[i] == '$')
+		if (input[i] == '$')
 			t_i = lexer_aux1(input, tokens, &i, t_i);
 		else if (input[i] == '|')
 		{

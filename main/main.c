@@ -16,7 +16,7 @@ int run_parser(char *input, t_cmdnode *nodes)
 	if (n_t < 0)
 		return (-1);
 	
-	//print_tokens(tokens, n_t);
+	print_tokens(tokens, n_t);
 	n_n = parse_tokens(tokens, n_t, nodes);
 	print_nodes(nodes, n_n);
 	return (n_n);

@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/05 19:37:23 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/11 12:02:14 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
 
-#include "../1_libft/libft.h"
-
+# include "../1_libft/libft.h"
 
 # define MAX_NODES	100
 # define MAX_ARGS	100
@@ -75,6 +74,8 @@ typedef struct s_cmdnode
 	t_redir	redir;
 }	t_cmdnode;
 
-typedef void (*FP) (t_cmdnode node, char *env[]);
+typedef void	(*t_FP) (t_cmdnode node, char *env[]);
+
+
 
 #endif
