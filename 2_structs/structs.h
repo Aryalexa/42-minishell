@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/11 12:02:14 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/15 14:34:20 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@
 typedef enum e_built_ins
 {
 	ECHO,		// 0
-	CD,			// 1
+	EXIT,		// 6
 	PWD,		// 2
 	EXPORT,		// 3
 	UNSET,		// 4
 	ENV,		// 5
-	EXIT,		// 6
+	CD,			// 1
 	N_BUILTINS
 }	t_built_ins;
 

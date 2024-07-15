@@ -2,33 +2,54 @@
 
 #include "minishell.h"
 
+char	**create_env(char *envp2[])
+{
+	char	**env;
+	int		size;
 
-int run_parser(char *input, t_cmdnode *nodes)
+	size = 0;
+	while (envp2[size] != NULL)
+		size++;
+	env = malloc((size + 1) * sizeof(char *));
+	if (!env)
+		return (NULL);
+	size = 0;
+	while (envp2[size] != NULL)
+	{
+		env[size] = strdup(envp2[size]);
+		if (env[size] == NULL)
+			return (NULL);
+		size++;
+	}
+	env[size] = NULL;
+	return (env);
+}
+
+int	run_parser(char *input, t_cmdnode *nodes)
 {
 	int		n_t;
 	int		n_n;
 	t_token	tokens[MAX_TKNS];
 
-	//char *input = "  <in  \"'ls$USER'\" 'arg1 '$arg2'  |  543 'arg3' =fgf >> appendhere we $fd < file1 <<lim arg   ";
-	//char *input = " ls . $ass '< inf' | <    inf2 <<a cmd2 > s >s2 >>append arg11";
-
 	n_t = lexer(input, tokens);
 	if (n_t < 0)
 		return (-1);
-	
-	print_tokens(tokens, n_t);
+	//print_tokens(tokens, n_t);
 	n_n = parse_tokens(tokens, n_t, nodes);
 	print_nodes(nodes, n_n);
 	return (n_n);
 }
 
 /*Begins minishell and checks the input*/
-int	main(int argc, char **argv)
+int	main(int argc, char **argv, char *envp[])
 {
+	char		**env;
 	char		*input;
 	t_cmdnode	nodes[MAX_NODES];
 	int			n_nodes;
 
+
+	env = create_env(envp);
 	(void)argc;
 	(void)argv;
 	while (1)
@@ -44,7 +65,10 @@ int	main(int argc, char **argv)
 		if (n_nodes < 0)
 			ft_printf("syntax error: no exec\n");
 		else
-			ft_printf("execution call\n");
+		{
+			ft_printf(ANSI_COLOR_CYAN "execution call\n" ANSI_COLOR_RESET);
+			my_pipex(n_nodes, nodes, env);
+		}
 		free(input);
 	}
 	return (0);

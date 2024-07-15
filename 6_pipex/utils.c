@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/06/21 00:23:09 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/15 15:04:12 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ char	*find_path(char *cmd, char *env[])
 	int		i;
 	char	**paths;
 	char	*cmd_path;
-	char	*path_i;
 
 	i = 0;
 	while (ft_strnstr(env[i], "PATH", 4) == NULL)
@@ -33,11 +32,10 @@ char	*find_path(char *cmd, char *env[])
 	i = 0;
 	while (paths[i])
 	{
-		path_i = ft_strjoin(paths[i], "/");
-		cmd_path = ft_strjoin(path_i, cmd);
-		free(path_i);
+		ft_strjoin_inplace(&paths[i], "/");
+		cmd_path = ft_strjoin(paths[i], cmd);
 		if (access(cmd_path, F_OK) == 0)
-			return (cmd_path);
+			return (ft_free_arrstr(paths), cmd_path);
 		free(cmd_path);
 		i++;
 	}

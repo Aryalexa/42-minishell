@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 19:47:46 by macastro          #+#    #+#             */
-/*   Updated: 2024/07/10 21:38:45 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/15 14:56:40 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ char	*ft_strjoin(char const *s1, char const *s2)
  * Returns a the same s1 pointer, but now pointing to the concatenation.
  * Memory safe (it makes a free of the previous value);
 */
-char	*ft_strjoin_inplace(char *s1, const char *s2)
+char	*ft_strjoin_inplace(char **s1, const char *s2)
 {
 	char	*joined;
 
-	joined = ft_strjoin(s1, s2);
-	free(s1);
-	s1 = joined;
-	return (s1);
+	joined = ft_strjoin(*s1, s2);
+	free(*s1);
+	*s1 = joined;
+	return (*s1);
 }
 
 /**
@@ -68,5 +68,5 @@ char	*ft_strappendc_inplace(char *s1, const char c)
 		ft_strlcpy(s1, s2, 2);
 		return (s1);
 	}
-	return (ft_strjoin_inplace(s1, s2));
+	return (ft_strjoin_inplace(&s1, s2));
 }

@@ -15,7 +15,6 @@
 typedef enum e_tokenType
 {
 	TKN_WORD,
-	TKN_WORD_Q,
 	TKN_ENVAR,
 	TKN_PIPE,
 	TKN_GT,

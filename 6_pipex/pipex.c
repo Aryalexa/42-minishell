@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/11 11:54:16 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/15 15:05:50 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,19 @@
 #include <fcntl.h>
 
 
+void	child_executes(char *cmd_path, char *argv[], char *env[])
+{
+	int	pid;
+	int	status; // salida!!
+
+	pid = fork();
+	if (pid == -1)
+		perror_exit("error: fork failed.");
+	if (pid == 0)
+		execve(cmd_path, argv, (char *const *)env);
+	else
+		wait(&status);
+}
 
 /**
  * diferenciar entre:
@@ -30,19 +43,21 @@
  */
 void	my_exec(t_cmdnode node, char *env[])
 {
-	char		*cmd_path;
-	const t_FP	built_ins[1] = {&exec_echo};
-	const char	built_ins_names[7][7] = {"echo", "cd", "pwd", "export",
-		"unset", "env", "exit"};
 	int			i;
+	char		*cmd_path;
+	const t_FP	built_ins[2] = {&exec_echo, &exec_exit};
+	const char	built_ins_names[7][7] = {"echo", "exit", "pwd",
+		"export", "unset", "env", "cd"};
 
+	debug("-- begin execution --\n");
+	if (!node.cmd)
+		return ;
 	if (node.cmd[0] == '/')
-		execve(node.cmd, node.argv, (char *const *)env);
-	// cmd null ???
+		child_executes(node.cmd, node.argv, env);
 	else
 	{
 		i = 0;
-		while (i < 7)
+		while (i < 7) // number of builtins
 		{
 			if (ft_strcmp(node.cmd, (char *)built_ins_names[i]) == 0)
 			{
@@ -51,11 +66,16 @@ void	my_exec(t_cmdnode node, char *env[])
 			}
 			i++;
 		}
+		ft_printf("executing %s \n", node.cmd);
 		cmd_path = find_path(node.cmd, env);
 
 		if (!cmd_path)
-			exit(1); //my_exit("command path not found");
-		execve(cmd_path, node.argv, (char *const *)env);
+		{
+			my_perror("command path not found 🌸");
+			return ;
+		}
+		child_executes(cmd_path, node.argv, env);
+		free(cmd_path);
 	}
 }
 
@@ -127,6 +147,8 @@ void	process_infiles(int n, t_infile	*infiles)
 		}
 		j++;
 	}
+	debug("exit infiles\n");
+
 }
 
 void	process_outfiles(int n, t_outfile *outfiles)
@@ -135,6 +157,7 @@ void	process_outfiles(int n, t_outfile *outfiles)
 	int	fdout;
 
 	j = 0;
+	ft_printf("#outfiles: %i\n", n);
 	while (j < n)
 	{
 		if (outfiles[j].type == F_APPEND)
@@ -149,19 +172,26 @@ void	process_outfiles(int n, t_outfile *outfiles)
 		close(fdout);
 		j++;
 	}
+	debug("exit outfiles\n");
 }
 
 void	my_pipex(int n_nodes, t_cmdnode nodes[], char *env[])
 {
 	int	i;
+	int	default_in;
+	int	default_out;
 
+	default_in = dup(STDIN_FILENO);
+	default_out = dup(STDOUT_FILENO);
 	i = 0;
 	while (i < n_nodes)
 	{
 		process_infiles(nodes[i].redir.n_in, nodes[i].redir.infiles);
 		process_outfiles(nodes[i].redir.n_out, nodes[i].redir.outfiles);
-
 		my_exec(nodes[i], env);
+		dup2(default_in, STDIN_FILENO); // reset only when....
+		dup2(default_out, STDOUT_FILENO); //
 		i++;
 	}
+	debug("exit pipex\n");
 }
