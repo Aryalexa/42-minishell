@@ -51,11 +51,12 @@ int	expand_quotes(char *code, int *i, char	**val)
 	//ft_printf("---🍏in: expand_quotes\n"); //
 	while (code[*i] != q_char)
 	{
-		ft_printf("code[*i] en bucle:%c\n", code[*i]);
+		//ft_printf("code[*i] en bucle:%c\n", code[*i]);
 		if (q_char == '"' && code[*i] == '$')
 		{
 			j += expand_dollar(code, i, &dollar_val);
 			*val = ft_strjoin_inplace(val, dollar_val);
+			free(dollar_val);
 		}
 		else
 			(*val)[j++] = code[(*i)++];
@@ -94,8 +95,6 @@ void	expand_token_val(char **code)
 
 	i = 0;
 	val = my_calloc(ft_strlen(*code) + 1, 1);
-	ft_printf("code addr %p\n", code);
-	ft_printf("val addr %p\n", &val);
 	j = 0;
 	while ((*code)[i])
 	{
@@ -103,20 +102,17 @@ void	expand_token_val(char **code)
 		{
 			j += expand_quotes(*code, &i, &aux_val);
 			val = ft_strjoin_inplace(&val, aux_val);
+			free(aux_val);
 		}
 		else if ((*code)[i] == '$')
 		{
 			j += expand_dollar(*code, &i, &aux_val);
 			val = ft_strjoin_inplace(&val, aux_val);
+			free(aux_val);
 		}
 		else
 			val[j++] = (*code)[i++];
 	}
 	val[j] = '\0';
 	swap_and_free_strings(code, &val);
-	//free(val);
-	ft_printf("code addr %p\n", code);
-	ft_printf("val addr %p\n", &val);
-	ft_printf("val %s\n", val);
-	ft_printf("code %s\n", *code);
 }

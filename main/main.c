@@ -40,6 +40,34 @@ int	run_parser(char *input, t_cmdnode *nodes)
 	return (n_n);
 }
 
+void	free_nodes(int n_nodes, t_cmdnode nodes[])
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	debug("free_nodes in\n");
+	while (i < n_nodes)
+	{
+		// cmd
+		free(nodes[i].cmd);
+		//args
+		j = 1;
+		while (j < nodes[i].argc)
+			free(nodes[i].argv[j++]);
+		//infiles
+		j = 0;
+		while (j < nodes[i].redir.n_in)
+			free(nodes[i].redir.infiles[j++].filename_delim);
+		//oufiles
+		j = 0;
+		while (j < nodes[i].redir.n_out)
+			free(nodes[i].redir.outfiles[j++].filename);
+		i++;
+	}
+
+}
+
 /*Begins minishell and checks the input*/
 int	main(int argc, char **argv, char *envp[])
 {
@@ -68,6 +96,7 @@ int	main(int argc, char **argv, char *envp[])
 		{
 			ft_printf(ANSI_COLOR_CYAN "execution call\n" ANSI_COLOR_RESET);
 			my_pipex(n_nodes, nodes, env);
+			free_nodes(n_nodes, nodes);
 		}
 		free(input);
 	}

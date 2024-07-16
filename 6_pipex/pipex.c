@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/15 15:05:50 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/16 13:57:26 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,10 +184,15 @@ void	my_pipex(int n_nodes, t_cmdnode nodes[], char *env[])
 	default_in = dup(STDIN_FILENO);
 	default_out = dup(STDOUT_FILENO);
 	i = 0;
-	while (i < n_nodes)
+	while (i < n_nodes) // node1 | node2
 	{
+		// process files and pipes (if files, use files!)
 		process_infiles(nodes[i].redir.n_in, nodes[i].redir.infiles);
 		process_outfiles(nodes[i].redir.n_out, nodes[i].redir.outfiles);
+		if (i + 1 < n_nodes && nodes[i].redir.n_out == 0)
+		{
+			//pipe 
+		}
 		my_exec(nodes[i], env);
 		dup2(default_in, STDIN_FILENO); // reset only when....
 		dup2(default_out, STDOUT_FILENO); //
