@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/16 13:57:26 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/16 15:05:25 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,15 @@
 // #include <stdlib.h>
 // #include <string.h>
 // #include <unistd.h>
-//#include <sys/types.h>
+// #include <sys/types.h>
 #include "pipex.h"
 #include <sys/wait.h>
 #include <fcntl.h>
-
 
 void	child_executes(char *cmd_path, char *argv[], char *env[])
 {
 	int	pid;
 	int	status; // salida!!
-
 	pid = fork();
 	if (pid == -1)
 		perror_exit("error: fork failed.");
@@ -68,7 +66,6 @@ void	my_exec(t_cmdnode node, char *env[])
 		}
 		ft_printf("executing %s \n", node.cmd);
 		cmd_path = find_path(node.cmd, env);
-
 		if (!cmd_path)
 		{
 			my_perror("command path not found 🌸");
@@ -110,7 +107,9 @@ void	my_piped_exec(t_cmdnode node, char *env[])
 			my_exit("wait error");
 		if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
 		{
-			exit(1);////printerr_cur_cmd(node.cmd); // error handlingmy_exit("child did not success");
+			exit(1);
+			//printerr_cur_cmd(node.cmd); 
+			//error handlingmy_exit("child did not success");
 		}
 	}
 }

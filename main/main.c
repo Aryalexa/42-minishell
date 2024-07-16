@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
+/*   Updated: 2024/07/16 15:11:36 by msoriano         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -65,17 +75,14 @@ void	free_nodes(int n_nodes, t_cmdnode nodes[])
 			free(nodes[i].redir.outfiles[j++].filename);
 		i++;
 	}
-
 }
 
-/*Begins minishell and checks the input*/
 int	main(int argc, char **argv, char *envp[])
 {
 	char		**env;
 	char		*input;
 	t_cmdnode	nodes[MAX_NODES];
 	int			n_nodes;
-
 
 	env = create_env(envp);
 	(void)argc;
@@ -85,11 +92,8 @@ int	main(int argc, char **argv, char *envp[])
 		input = readline(ANSI_COLOR_MAGENTA "minishell> " ANSI_COLOR_RESET);
 		if (input)
 			add_history(input);
-
-		//Ctrl+D and NULL management to exit program
-		//if (input == NULL)
+		//Ctrl+D and NULL management to exit program //if (input == NULL)
 		n_nodes = run_parser(input, nodes);
-		// ya tengo los nodos para ejecutar!
 		if (n_nodes < 0)
 			ft_printf("syntax error: no exec\n");
 		else
@@ -102,4 +106,3 @@ int	main(int argc, char **argv, char *envp[])
 	}
 	return (0);
 }
-

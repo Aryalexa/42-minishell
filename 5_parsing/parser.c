@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/16 14:58:04 by msoriano          #+#    #+#             */
+/*   Updated: 2024/07/16 15:13:49 by msoriano         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "parsing.h"
 
@@ -126,7 +137,7 @@ int	check_pipe(t_token *tokens, int t, int n_tokens, int *n)
  * builds command nodes
  * returns number of nodes
  */
-int    parse_tokens(t_token *tokens, int n_tokens, t_cmdnode *nodes)
+int	parse_tokens(t_token *tokens, int n_tokens, t_cmdnode *nodes)
 {
 	int	t;
 	int	n;

@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_print.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/16 14:59:24 by msoriano          #+#    #+#             */
+/*   Updated: 2024/07/16 15:00:58 by msoriano         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "parsing.h"
 
@@ -15,7 +25,9 @@ void	print_token(t_token token)
 
 void	print_tokens(t_token *tokens, int n)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	ft_printf("#tokens %i\n", n);
 	while (i < n)
 	{
@@ -27,13 +39,14 @@ void	print_tokens(t_token *tokens, int n)
 
 void	print_nodes(t_cmdnode *nodes, int n)
 {
-	int i = 0;
-	int j;
+	int	i;
+	int	j;
+
+	i = 0;
 	ft_printf("#nodes %i----\n", n);
 	while (i < n)
 	{
 		ft_printf("nodes #%i\n", i);
-
 		// cmd
 		if (nodes[i].cmd)
 			ft_printf("cmd:%s\n", nodes[i].cmd);
@@ -72,8 +85,6 @@ void	print_nodes(t_cmdnode *nodes, int n)
 				ft_printf("error\n");
 			j++;
 		}
-
-
 		i++;
 	}
 }

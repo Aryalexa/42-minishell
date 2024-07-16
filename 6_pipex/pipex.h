@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:57:31 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/11 11:23:52 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/16 15:03:55 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ void	my_exit(char *msg);
 char	*find_path(char *cmd, char *env[]);
 void	printerr_cur_cmd(char *cmd);
 void	close_and_dup(int pipefd[], int is_child);
-int     here_doc(char *delimiter);
-
+int		here_doc(char *delimiter);
 //PIPEX
 void	my_pipex(int n_nodes, t_cmdnode nodes[], char *env[]);
 

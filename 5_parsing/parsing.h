@@ -1,16 +1,23 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/16 15:01:03 by msoriano          #+#    #+#             */
+/*   Updated: 2024/07/16 15:01:24 by msoriano         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef PARSING_H
 # define PARSING_H
+# define MAX_TKNS   101
 
 # include "../1_libft/libft.h"
 # include "../2_structs/structs.h"
 # include "../3_utils/utils.h"
 # include "../4_builtin/builtin.h"
-
-
-# define MAX_TKNS   101
-
 
 typedef enum e_tokenType
 {
@@ -37,6 +44,5 @@ void	print_tokens(t_token *tokens, int n);
 void	print_token(t_token token);
 char	*read_quote(const char *input, int *i);
 char	*read_word(const char *input, int *i);
-
 
 #endif

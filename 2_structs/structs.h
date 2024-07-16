@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/15 14:34:20 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/16 14:45:23 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ typedef enum e_out_type
 	F_APPEND
 }	t_out_type;
 
-
 typedef struct s_infile
 {
 	char		*filename_delim;
@@ -59,7 +58,6 @@ typedef struct s_outfile
 
 typedef struct s_redir
 {
-
 	int			n_in;
 	t_infile	infiles[MAX_FILES];		// list of infiles
 	int			n_out;
@@ -75,7 +73,5 @@ typedef struct s_cmdnode
 }	t_cmdnode;
 
 typedef void	(*t_FP) (t_cmdnode node, char *env[]);
-
-
 
 #endif

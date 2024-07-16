@@ -1,6 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/16 14:45:44 by msoriano          #+#    #+#             */
+/*   Updated: 2024/07/16 15:12:48 by msoriano         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "utils.h"
-
 
 void	perror_exit(char *msg)
 {
@@ -17,7 +27,6 @@ void	my_perror(char *msg)
 
 void	debug(char *msg)
 {
-
 	write(2, msg, ft_strlen(msg));
 	//1 > 2
 	// ft_printf

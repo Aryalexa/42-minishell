@@ -1,4 +1,14 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/16 14:56:54 by msoriano          #+#    #+#             */
+/*   Updated: 2024/07/16 14:57:59 by msoriano         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "parsing.h"
 
@@ -61,7 +71,7 @@ int	update_token(t_token *tokens, int t_i, t_tokenType type, char *value)
 		return (-1);
 	tokens[t_i].type = type;
 	tokens[t_i].val = value;
-	return t_i + 1;
+	return (t_i + 1);
 }
 
 int	lexer(const char *input, t_token *tokens)
@@ -92,4 +102,3 @@ int	lexer(const char *input, t_token *tokens)
 	}
 	return (t_i);
 }
-

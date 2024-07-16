@@ -1,15 +1,23 @@
-
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
+/*   Updated: 2024/07/16 15:06:42 by msoriano         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "builtin.h"
 
-
 /**
- * return len
+ * returns len
  */
 int	expand_dollar(char *code, int *i, char **val)
 {
 	//ft_printf("---🍇in:expand_dollar code:%s\n", code);
-
 	if (!code[*i + 1] || is_reserved_all(code[*i + 1]))
 	{
 		//ft_printf("----just one dollar!\n");
@@ -30,12 +38,11 @@ int	expand_dollar(char *code, int *i, char **val)
 	}
 	*val = ft_strdup("DOLLAR"); //
 	//ft_printf("---🍇out:expand_dollar val:%s\n", *val);
-
 	return (ft_strlen(*val));
 }
 
 /**
- * return len
+ * returns len
  */
 int	expand_quotes(char *code, int *i, char	**val)
 {
@@ -51,7 +58,6 @@ int	expand_quotes(char *code, int *i, char	**val)
 	//ft_printf("---🍏in: expand_quotes\n"); //
 	while (code[*i] != q_char)
 	{
-		//ft_printf("code[*i] en bucle:%c\n", code[*i]);
 		if (q_char == '"' && code[*i] == '$')
 		{
 			j += expand_dollar(code, i, &dollar_val);
@@ -86,6 +92,7 @@ void	swap_and_free_strings(char **s1, char **s2)
  * - $
  * - no nulo
  */
+
 void	expand_token_val(char **code)
 {
 	int		i;

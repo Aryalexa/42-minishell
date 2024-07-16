@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/15 15:04:12 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/16 15:02:52 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
 
 void	my_exit(char *msg)
 {
@@ -65,7 +64,6 @@ void	close_and_dup(int pipefd[], int is_child)
 		close(pipefd[0]);
 	}
 }
-
 
 int	read_line(char **line)
 {
@@ -127,5 +125,3 @@ int	here_doc(char *delimiter)
 		return (pipe_fd[0]);
 	}
 }
-
-
