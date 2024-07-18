@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 16:23:59 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:58:25 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,6 @@ int	expand_quotes(char *code, int *i, char	**val)
 	return (ft_strlen(*val));
 }
 
-/**
- * s1 new value is the onw s2 is pointing
- * frees old s1 value
- */
-void	swap_and_free_strings(char **s1, char **s2)
-{
-	char	*aux;
-
-	aux = *s1;
-	*s1 = *s2;
-	free(aux);
-}
 /**
  * modify the code to its expansion
  * cases:

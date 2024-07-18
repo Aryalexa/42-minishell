@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:46:28 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 12:24:45 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:58:24 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,4 +52,17 @@ int	is_quote(char c)
 	if (c == '"' || c == '\'')
 		return (1);
 	return (0);
+}
+
+/**
+ * s1 new value is the onw s2 is pointing
+ * frees old s1 value
+ */
+void	swap_and_free_strings(char **s1, char **s2)
+{
+	char	*aux;
+
+	aux = *s1;
+	*s1 = *s2;
+	free(aux);
 }

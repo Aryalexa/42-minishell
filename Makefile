@@ -15,6 +15,11 @@ SRCS_S	=	3_utils/utils.c \
 			4_builtin/builtin.c \
 			4_builtin/echo.c \
 			4_builtin/exit.c \
+			4_builtin/pwd.c \
+			4_builtin/unset.c \
+			4_builtin/export.c \
+			4_builtin/cd.c \
+			4_builtin/env.c \
 			5_parsing/lexer.c \
 			5_parsing/lexer_utils.c \
 			5_parsing/parser.c \

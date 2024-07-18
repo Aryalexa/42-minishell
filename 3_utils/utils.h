@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 15:39:14 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:58:11 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,6 @@ int		is_quote(char c);
 void	debug(char *msg);
 void	debug_int(char *fdname, int fdint);
 void	debug_str(char *name_desc, char* str);
+void	swap_and_free_strings(char **s1, char **s2);
 
 #endif
