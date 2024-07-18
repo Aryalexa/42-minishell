@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 16:17:16 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:39:46 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,34 +286,36 @@ void	print_nodes_2(t_cmdnode *nodes, int n)
 
 void	my_pipex(int n_nodes, t_cmdnode nodes[], char *env[])
 {
-	// int	i;
-	//int	default_in;
-	// int	default_out;
+	int	i;
+	int	default_in;
+	int	default_out;
 	// int fd[2];
 
-	//default_in = dup(STDIN_FILENO);
-	// default_out = dup(STDOUT_FILENO);
+	default_in = dup(STDIN_FILENO);
+	default_out = dup(STDOUT_FILENO);
 	(void)env;
-	// i = 0;
+	i = 0;
 	print_nodes_2(nodes, n_nodes);
-	// while (i < n_nodes) // node1 | nodeUlt
-	// {
+	while (i < n_nodes) // node1 | nodeUlt
+	{
 		
-	// 	debug_int("new node-------------------", i);
-	// 	debug_str("cmd 01", nodes[i].cmd);
-	// 	if (i == n_nodes - 1)
-	// 		nodes[i].last_node = 1;
-	// 	debug_str("cmd 02", nodes[i].cmd);
+		debug_int("new node-------------------", i);
+		debug_str("cmd 01", nodes[i].cmd);
+		if (i == n_nodes - 1)
+			nodes[i].last_node = 1;
+		debug_str("cmd 02", nodes[i].cmd);
 		
-	// 	// if (solve_path(&(nodes[i]), env))
-	// 	// 	my_exec(nodes[i], env);
+		if (solve_path(&(nodes[i]), env))
+			my_exec(nodes[i], env);
 
-	// 	// process files and pipes (if files, use files!)
-	// 	// process_infiles(nodes[i].redir.n_in, nodes[i].redir.infiles); // infile? file is new in
-	// 	// process_outfiles(nodes[i].redir.n_out, nodes[i].redir.outfiles); // outfile? file new out
+		// process files and pipes (if files, use files!)
+		// process_infiles(nodes[i].redir.n_in, nodes[i].redir.infiles); // infile? file is new in
+		// process_outfiles(nodes[i].redir.n_out, nodes[i].redir.outfiles); // outfile? file new out
 		
 		
-	// 	i++;
-	// }
-	// debug("exit pipex\n");
+		i++;
+	}
+	dup2(default_in, STDIN_FILENO);
+	dup2(default_out, STDOUT_FILENO);
+	debug("exit pipex\n");
 }

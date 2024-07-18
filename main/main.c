@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 16:14:37 by macastro         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:39:47 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,18 @@ int	main(int argc, char **argv, char *envp[])
 	(void)argv;
 	while (1)
 	{
+		debug("in");
+
 		input = readline(ANSI_COLOR_MAGENTA "minishell> " ANSI_COLOR_RESET);
+		debug("read inpupt done");
+
 		if (input)
 			add_history(input);
+		
 		//Ctrl+D and NULL management to exit program //if (input == NULL)
 		n_nodes = run_parser(input, nodes);
+		debug("in 3");
+
 		if (n_nodes < 0)
 			ft_printf("syntax error: no exec\n");
 		else
@@ -103,8 +110,11 @@ int	main(int argc, char **argv, char *envp[])
 
 			my_pipex(n_nodes, nodes, env);
 			free_nodes(n_nodes, nodes);
+			debug("end");
 		}
 		free(input);
+		
+		debug("nooo");
 	}
 	return (0);
 }

@@ -6,15 +6,12 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/16 15:06:42 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:23:59 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-/**
- * returns len
- */
 int	expand_dollar(char *code, int *i, char **val)
 {
 	//ft_printf("---🍇in:expand_dollar code:%s\n", code);
@@ -41,9 +38,6 @@ int	expand_dollar(char *code, int *i, char **val)
 	return (ft_strlen(*val));
 }
 
-/**
- * returns len
- */
 int	expand_quotes(char *code, int *i, char	**val)
 {
 	int		j;
