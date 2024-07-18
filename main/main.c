@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/16 15:11:36 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:14:37 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ int	run_parser(char *input, t_cmdnode *nodes)
 		return (-1);
 	//print_tokens(tokens, n_t);
 	n_n = parse_tokens(tokens, n_t, nodes);
-	print_nodes(nodes, n_n);
 	return (n_n);
 }
 
@@ -98,7 +97,10 @@ int	main(int argc, char **argv, char *envp[])
 			ft_printf("syntax error: no exec\n");
 		else
 		{
+			print_nodes(nodes, n_nodes);
 			ft_printf(ANSI_COLOR_CYAN "execution call\n" ANSI_COLOR_RESET);
+			print_nodes(nodes, n_nodes);
+
 			my_pipex(n_nodes, nodes, env);
 			free_nodes(n_nodes, nodes);
 		}

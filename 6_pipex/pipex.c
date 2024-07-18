@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/16 15:05:25 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:17:16 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,80 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
-void	child_executes(char *cmd_path, char *argv[], char *env[])
+void	child_executes(t_cmdnode node, char *env[])
 {
+	int pipefd[2];
 	int	pid;
 	int	status; // salida!!
+
+    if (pipe(pipefd)  == -1)
+        my_perror_exit("pipe failed");
+    // dup2(fd[0], STDIN_FILENO);
 	pid = fork();
 	if (pid == -1)
-		perror_exit("error: fork failed.");
+		my_perror_exit("error: fork failed.");
 	if (pid == 0)
-		execve(cmd_path, argv, (char *const *)env);
+	{
+
+        // lectura: pipe con contenido
+        // escritura SDTOUT
+		debug("child execs");
+        // char * buff[2000];
+		// read(0, buff, 45);
+		// debug("read done");
+		// write(2, buff, 45);
+		// debug("write done");
+		// write(1, "salida\n", 7);
+        close(pipefd[0]);
+		if(!node.last_node)
+            dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
+		execve(node.cmd, node.argv, (char *const *)env);
+	}
 	else
-		wait(&status);
+	{
+        close(pipefd[1]);
+		dup2(pipefd[0], STDIN_FILENO);
+		close(pipefd[0]);
+		debug("parent waiting");
+		if (wait(&status) == -1)
+			my_perror_exit("wait error");
+		if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
+			my_perror_exit("child did not success");
+
+		debug("parent waited!");
+	}
 }
 
+int	cmd_is_builtin_exec(t_cmdnode node, char *env[])
+{
+	int			i;
+
+	const t_FP	built_ins[2] = {&exec_echo, &exec_exit};
+	const char	built_ins_names[7][7] = {"echo", "exit", "pwd",
+		"export", "unset", "env", "cd"};
+	i = 0;
+	while (i < 7) // number of builtins
+	{
+		if (ft_strcmp(node.cmd, (char *)built_ins_names[i]) == 0)
+		{
+			built_ins[i](node, env);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+
+void	my_exec(t_cmdnode node, char *env[])
+{
+	debug("-- begin execution --\n");
+	//if (cmd_is_builtin_exec(node, env))
+		// 	return ;
+	debug_str("executing", node.cmd);
+	child_executes(node, env);
+}
 /**
  * diferenciar entre:
  * - ruta relativa o absoluta (empieza con /)
@@ -39,40 +100,36 @@ void	child_executes(char *cmd_path, char *argv[], char *env[])
  * - argv[0] falta
  * 
  */
-void	my_exec(t_cmdnode node, char *env[])
+int	solve_path(t_cmdnode *node, char *env[])
 {
-	int			i;
 	char		*cmd_path;
-	const t_FP	built_ins[2] = {&exec_echo, &exec_exit};
-	const char	built_ins_names[7][7] = {"echo", "exit", "pwd",
-		"export", "unset", "env", "cd"};
+	char		*aux;
+	
 
-	debug("-- begin execution --\n");
-	if (!node.cmd)
-		return ;
-	if (node.cmd[0] == '/')
-		child_executes(node.cmd, node.argv, env);
+	debug("-- solve path --");
+	debug_str("cmd 1 ", (*node).cmd);
+	debug_str("cmd 2", (node)->cmd);
+	if (!node->cmd)
+		return (0);
+	if (node->cmd[0] == '/')
+		return (1);
 	else
 	{
-		i = 0;
-		while (i < 7) // number of builtins
-		{
-			if (ft_strcmp(node.cmd, (char *)built_ins_names[i]) == 0)
-			{
-				built_ins[i](node, env);
-				return ;
-			}
-			i++;
-		}
-		ft_printf("executing %s \n", node.cmd);
-		cmd_path = find_path(node.cmd, env);
+		// if (cmd_is_builtin_exec(node, env))
+		// 	return ;
+		//ft_printf("executing %s \n", node.cmd);
+		cmd_path = find_path(node->cmd, env);
 		if (!cmd_path)
 		{
 			my_perror("command path not found 🌸");
-			return ;
+			return (0);
 		}
-		child_executes(cmd_path, node.argv, env);
-		free(cmd_path);
+		debug_str("cmd", node->cmd);
+		aux = node->cmd;
+		node->cmd = cmd_path;
+		free(aux);
+		debug_str("cmd", node->cmd);
+		return (1);
 	}
 }
 
@@ -174,28 +231,89 @@ void	process_outfiles(int n, t_outfile *outfiles)
 	debug("exit outfiles\n");
 }
 
-void	my_pipex(int n_nodes, t_cmdnode nodes[], char *env[])
+
+void	print_nodes_2(t_cmdnode *nodes, int n)
 {
 	int	i;
-	int	default_in;
-	int	default_out;
+	int	j;
 
-	default_in = dup(STDIN_FILENO);
-	default_out = dup(STDOUT_FILENO);
 	i = 0;
-	while (i < n_nodes) // node1 | node2
+	ft_printf("#nodes %i----\n", n);
+	while (i < n)
 	{
-		// process files and pipes (if files, use files!)
-		process_infiles(nodes[i].redir.n_in, nodes[i].redir.infiles);
-		process_outfiles(nodes[i].redir.n_out, nodes[i].redir.outfiles);
-		if (i + 1 < n_nodes && nodes[i].redir.n_out == 0)
+		ft_printf("nodes #%i\n", i);
+		// cmd
+		if (nodes[i].cmd)
+			ft_printf("cmd:%s\n", nodes[i].cmd);
+		else
+			ft_printf("no cmd\n");
+		// args
+		j = 0;
+		while (j < nodes[i].argc)
 		{
-			//pipe 
+			ft_printf("arg %i:%s\n", j, nodes[i].argv[j]);
+			j++;
 		}
-		my_exec(nodes[i], env);
-		dup2(default_in, STDIN_FILENO); // reset only when....
-		dup2(default_out, STDOUT_FILENO); //
+		// redirs in
+		j = 0;
+		while (j < nodes[i].redir.n_in)
+		{
+			ft_printf("inf %i:%s", j, nodes[i].redir.infiles[j].filename_delim);
+			if (nodes[i].redir.infiles[j].type == F_HEREDOC)
+				ft_printf("(<<)\n");
+			else if (nodes[i].redir.infiles[j].type == F_IN)
+				ft_printf("(<)\n");
+			else
+				ft_printf("error\n");
+			j++;
+		}
+		// redirs out
+		j = 0;
+		while (j < nodes[i].redir.n_out)
+		{
+			ft_printf("outf %i:%s", j, nodes[i].redir.outfiles[j].filename);
+			if (nodes[i].redir.outfiles[j].type == F_APPEND)
+				ft_printf("(>>)\n");
+			else if (nodes[i].redir.outfiles[j].type == F_OUT)
+				ft_printf("(>)\n");
+			else
+				ft_printf("error\n");
+			j++;
+		}
 		i++;
 	}
-	debug("exit pipex\n");
+}
+
+void	my_pipex(int n_nodes, t_cmdnode nodes[], char *env[])
+{
+	// int	i;
+	//int	default_in;
+	// int	default_out;
+	// int fd[2];
+
+	//default_in = dup(STDIN_FILENO);
+	// default_out = dup(STDOUT_FILENO);
+	(void)env;
+	// i = 0;
+	print_nodes_2(nodes, n_nodes);
+	// while (i < n_nodes) // node1 | nodeUlt
+	// {
+		
+	// 	debug_int("new node-------------------", i);
+	// 	debug_str("cmd 01", nodes[i].cmd);
+	// 	if (i == n_nodes - 1)
+	// 		nodes[i].last_node = 1;
+	// 	debug_str("cmd 02", nodes[i].cmd);
+		
+	// 	// if (solve_path(&(nodes[i]), env))
+	// 	// 	my_exec(nodes[i], env);
+
+	// 	// process files and pipes (if files, use files!)
+	// 	// process_infiles(nodes[i].redir.n_in, nodes[i].redir.infiles); // infile? file is new in
+	// 	// process_outfiles(nodes[i].redir.n_out, nodes[i].redir.outfiles); // outfile? file new out
+		
+		
+	// 	i++;
+	// }
+	// debug("exit pipex\n");
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/16 14:45:23 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 15:55:54 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct s_cmdnode
 	int		argc;		// num of args
 	char	*argv[MAX_ARGS];		// list of args
 	t_redir	redir;
+	int		last_node;
 }	t_cmdnode;
 
 typedef void	(*t_FP) (t_cmdnode node, char *env[]);

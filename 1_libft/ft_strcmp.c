@@ -3,13 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 12:21:28 by msoriano          #+#    #+#             */
-/*   Updated: 2024/06/20 12:23:03 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 13:22:40 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/**
+ * return diff: 0 if equal, != 0 otherwise
+ */
 int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:46:28 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/16 14:46:29 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 12:24:45 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*my_malloc(size_t size)
 
 	val = malloc(size);
 	if (!val)
-		perror_exit("malloc: mem error.");
+		my_perror_exit("malloc: mem error.");
 	return (val);
 }
 
@@ -28,7 +28,7 @@ void	*my_calloc(size_t count, size_t size)
 
 	val = ft_calloc(count, size);
 	if (!val)
-		perror_exit("calloc: mem error.");
+		my_perror_exit("calloc: mem error.");
 	return (val);
 }
 

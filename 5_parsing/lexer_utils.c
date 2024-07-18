@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:57:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/16 14:58:00 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 12:24:45 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*read_quote(const char *input, int *i)
 		word = ft_strndup(&input[*i], final - *i + 1);
 		*i = final + 1;
 		if (!word)
-			perror_exit("strndup: mem error.");
+			my_perror_exit("strndup: mem error.");
 		return (word);
 	}
 	my_perror("syntax error: quote not finished.");
@@ -46,10 +46,10 @@ char	*read_quote(const char *input, int *i)
 // 	if (ft_strchri(str, '\'') < len && ft_strchri(str, '\'') != -1)
 // 	{
 // 		if (len < 0)
-// 			perror_exit("fatal error 345.");
+// 			my_perror_exit("fatal error 345.");
 // 		res = (char *)malloc(sizeof(char) * (len - 1));
 // 		if (!res)
-// 			perror_exit("malloc: mem error.");
+// 			my_perror_exit("malloc: mem error.");
 // 		i = 0;
 // 		j = 0;
 // 		while (str[i] && i < len)
@@ -91,6 +91,6 @@ char	*read_word(const char *input, int *i)
 	}
 	word = ft_strndup(&input[*i], j - *i);
 	if (!word)
-		perror_exit("strndup: mem error.");
+		my_perror_exit("strndup: mem error.");
 	return (*i = j, word);
 }
