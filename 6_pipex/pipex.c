@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 17:44:36 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 19:39:52 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,9 +197,9 @@ int	solve_path(t_cmdnode *node, char *env[])
 		}
 		debug_str("cmd", node->cmd);
 		debug_str("before: aarg0", node->argv[0]);
+		free(node->cmd); //
 		node->cmd = cmd_path;
 		//node->argv[0] = node->cmd;
-		debug("swapping");
 		debug_str("cmd 1 AFTER", (*node).cmd);
 		debug_str("after: arg0", node->argv[0]);
 		return (1);
@@ -254,7 +254,6 @@ void	my_pipex(int n_nodes, t_cmdnode nodes[], char *env[])
 
 	default_in = dup(STDIN_FILENO);
 	default_out = dup(STDOUT_FILENO);
-	(void)env;
 	i = 0;
 	while (i < n_nodes) // node1 | nodeUlt
 	{

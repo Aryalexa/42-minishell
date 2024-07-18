@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 16:58:25 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 19:29:46 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	expand_quotes(char *code, int *i, char	**val)
  * - no nulo
  */
 
-void	expand_token_val(char **code)
+char	*expand_token_val(char *code)
 {
 	int		i;
 	char	*val;
@@ -83,25 +83,26 @@ void	expand_token_val(char **code)
 	int		j;
 
 	i = 0;
-	val = my_calloc(ft_strlen(*code) + 1, 1);
+	val = my_calloc(ft_strlen(code) + 1, 1);
 	j = 0;
-	while ((*code)[i])
+	while ((code)[i])
 	{
-		if (is_quote((*code)[i]))
+		if (is_quote((code)[i]))
 		{
-			j += expand_quotes(*code, &i, &aux_val);
+			j += expand_quotes(code, &i, &aux_val);
 			val = ft_strjoin_inplace(&val, aux_val);
 			free(aux_val);
 		}
-		else if ((*code)[i] == '$')
+		else if ((code)[i] == '$')
 		{
-			j += expand_dollar(*code, &i, &aux_val);
+			j += expand_dollar(code, &i, &aux_val);
 			val = ft_strjoin_inplace(&val, aux_val);
 			free(aux_val);
 		}
 		else
-			val[j++] = (*code)[i++];
+			val[j++] = (code)[i++];
 	}
 	val[j] = '\0';
-	swap_and_free_strings(code, &val);
+	//swap_and_free_strings(code, &val);
+	return (val);
 }

@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:58:04 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 17:08:36 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 19:29:47 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,27 @@
 
 int	check_word_and_vars(t_token token, t_cmdnode *node)
 {
+	char	*new_val;
 	if (token.type == TKN_WORD || token.type == TKN_ENVAR)
 	{
 		//ft_printf("token BEFORE: %s, %i\n", token.val, token.type);
-		expand_token_val(&token.val);
+		new_val = expand_token_val(token.val);
 		//ft_printf("token AFTER: %s\n", token.val);
 		if (!node->cmd)
 		{
 			// ft_printf("cmd found: %s\n", token.val); //
-			node->cmd = token.val;
-			node->argv[0] = token.val;
+			node->cmd = new_val;
+			node->argv[0] = ft_strdup(new_val);
 			node->argc = 1;
 		}
 		else
 		{
 			// ft_printf("arg found: %s\n", token.val); //
-			node->argv[node->argc] = token.val;
+			node->argv[node->argc] = new_val;
 			node->argc++;
 			if (node->argc >= MAX_ARGS)
 			{
-				my_perror("error: too many args!"); // free?
+				my_perror("error: too many args!");
 				return (-1);
 			}
 		}
@@ -43,17 +44,18 @@ int	check_word_and_vars(t_token token, t_cmdnode *node)
 
 void	read_file(t_token token, t_cmdnode *node, int is_infile)
 {
+	char	*new_val;
 	if (token.type == TKN_WORD || token.type == TKN_ENVAR)
-		expand_token_val(&token.val);
+		new_val = expand_token_val(token.val);
 	if (is_infile)
 	{
-		ft_printf("infile found: %s\n", token.val);
-		node->redir.infiles[node->redir.n_in].filename_delim = token.val;
+		ft_printf("infile found: %s\n", new_val);
+		node->redir.infiles[node->redir.n_in].filename_delim = new_val;
 	}
 	else
 	{
-		ft_printf("outfile found: %s\n", token.val);
-		node->redir.outfiles[node->redir.n_out].filename = token.val;
+		ft_printf("outfile found: %s\n", new_val);
+		node->redir.outfiles[node->redir.n_out].filename = new_val;
 	}
 }
 
@@ -67,14 +69,14 @@ int	check_infiles(t_token *tokens, t_cmdnode *node, int *t, int n_tokens)
 			node->redir.infiles[node->redir.n_in].type = F_HEREDOC;
 		if (++(*t) >= n_tokens)
 		{
-			my_perror("syntax error: missing value after `<'/'<<' at the end!"); // free?
+			my_perror("syntax error: missing value after `<'/'<<' at the end!");
 			return (-1);
 		}
 		if (tokens[*t].type == TKN_WORD || tokens[*t].type == TKN_ENVAR)
 			read_file(tokens[*t], node, 1);
 		else
 		{
-			my_perror("syntax error: missing value after `<'/'<<'!"); // free?
+			my_perror("syntax error: missing value after `<'/'<<'!");
 			return (-1);
 		}
 		node->redir.n_in++;
@@ -94,14 +96,14 @@ int	check_outfiles(t_token *tokens, t_cmdnode *node, int *t, int n_tokens)
 			node->redir.outfiles[node->redir.n_out].type = F_APPEND;
 		if (++(*t) >= n_tokens)
 		{
-			my_perror("syntax error: missing file after `>'/'>>' at the end!"); // free
+			my_perror("syntax error: missing file after `>'/'>>' at the end!");
 			return (-1);
 		}
 		if (tokens[*t].type == TKN_WORD || tokens[*t].type == TKN_ENVAR)
 			read_file(tokens[*t], node, 0);
 		else
 		{
-			my_perror("syntax error: missing file after `>'/'>>'!"); // free
+			my_perror("syntax error: missing file after `>'/'>>'!");
 			return (-1);
 		}
 		node->redir.n_out++;

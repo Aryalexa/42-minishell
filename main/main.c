@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 17:05:26 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 19:45:52 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,36 +44,10 @@ int	run_parser(char *input, t_cmdnode *nodes)
 	n_t = lexer(input, tokens);
 	if (n_t < 0)
 		return (-1);
-	//print_tokens(tokens, n_t);
+	print_tokens(tokens, n_t);
 	n_n = parse_tokens(tokens, n_t, nodes);
+	free_tokens(tokens, n_t);
 	return (n_n);
-}
-
-void	free_nodes(int n_nodes, t_cmdnode nodes[])
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	debug("free_nodes in\n");
-	while (i < n_nodes)
-	{
-		// cmd
-		free(nodes[i].cmd);
-		//args
-		j = 1;
-		while (j < nodes[i].argc)
-			free(nodes[i].argv[j++]);
-		//infiles
-		j = 0;
-		while (j < nodes[i].redir.n_in)
-			free(nodes[i].redir.infiles[j++].filename_delim);
-		//oufiles
-		j = 0;
-		while (j < nodes[i].redir.n_out)
-			free(nodes[i].redir.outfiles[j++].filename);
-		i++;
-	}
 }
 
 int	main(int argc, char **argv, char *envp[])
@@ -99,7 +73,7 @@ int	main(int argc, char **argv, char *envp[])
 			ft_printf("syntax error: no exec\n");
 		else
 		{
-			print_nodes(nodes, n_nodes);
+			//print_nodes(nodes, n_nodes);
 			ft_printf(ANSI_COLOR_CYAN "execution call\n" ANSI_COLOR_RESET);
 
 			my_pipex(n_nodes, nodes, env);

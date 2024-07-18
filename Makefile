@@ -1,7 +1,6 @@
 CC		= gcc
 
 # FT_SAN = -fsanitize=address
-FT_SAN 	= 
 EXCFLGS = -lreadline -lncurses
 CFLAGS	= -Wall -Wextra -Werror $(FT_SAN)
 

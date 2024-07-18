@@ -6,14 +6,14 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:56:54 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/16 14:57:59 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 19:29:50 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
 /**
- * tokenize ", ', $
+ * tokenize $
  * 
  */
 int	lexer_aux1(const char *input, t_token *tokens, int *_i, int idx)

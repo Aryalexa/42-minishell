@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/16 14:55:55 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 19:29:17 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	exec_exit(t_cmdnode node, char *env[])
 {
-	(void)node;
-	(void)env;
+	ft_free_arrstr(env);
+	free_node(node);
 	debug("Exit.\n");
 	exit(1);
 }

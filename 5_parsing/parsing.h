@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:01:03 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/16 15:01:24 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 18:51:10 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int		parse_tokens(t_token *tokens, int n_tokens, t_cmdnode *nodes);
 void	print_nodes(t_cmdnode *nodes, int n);
 void	print_tokens(t_token *tokens, int n);
 void	print_token(t_token token);
-char	*read_quote(const char *input, int *i);
 char	*read_word(const char *input, int *i);
+void	free_tokens(t_token *tokens, int n_tokens);
 
 #endif
