@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 19:45:52 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 20:04:22 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	run_parser(char *input, t_cmdnode *nodes)
 	n_t = lexer(input, tokens);
 	if (n_t < 0)
 		return (-1);
-	print_tokens(tokens, n_t);
 	n_n = parse_tokens(tokens, n_t, nodes);
 	free_tokens(tokens, n_t);
 	return (n_n);
@@ -73,9 +72,7 @@ int	main(int argc, char **argv, char *envp[])
 			ft_printf("syntax error: no exec\n");
 		else
 		{
-			//print_nodes(nodes, n_nodes);
 			ft_printf(ANSI_COLOR_CYAN "execution call\n" ANSI_COLOR_RESET);
-
 			my_pipex(n_nodes, nodes, env);
 			free_nodes(n_nodes, nodes);
 		}

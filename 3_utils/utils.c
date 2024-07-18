@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:46:28 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 19:43:27 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/07/18 20:02:08 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,21 +66,21 @@ void	swap_and_free_strings(char **s1, char **s2)
 	*s1 = *s2;
 	free(aux);
 }
+/**
+ * free cmd, argv, infiles and outfiles
+ */
 void	free_node(t_cmdnode node)
 {
 	int	j;
 
-	// cmd
-	free(node.cmd);
-	//args
-	
+	if (node.cmd)
+		free(node.cmd);
+	j = 0;
 	while (j < node.argc)
 		free(node.argv[j++]);
-	//infiles
 	j = 0;
 	while (j < node.redir.n_in)
 		free(node.redir.infiles[j++].filename_delim);
-	//oufiles
 	j = 0;
 	while (j < node.redir.n_out)
 		free(node.redir.outfiles[j++].filename);
