@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 19:39:52 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/08/02 14:12:11 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	process_outfiles(int n, t_outfile *outfiles)
 	debug("exit outfiles\n");
 }
 
-void	child_executes(t_cmdnode node, char *env[])
+void	child_executes(t_cmdnode node, t_env env)
 {
 	int pipefd[2];
 	int	pid;
@@ -108,7 +108,7 @@ void	child_executes(t_cmdnode node, char *env[])
 		process_infiles(node.redir.n_in, node.redir.infiles); // infile? file is new in
 		process_outfiles(node.redir.n_out, node.redir.outfiles); // outfile? file new out
 		debug_str("ARGV 0:", node.argv[0]);
-		execve(node.cmd, node.argv, (char *const *)env);
+		execve(node.cmd, node.argv, (char *const *)env.env);
 	}
 	else
 	{
@@ -141,7 +141,7 @@ int	check_builtin(t_cmdnode node)
 	return (-1);
 }
 
-int	exec_builtin(t_cmdnode node, char *env[])
+int	exec_builtin(t_cmdnode node, t_env env)
 {
 	int			i;
 
@@ -154,7 +154,7 @@ int	exec_builtin(t_cmdnode node, char *env[])
 }
 
 
-void	my_exec(t_cmdnode node, char *env[])
+void	my_exec(t_cmdnode node, t_env env)
 {
 	debug("-- begin execution --\n");
 	if (check_builtin(node) >= 0)
@@ -176,8 +176,8 @@ int	solve_path(t_cmdnode *node, char *env[])
 {
 	char		*cmd_path;	
 
-	debug("-- solve path --");
-	debug_str("cmd 1 BEFORE", (*node).cmd);
+	//debug("-- solve path --");
+	//debug_str("cmd 1 BEFORE", (*node).cmd);
 	if (!node->cmd)
 		return (0);
 	if (node->cmd[0] == '/')
@@ -186,7 +186,7 @@ int	solve_path(t_cmdnode *node, char *env[])
 	{
 		if (check_builtin(*node) >= 0)
 		{
-			debug_str("cmd 1 AFTER BUILTIN", (*node).cmd);
+			//debug_str("cmd 1 AFTER BUILTIN", (*node).cmd);
 			return (1);
 		}
 		cmd_path = find_path(node->cmd, env);
@@ -195,13 +195,13 @@ int	solve_path(t_cmdnode *node, char *env[])
 			my_perror("command path not found 🌸");
 			return (0);
 		}
-		debug_str("cmd", node->cmd);
-		debug_str("before: aarg0", node->argv[0]);
+		//debug_str("cmd", node->cmd);
+		//debug_str("before: aarg0", node->argv[0]);
 		free(node->cmd); //
 		node->cmd = cmd_path;
 		//node->argv[0] = node->cmd;
-		debug_str("cmd 1 AFTER", (*node).cmd);
-		debug_str("after: arg0", node->argv[0]);
+		//debug_str("cmd 1 AFTER", (*node).cmd);
+		//debug_str("after: arg0", node->argv[0]);
 		return (1);
 	}
 }
@@ -214,7 +214,8 @@ int	solve_path(t_cmdnode *node, char *env[])
  * child: > pipe, exec
  * parent: < pipe, wait
 */
-void	my_piped_exec(t_cmdnode node, char *env[])
+/*
+void	my_piped_exec(t_cmdnode node, t_env env)
 {
 	int	pipefd[2];
 	int	pid;
@@ -243,9 +244,9 @@ void	my_piped_exec(t_cmdnode node, char *env[])
 		}
 	}
 }
+*/
 
-
-void	my_pipex(int n_nodes, t_cmdnode nodes[], char *env[])
+void	my_pipex(int n_nodes, t_cmdnode nodes[], t_env env)
 {
 	int	i;
 	int	default_in;
@@ -263,7 +264,7 @@ void	my_pipex(int n_nodes, t_cmdnode nodes[], char *env[])
 		if (i == n_nodes - 1)
 			nodes[i].last_node = 1;
 		
-		if (solve_path(&(nodes[i]), env))
+		if (solve_path(&(nodes[i]), env.env))
 			my_exec(nodes[i], env);
 
 		

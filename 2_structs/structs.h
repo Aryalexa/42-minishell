@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 15:55:54 by macastro         ###   ########.fr       */
+/*   Updated: 2024/08/02 14:10:14 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,13 @@ typedef struct s_cmdnode
 	int		last_node;
 }	t_cmdnode;
 
-typedef void	(*t_FP) (t_cmdnode node, char *env[]);
+typedef struct s_env
+{
+	char		**env;
+	char		**envp;	//ORIGINAL
+
+}	t_env;
+
+typedef void	(*t_FP) (t_cmdnode node, t_env env);
 
 #endif

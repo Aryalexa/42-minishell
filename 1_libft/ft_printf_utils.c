@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_printf_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/26 18:35:45 by macastro          #+#    #+#             */
-/*   Updated: 2023/12/04 17:15:59 by macastro         ###   ########.fr       */
+/*   Updated: 2024/08/02 13:19:48 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	ft_putarr_ints(int *ints, int size)
 	i = 0;
 	while (i < size)
 	{
-		ft_printf("i:%i %i\n", i, ints[i]);
+		ft_printf("%i\n", ints[i]);
 		i++;
 	}
 }
@@ -31,7 +31,7 @@ void	ft_putarr_str(char **words)
 	i = 0;
 	while (words[i])
 	{
-		ft_printf("w:%i %s\n", i, words[i]);
+		ft_printf("%s\n", words[i]);
 		i++;
 	}
 }

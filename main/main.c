@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 20:04:22 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/08/02 14:07:49 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	**create_env(char *envp2[])
 	size = 0;
 	while (envp2[size] != NULL)
 	{
-		env[size] = strdup(envp2[size]);
+		env[size] = ft_strdup(envp2[size]);
 		if (env[size] == NULL)
 			return (NULL);
 		size++;
@@ -51,12 +51,14 @@ int	run_parser(char *input, t_cmdnode *nodes)
 
 int	main(int argc, char **argv, char *envp[])
 {
-	char		**env;
+	t_env 		env;
 	char		*input;
 	t_cmdnode	nodes[MAX_NODES];
 	int			n_nodes;
 
-	env = create_env(envp);
+	env.envp = envp;
+	env.env = create_env(envp);
+
 	(void)argc;
 	(void)argv;
 	while (1)

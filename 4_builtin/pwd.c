@@ -3,18 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 17:40:56 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/08/02 14:01:06 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-void	exec_pwd(t_cmdnode node, char *env[])
+char	*get_pwd(char *env[])
 {
-	(void)node;
-	(void)env;
-	ft_printf("pwd not implemented.\n");
+	int		i;
+	
+	i = 0;
+	while (ft_strnstr(env[i], "PWD", 3) == NULL)
+		i++;
+	return(&env[i][4]);
+}
+
+void	exec_pwd(t_cmdnode node,  t_env env)
+{
+	(void)	node;
+	char	*path;
+	
+	path = get_pwd(env.env);
+	ft_putstr_fd(path, 1);
+	write(1, "\n", 1);
 }

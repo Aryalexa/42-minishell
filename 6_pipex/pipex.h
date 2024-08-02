@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:57:31 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/16 15:03:55 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/08/02 14:08:33 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@ void	printerr_cur_cmd(char *cmd);
 void	close_and_dup(int pipefd[], int is_child);
 int		here_doc(char *delimiter);
 //PIPEX
-void	my_pipex(int n_nodes, t_cmdnode nodes[], char *env[]);
+void	my_pipex(int n_nodes, t_cmdnode nodes[], t_env env);
 
 #endif
