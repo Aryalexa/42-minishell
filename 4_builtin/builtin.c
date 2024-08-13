@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/13 16:11:52 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/08/13 20:33:35 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ int	expand_quotes(char *code, int *i, char	**val)
  * - $
  * - no nulo
  */
-
 char	*expand_token_val(char *code)
 {
 	int		i;
@@ -107,12 +106,34 @@ char	*expand_token_val(char *code)
 	return (val);
 }
 
-char	*get_pwd(char *env[])
+int	envvar_index(char *key, char **env)
 {
-	int		i;
+	int	i;
 
 	i = 0;
-	while (ft_strnstr(env[i], "PWD", 3) == NULL)
+	while (env[i] && ft_strnstr(env[i], key, ft_strlen(key)) == NULL)
 		i++;
-	return (&env[i][4]);
+	if (!env[i])
+		return (-1);
+	return (i);
+}
+
+
+/**
+ * create or replace env var in env
+ */
+void	update_envvar(char *key, char *value, char *env[]) // funciona????
+{
+	int		i;
+	char	*line;
+	char	*aux;
+
+	i = envvar_index(key, env);
+	if (i == -1)
+		return ;
+	aux = ft_strjoin(key, "=");
+	line = ft_strjoin(aux, value);
+	free(env[i]);
+	free(aux);
+	env[i] = line;
 }

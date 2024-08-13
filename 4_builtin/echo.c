@@ -6,27 +6,27 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/13 16:10:12 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/08/13 18:42:30 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-int		isoption(t_cmdnode node, char *option)
+int	isoption(t_cmdnode node, char *option)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (i < node.argc)
 	{
-		if (ft_strcmp(node.argv[i], option)== 0)
+		if (ft_strcmp(node.argv[i], option) == 0)
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-void	exec_echo(t_cmdnode node, t_env env)
+void	exec_echo(t_cmdnode node, t_env *env)
 {
 	int	i;
 

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/02 14:07:49 by root             ###   ########.fr       */
+/*   Updated: 2024/08/13 18:51:36 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**create_env(char *envp2[])
+char	**create_env(char *envp2[], int *save_size)
 {
 	char	**env;
 	int		size;
@@ -32,6 +32,7 @@ char	**create_env(char *envp2[])
 		size++;
 	}
 	env[size] = NULL;
+	*save_size = size + 1;
 	return (env);
 }
 
@@ -47,7 +48,7 @@ int	run_parser(char *input, t_cmdnode *nodes)
 	n_n = parse_tokens(tokens, n_t, nodes);
 	free_tokens(tokens, n_t);
 	return (n_n);
-}
+} 
 
 int	main(int argc, char **argv, char *envp[])
 {
@@ -57,7 +58,8 @@ int	main(int argc, char **argv, char *envp[])
 	int			n_nodes;
 
 	env.envp = envp;
-	env.env = create_env(envp);
+	env.env = create_env(envp, &env.n_env);
+
 
 	(void)argc;
 	(void)argv;
@@ -75,7 +77,7 @@ int	main(int argc, char **argv, char *envp[])
 		else
 		{
 			ft_printf(ANSI_COLOR_CYAN "execution call\n" ANSI_COLOR_RESET);
-			my_pipex(n_nodes, nodes, env);
+			my_pipex(n_nodes, nodes, &env);
 			free_nodes(n_nodes, nodes);
 		}
 		free(input);

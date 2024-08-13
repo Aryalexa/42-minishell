@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/13 18:07:47 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/08/13 20:33:49 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,10 @@ int	checkpath(char	*path)
 }
 
 /**
- * create or replace env var in env
- */
-void	update_pwd(char *key, char *value, char *env[])
-{
-	int		i;
-	char	*line;
-
-	i = 0;
-	while (env[i] && ft_strnstr(env[i], key, ft_strlen(key)) == NULL)
-		i++;
-	line = ft_strjoin(key, value);
-	free(env[i]);
-	env[i] = line;
-}
-
-/**
  * Change directory.
  * it calls chdir and change the env var PWD
  */
-void	exec_cd(t_cmdnode node, t_env env)
+void	exec_cd(t_cmdnode node, t_env *env)
 {
 	char	cwd[PATH_MAX];
 
@@ -64,5 +48,5 @@ void	exec_cd(t_cmdnode node, t_env env)
 		return ;
 	}
 	getcwd(cwd, PATH_MAX);
-	update_pwd("PWD=", cwd, env.env);
+	update_envvar("PWD", cwd, env->env);
 }

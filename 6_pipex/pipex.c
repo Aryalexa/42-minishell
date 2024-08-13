@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/02 14:12:11 by root             ###   ########.fr       */
+/*   Updated: 2024/08/13 18:51:09 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ int	check_builtin(t_cmdnode node)
 	return (-1);
 }
 
-int	exec_builtin(t_cmdnode node, t_env env)
+int	exec_builtin(t_cmdnode node, t_env *env)
 {
 	int			i;
 
@@ -154,7 +154,7 @@ int	exec_builtin(t_cmdnode node, t_env env)
 }
 
 
-void	my_exec(t_cmdnode node, t_env env)
+void	my_exec(t_cmdnode node, t_env *env)
 {
 	debug("-- begin execution --\n");
 	if (check_builtin(node) >= 0)
@@ -162,7 +162,7 @@ void	my_exec(t_cmdnode node, t_env env)
 	else
 	{
 		debug_str("executing", node.cmd);
-		child_executes(node, env);
+		child_executes(node, *env);
 	}
 }
 /**
@@ -246,7 +246,7 @@ void	my_piped_exec(t_cmdnode node, t_env env)
 }
 */
 
-void	my_pipex(int n_nodes, t_cmdnode nodes[], t_env env)
+void	my_pipex(int n_nodes, t_cmdnode nodes[], t_env *env)
 {
 	int	i;
 	int	default_in;
@@ -264,7 +264,7 @@ void	my_pipex(int n_nodes, t_cmdnode nodes[], t_env env)
 		if (i == n_nodes - 1)
 			nodes[i].last_node = 1;
 		
-		if (solve_path(&(nodes[i]), env.env))
+		if (solve_path(&(nodes[i]), env->env))
 			my_exec(nodes[i], env);
 
 		
