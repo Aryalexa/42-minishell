@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/02 12:24:07 by root             ###   ########.fr       */
+/*   Updated: 2024/08/13 16:10:12 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,29 +19,29 @@ int		isoption(t_cmdnode node, char *option)
 	i = 1;
 	while (i < node.argc)
 	{
-		if(ft_strcmp(node.argv[i], option)== 0)
-			return(1);
+		if (ft_strcmp(node.argv[i], option)== 0)
+			return (1);
 		i++;
 	}
 	return (0);
 }
 
-void	exec_echo(t_cmdnode node, char *env[])
+void	exec_echo(t_cmdnode node, t_env env)
 {
-	(void)env;
-	int i;
+	int	i;
 
+	(void)env;
 	i = 1;
-	while(i < node.argc)
+	while (i < node.argc)
 	{
-		if(ft_strcmp(node.argv[i], "-n") != 0)
+		if (ft_strcmp(node.argv[i], "-n") != 0)
 		{
 			ft_putstr_fd(node.argv[i], 1);
-			if( i < node.argc - 1)
+			if ( i < node.argc - 1)
 				write(1, " ", 1);
 		}
 		i++;
 	}
-	if(!isoption(node, "-n"))
+	if (!isoption(node, "-n"))
 		write(1, "\n", 1);
 }

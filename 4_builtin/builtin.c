@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 19:29:46 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/08/13 16:11:52 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,14 @@ char	*expand_token_val(char *code)
 	val[j] = '\0';
 	//swap_and_free_strings(code, &val);
 	return (val);
+}
+
+char	*get_pwd(char *env[])
+{
+	int		i;
+
+	i = 0;
+	while (ft_strnstr(env[i], "PWD", 3) == NULL)
+		i++;
+	return (&env[i][4]);
 }

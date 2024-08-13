@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:48:47 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/02 14:07:39 by root             ###   ########.fr       */
+/*   Updated: 2024/08/13 15:11:18 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include "../2_structs/structs.h"
 # include "../3_utils/utils.h"
+
+# define PATH_MAX 1000
 
 void	exec_echo(t_cmdnode node, t_env env);
 void	exec_exit(t_cmdnode node, t_env env);
