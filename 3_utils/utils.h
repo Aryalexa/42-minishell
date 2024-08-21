@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 19:43:12 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:02:53 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 
 void	my_perror_exit(char *msg);
 void	my_perror(char *msg);
+void	my_perror_arg(char *msg, char *var_name);
 void	*my_malloc(size_t size);
 void	*my_calloc(size_t count, size_t size);
 int		is_reserved(char c);

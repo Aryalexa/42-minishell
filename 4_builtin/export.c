@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/13 20:44:08 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:13:06 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	print_export_style(char *line)
 	}
 }
 
-char **add_one(char **list, int *n_items, char *new_str)
+char **add_one(char **items, int *n_items, char *new_str)
 {
 	char	**copy;
 	int		i;
@@ -36,12 +36,12 @@ char **add_one(char **list, int *n_items, char *new_str)
 	i = 0;
 	while (i < *n_items - 1)
 	{
-		copy[i] = list[i];
+		copy[i] = items[i];
 		i++;
 	}
 	copy[i++] = ft_strdup(new_str);
 	copy[i] = NULL;
-	free(list);
+	free(items);
 	(*n_items)++;
 	return (copy);
 }
@@ -94,13 +94,12 @@ void	exec_export(t_cmdnode node, t_env *env)
 		i = 1;
 		while (i < node.argc)
 		{
-			if (ft_strchri(node.argv[i], '=') == -1)
-			{
-				if (envvar_index(node.argv[i], env->env) == -1)
+			if (node.argv[i][0] == '=' || ft_isdigit(node.argv[i][0]) || ft_strchr(node.argv[i], '-'))
+				my_perror_arg("export error. Not a valid identifier", node.argv[i]);
+			else if (ft_strchri(node.argv[i], '=') != -1)
+					process_assignment(node.argv[i], env);
+			else if (envvar_index(node.argv[i], env->env) == -1)
 					(*env).env = add_one(env->env, &(env->n_env), node.argv[i]);
-			}
-			else
-				process_assignment(node.argv[i], env);
 			i++;
 		}
 	}

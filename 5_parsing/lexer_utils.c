@@ -3,15 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:57:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 18:49:35 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:29:52 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
+/**
+ * check quotes and return found word.
+ * returns string (with quotes if there were any)
+ * 
+ */
 char	*read_word(const char *input, int *i)
 {
 	char	*word;

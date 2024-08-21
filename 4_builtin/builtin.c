@@ -3,22 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/13 20:33:35 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/08/21 13:53:02 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
-
-int	expand_dollar(char *code, int *i, char **val)
+/**
+ * if quotes are open, q_char is " OR ' , otherwise NULL
+ */
+int	expand_dollar(char *code, int *i, char **val, char q_char)
 {
 	//ft_printf("---🍇in:expand_dollar code:%s\n", code);
 	if (!code[*i + 1] || is_reserved_all(code[*i + 1]))
 	{
+		if (code[*i + 1] == q_char)
+			*val = ft_strdup("$");
 		//ft_printf("----just one dollar!\n");
-		if (is_quote(code[*i + 1]))
+		else if (is_quote(code[*i + 1]))
 			*val = ft_strdup("");
 		else
 			*val = ft_strdup("$");
@@ -28,7 +32,7 @@ int	expand_dollar(char *code, int *i, char **val)
 	}
 	// USAR ENV
 	(*i)++;
-	while (code[*i] && !is_reserved_all(code[*i]))
+	while (code[*i] && !is_reserved_all(code[*i]) && !ft_isspace(code[*i]))
 	{
 		//ft_printf("--expand_dollar--i:%i code[i]:%c\n", *i, code[*i]);
 		(*i)++;
@@ -54,7 +58,7 @@ int	expand_quotes(char *code, int *i, char	**val)
 	{
 		if (q_char == '"' && code[*i] == '$')
 		{
-			j += expand_dollar(code, i, &dollar_val);
+			j += expand_dollar(code, i, &dollar_val, q_char);
 			*val = ft_strjoin_inplace(val, dollar_val);
 			free(dollar_val);
 		}
@@ -94,7 +98,7 @@ char	*expand_token_val(char *code)
 		}
 		else if ((code)[i] == '$')
 		{
-			j += expand_dollar(code, &i, &aux_val);
+			j += expand_dollar(code, &i, &aux_val, '\0');
 			val = ft_strjoin_inplace(&val, aux_val);
 			free(aux_val);
 		}
@@ -102,7 +106,6 @@ char	*expand_token_val(char *code)
 			val[j++] = (code)[i++];
 	}
 	val[j] = '\0';
-	//swap_and_free_strings(code, &val);
 	return (val);
 }
 
