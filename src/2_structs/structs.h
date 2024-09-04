@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/13 18:40:38 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/04 17:12:03 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # define MAX_NODES	100
 # define MAX_ARGS	100
 # define MAX_FILES	100
+# define DEBUG		0
 
 typedef enum e_built_ins
 {

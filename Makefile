@@ -1,4 +1,4 @@
-CC		= gcc
+CC		= cc
 
 # FT_SAN = -fsanitize=address
 EXCFLGS = -lreadline -lncurses
@@ -8,53 +8,66 @@ AR		= ar -rcs
 RM		= /bin/rm -rf
 
 NAME	= minishell
+SRCDIR = src
+OBJDIR = build
+LIBFT_DIR  = $(SRCDIR)/1_libft
+LIBFT	= $(LIBFT_DIR)/libft.a
 
-SRCS_S	=	3_utils/utils.c \
-			3_utils/debug.c \
-			3_utils/error.c \
-			3_utils/memory.c \
-			4_builtin/builtin.c \
-			4_builtin/echo.c \
-			4_builtin/exit.c \
-			4_builtin/pwd.c \
-			4_builtin/unset.c \
-			4_builtin/export.c \
-			4_builtin/cd.c \
-			4_builtin/env.c \
-			5_parsing/lexer.c \
-			5_parsing/lexer_utils.c \
-			5_parsing/parser.c \
-			5_parsing/parsing_print.c \
-			6_pipex/pipex.c \
-			6_pipex/utils.c \
-			main/main.c
-			#main/test.c
+SRCS_S = $(filter-out $(wildcard $(LIBFT_DIR)/*.c), $(shell find $(SRCDIR) -name '*.c'))
+# SRCS_S	=	3_utils/utils.c \
+# 			3_utils/debug.c \
+# 			3_utils/error.c \
+# 			3_utils/memory.c \
+# 			4_builtin/builtin.c \
+# 			4_builtin/echo.c \
+# 			4_builtin/exit.c \
+# 			4_builtin/pwd.c \
+# 			4_builtin/unset.c \
+# 			4_builtin/export.c \
+# 			4_builtin/cd.c \
+# 			4_builtin/env.c \
+# 			5_parsing/lexer.c \
+# 			5_parsing/lexer_utils.c \
+# 			5_parsing/parser.c \
+# 			5_parsing/parsing_print.c \
+# 			6_pipex/pipex.c \
+# 			6_pipex/utils.c \
+# 			main/main.c
+# 			#main/test.c
 
-OBJS_S	=  $(SRCS_S:.c=.o)
+$(info SRCS_S: $(SRCS_S))
 
-LIBFT_PATH  = 1_libft
-LIBFT	= $(LIBFT_PATH)/libft.a
+#OBJS_S	=  $(SRCS_S:.c=.o)
+# $(patsubst search_pattern, replace_pattern, text)
+OBJS_S = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS_S))
+
 
 all:		$(NAME) 
 
 ${NAME}: ${OBJS_S}
-	${MAKE} -C $(LIBFT_PATH)
+	${MAKE} -C $(LIBFT_DIR)
 	${CC} ${CFLAGS} $(OBJS_S) $(LIBFT) $(EXCFLGS) -o ${NAME}
 
 # bonus:		$(NAME_C)
 
-.c.o:
-			$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) 
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+# .c.o:
+# 			$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) 
 
 $(LIBFT):	
-			make -C $(LIBFT_PATH) all
+			make -C $(LIBFT_DIR) all
 
 clean:
-			make -C $(LIBFT_PATH) clean
-			$(RM) $(OBJS_S)
+			make -C $(LIBFT_DIR) clean
+			$(RM) $(OBJDIR)
 
 fclean:		clean
-			make -C $(LIBFT_PATH) fclean
+			make -C $(LIBFT_DIR) fclean
 			$(RM) $(NAME)
 
 re:			fclean all
