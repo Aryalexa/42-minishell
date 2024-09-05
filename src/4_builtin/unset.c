@@ -6,15 +6,47 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/21 12:43:22 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/05 19:15:54 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-void	exec_unset(t_cmdnode node,  t_env *env)
+void	env_del_one(t_env *env, char *var)
 {
-	(void)node;
-	(void)env;
-	ft_printf("unset not implemented.\n");
+	char	**copy;
+	int		i;
+	int		j;
+	char	*key;
+	char	*value;
+
+	copy = my_calloc(env->n_env - 1, sizeof(char *));
+	i = 0;
+	j = 0;
+	while (env->env[i])
+	{
+		get_kv(env->env[i], &key, &value);
+		if (ft_strcmp(key, var) != 0)
+			copy[j++] = ft_strdup(env->env[i]);
+		free(key);
+		free(value);
+		i++;
+	}
+	copy[j] = NULL;
+	ft_free_arrstr(env->env);
+	env->env = copy;
+	env->n_env--;
+}
+
+void	exec_unset(t_cmdnode node, t_env *env)
+{
+	int	i;
+
+	i = 1;
+	while (i < node.argc)
+	{
+		if (envvar_index(node.argv[i], env) != -1)
+			env_del_one(env, node.argv[i]);
+		i++;
+	}
 }

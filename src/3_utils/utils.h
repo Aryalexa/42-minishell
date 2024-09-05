@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/21 13:02:53 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/05 13:50:53 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int		is_quote(char c);
 void	debug(char *msg);
 void	debug_int(char *fdname, int fdint);
 void	debug_str(char *name_desc, char* str);
+void    debug_env(t_env *env);
 void	swap_and_free_strings(char **s1, char **s2);
 void	free_node(t_cmdnode node);
 void	free_nodes(int n_nodes, t_cmdnode *nodes);

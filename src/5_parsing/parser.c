@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:58:04 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 19:29:47 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/05 17:25:46 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-int	check_word_and_vars(t_token token, t_cmdnode *node)
+int	check_word_and_vars(t_token token, t_cmdnode *node, t_env *env)
 {
 	char	*new_val;
 	if (token.type == TKN_WORD || token.type == TKN_ENVAR)
 	{
 		//ft_printf("token BEFORE: %s, %i\n", token.val, token.type);
-		new_val = expand_token_val(token.val);
+		new_val = expand_token_val(token.val, env);
 		//ft_printf("token AFTER: %s\n", token.val);
 		if (!node->cmd)
 		{
@@ -42,11 +42,12 @@ int	check_word_and_vars(t_token token, t_cmdnode *node)
 	return (0);
 }
 
-void	read_file(t_token token, t_cmdnode *node, int is_infile)
+void	read_file(t_token token, t_cmdnode *node, int is_infile, t_env *env)
 {
 	char	*new_val;
+
 	if (token.type == TKN_WORD || token.type == TKN_ENVAR)
-		new_val = expand_token_val(token.val);
+		new_val = expand_token_val(token.val, env);
 	if (is_infile)
 	{
 		ft_printf("infile found: %s\n", new_val);
@@ -59,21 +60,23 @@ void	read_file(t_token token, t_cmdnode *node, int is_infile)
 	}
 }
 
-int	check_infiles(t_token *tokens, t_cmdnode *node, int *t, int n_tokens)
+int	check_infiles(t_tkdata *tkd, t_cmdnode *node, t_env *env)
 {
-	if (tokens[*t].type == TKN_LT || tokens[*t].type == TKN_HRDC)
+	if (tkd->tokens[*(tkd->cur)].type == TKN_LT
+		|| tkd->tokens[*(tkd->cur)].type == TKN_HRDC)
 	{
-		if (tokens[*t].type == TKN_LT)
+		if (tkd->tokens[*(tkd->cur)].type == TKN_LT)
 			node->redir.infiles[node->redir.n_in].type = F_IN;
-		if (tokens[*t].type == TKN_HRDC)
+		if (tkd->tokens[*(tkd->cur)].type == TKN_HRDC)
 			node->redir.infiles[node->redir.n_in].type = F_HEREDOC;
-		if (++(*t) >= n_tokens)
+		if (++(*(tkd->cur)) >= tkd->n_tokens)
 		{
 			my_perror("syntax error: missing value after `<'/'<<' at the end!");
 			return (-1);
 		}
-		if (tokens[*t].type == TKN_WORD || tokens[*t].type == TKN_ENVAR)
-			read_file(tokens[*t], node, 1);
+		if (tkd->tokens[*(tkd->cur)].type == TKN_WORD
+			|| tkd->tokens[*(tkd->cur)].type == TKN_ENVAR)
+			read_file(tkd->tokens[*(tkd->cur)], node, 1, env);
 		else
 		{
 			my_perror("syntax error: missing value after `<'/'<<'!");
@@ -86,21 +89,23 @@ int	check_infiles(t_token *tokens, t_cmdnode *node, int *t, int n_tokens)
 	return (0);
 }
 
-int	check_outfiles(t_token *tokens, t_cmdnode *node, int *t, int n_tokens)
+int	check_outfiles(t_tkdata *tkd, t_cmdnode *node, t_env *env)
 {
-	if (tokens[*t].type == TKN_GT || tokens[*t].type == TKN_APPD)
+	if (tkd->tokens[*(tkd->cur)].type == TKN_GT
+		|| tkd->tokens[*(tkd->cur)].type == TKN_APPD)
 	{
-		if (tokens[*t].type == TKN_GT)
+		if (tkd->tokens[*(tkd->cur)].type == TKN_GT)
 			node->redir.outfiles[node->redir.n_out].type = F_OUT;
-		if (tokens[*t].type == TKN_APPD)
+		if (tkd->tokens[*(tkd->cur)].type == TKN_APPD)
 			node->redir.outfiles[node->redir.n_out].type = F_APPEND;
-		if (++(*t) >= n_tokens)
+		if (++(*(tkd->cur)) >= tkd->n_tokens)
 		{
 			my_perror("syntax error: missing file after `>'/'>>' at the end!");
 			return (-1);
 		}
-		if (tokens[*t].type == TKN_WORD || tokens[*t].type == TKN_ENVAR)
-			read_file(tokens[*t], node, 0);
+		if (tkd->tokens[*(tkd->cur)].type == TKN_WORD
+			|| tkd->tokens[*(tkd->cur)].type == TKN_ENVAR)
+			read_file(tkd->tokens[*(tkd->cur)], node, 0, env);
 		else
 		{
 			my_perror("syntax error: missing file after `>'/'>>'!");
@@ -139,21 +144,25 @@ int	check_pipe(t_token *tokens, int t, int n_tokens, int *n)
  * builds command nodes
  * returns number of nodes
  */
-int	parse_tokens(t_token *tokens, int n_tokens, t_cmdnode *nodes)
+int	parse_tokens(t_token *tokens, int n_tokens, t_cmdnode *nodes, t_env *env)
 {
 	int	t;
 	int	n;
 	int	ok;
+	t_tkdata tkdata;
 
 	ft_memset(nodes, '\0', sizeof(t_cmdnode) * MAX_NODES);
 	n = 0;
 	t = 0;
 	ok = 1;
+	tkdata.cur = &t;
+	tkdata.tokens = tokens;
+	tkdata.n_tokens = n_tokens;
 	while (t < n_tokens && ok)
 	{
-		ok = ok && (check_word_and_vars(tokens[t], &nodes[n]) == 0);
-		ok = ok && (check_infiles(tokens, &nodes[n], &t, n_tokens) == 0);
-		ok = ok && (check_outfiles(tokens, &nodes[n], &t, n_tokens) == 0);
+		ok = ok && (check_word_and_vars(tokens[t], &nodes[n], env) == 0);
+		ok = ok && (check_infiles(&tkdata, &nodes[n], env) == 0);
+		ok = ok && (check_outfiles(&tkdata, &nodes[n], env) == 0);
 		ok = ok && (check_pipe(tokens, t, n_tokens, &n) == 0);
 		t++;
 	}

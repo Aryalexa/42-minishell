@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/13 18:51:09 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/05 18:25:06 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	process_infiles(int n, t_infile	*infiles)
 		j++;
 	}
 	debug("exit infiles\n");
-
 }
 
 void	process_outfiles(int n, t_outfile *outfiles)
@@ -80,47 +79,42 @@ void	process_outfiles(int n, t_outfile *outfiles)
 
 void	child_executes(t_cmdnode node, t_env env)
 {
-	int pipefd[2];
+	int	pipefd[2];
 	int	pid;
 	int	status; // salida!!
 
-	// process files and pipes (if files, use files!)
-	
-		
-    if (pipe(pipefd)  == -1)
-        my_perror_exit("pipe failed");
-    // dup2(fd[0], STDIN_FILENO);
+	// process files and pipes (if files, use files!)	
+	if (pipe(pipefd)  == -1)
+		my_perror_exit("pipe failed");
+	// dup2(fd[0], STDIN_FILENO);
 	pid = fork();
 	if (pid == -1)
 		my_perror_exit("error: fork failed.");
 	if (pid == 0)
 	{
-
-        // lectura: pipe con contenido
-        // escritura SDTOUT
-		debug("child execs");
-        
-        close(pipefd[0]);
-		if(!node.last_node)
-            dup2(pipefd[1], STDOUT_FILENO);
+		// lectura: pipe con contenido
+		// escritura SDTOUT
+		debug("child execs"); //
+		close(pipefd[0]);
+		if (!node.last_node)
+			dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
-
 		process_infiles(node.redir.n_in, node.redir.infiles); // infile? file is new in
 		process_outfiles(node.redir.n_out, node.redir.outfiles); // outfile? file new out
-		debug_str("ARGV 0:", node.argv[0]);
+		debug_str("ARGV 0:", node.argv[0]); //
 		execve(node.cmd, node.argv, (char *const *)env.env);
 	}
 	else
 	{
-        close(pipefd[1]);
+		close(pipefd[1]);
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
-		debug("parent waiting");
+		debug("parent waiting"); //
 		if (wait(&status) == -1)
 			my_perror_exit("wait error");
 		//if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
 		//	return ;
-		debug("parent waited!");
+		debug("parent waited!"); //
 	}
 }
 
@@ -192,7 +186,7 @@ int	solve_path(t_cmdnode *node, char *env[])
 		cmd_path = find_path(node->cmd, env);
 		if (!cmd_path)
 		{
-			my_perror("command path not found 🌸");
+			my_perror_arg("command path not found 🌸", node->cmd);
 			return (0);
 		}
 		//debug_str("cmd", node->cmd);

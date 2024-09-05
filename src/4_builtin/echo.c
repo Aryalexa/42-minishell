@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/13 18:42:30 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/05 17:37:43 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	exec_echo(t_cmdnode node, t_env *env)
 		if (ft_strcmp(node.argv[i], "-n") != 0)
 		{
 			ft_putstr_fd(node.argv[i], 1);
-			if ( i < node.argc - 1)
+			if (i < node.argc - 1)
 				write(1, " ", 1);
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/12 16:33:50 by macastro          #+#    #+#             */
-/*   Updated: 2024/07/15 14:55:13 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/05 13:59:11 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int		ft_memcmp(const void *s1, const void *s2, size_t n);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	*ft_calloc(size_t count, size_t size);
 void	ft_free_arrstr(char **words);
+void	ft_free_arrstrn(char **words, int n);
 
 int		ft_atoi(const char *str);
 int		ft_atoi_hex(const char *str, int b);

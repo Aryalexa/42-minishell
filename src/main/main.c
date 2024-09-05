@@ -3,30 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/13 18:51:36 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/05 17:34:50 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**create_env(char *envp2[], int *save_size)
+/**
+ * the original env that main receives has a null terminator
+ * This creates a copy and returns the env and the number of items.
+ * The copy does not have a null terminator.
+ */
+char	**create_env(char *env_src[], int *save_size)
 {
 	char	**env;
 	int		size;
 
 	size = 0;
-	while (envp2[size] != NULL)
+	while (env_src[size] != NULL)
 		size++;
 	env = malloc((size + 1) * sizeof(char *));
 	if (!env)
 		return (NULL);
 	size = 0;
-	while (envp2[size] != NULL)
+	while (env_src[size] != NULL)
 	{
-		env[size] = ft_strdup(envp2[size]);
+		env[size] = ft_strdup(env_src[size]);
 		if (env[size] == NULL)
 			return (NULL);
 		size++;
@@ -36,7 +41,7 @@ char	**create_env(char *envp2[], int *save_size)
 	return (env);
 }
 
-int	run_parser(char *input, t_cmdnode *nodes)
+int	run_parser(char *input, t_cmdnode *nodes, t_env *env)
 {
 	int		n_t;
 	int		n_n;
@@ -45,10 +50,10 @@ int	run_parser(char *input, t_cmdnode *nodes)
 	n_t = lexer(input, tokens);
 	if (n_t < 0)
 		return (-1);
-	n_n = parse_tokens(tokens, n_t, nodes);
+	n_n = parse_tokens(tokens, n_t, nodes, env);
 	free_tokens(tokens, n_t);
 	return (n_n);
-} 
+}
 
 int	main(int argc, char **argv, char *envp[])
 {
@@ -60,7 +65,6 @@ int	main(int argc, char **argv, char *envp[])
 	env.envp = envp;
 	env.env = create_env(envp, &env.n_env);
 
-
 	(void)argc;
 	(void)argv;
 	while (1)
@@ -70,8 +74,7 @@ int	main(int argc, char **argv, char *envp[])
 			add_history(input);
 		
 		//Ctrl+D and NULL management to exit program //if (input == NULL)
-		n_nodes = run_parser(input, nodes);
-
+		n_nodes = run_parser(input, nodes, &env); // solo lee env
 		if (n_nodes < 0)
 			ft_printf("syntax error: no exec\n");
 		else

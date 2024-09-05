@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:01:03 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/18 18:51:10 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/05 17:26:47 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,16 @@ typedef struct s_token
 	char		*val;
 }	t_token;
 
+typedef struct s_tkdata
+{
+	t_token	*tokens;
+	int		n_tokens;
+	int		*cur;
+}	t_tkdata;
+
 int		lexer(const char *input, t_token *tokens);
-int		parse_tokens(t_token *tokens, int n_tokens, t_cmdnode *nodes);
+int		parse_tokens(t_token *tokens, int n_tokens,
+			t_cmdnode *nodes, t_env *env);
 void	print_nodes(t_cmdnode *nodes, int n);
 void	print_tokens(t_token *tokens, int n);
 void	print_token(t_token token);

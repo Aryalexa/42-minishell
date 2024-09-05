@@ -13,12 +13,13 @@ OBJDIR = build
 LIBFT_DIR  = $(SRCDIR)/1_libft
 LIBFT	= $(LIBFT_DIR)/libft.a
 
-SRCS_S = $(filter-out $(wildcard $(LIBFT_DIR)/*.c), $(shell find $(SRCDIR) -name '*.c'))
-# SRCS_S	=	3_utils/utils.c \
+SRCS = $(filter-out $(wildcard $(LIBFT_DIR)/*.c), $(shell find $(SRCDIR) -name '*.c'))
+# SRCS	=	3_utils/utils.c \
 # 			3_utils/debug.c \
 # 			3_utils/error.c \
 # 			3_utils/memory.c \
 # 			4_builtin/builtin.c \
+# 			4_builtin/expand.c \
 # 			4_builtin/echo.c \
 # 			4_builtin/exit.c \
 # 			4_builtin/pwd.c \
@@ -35,18 +36,18 @@ SRCS_S = $(filter-out $(wildcard $(LIBFT_DIR)/*.c), $(shell find $(SRCDIR) -name
 # 			main/main.c
 # 			#main/test.c
 
-$(info SRCS_S: $(SRCS_S))
+$(info SRCS: $(SRCS))
 
-#OBJS_S	=  $(SRCS_S:.c=.o)
+#OBJS	=  $(SRCS:.c=.o)
 # $(patsubst search_pattern, replace_pattern, text)
-OBJS_S = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS_S))
+OBJS = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 
 
 all:		$(NAME) 
 
-${NAME}: ${OBJS_S}
+${NAME}: ${OBJS}
 	${MAKE} -C $(LIBFT_DIR)
-	${CC} ${CFLAGS} $(OBJS_S) $(LIBFT) $(EXCFLGS) -o ${NAME}
+	${CC} ${CFLAGS} $(OBJS) $(LIBFT) $(EXCFLGS) -o ${NAME}
 
 # bonus:		$(NAME_C)
 
