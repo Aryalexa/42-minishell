@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 15:42:26 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 20:01:39 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,50 @@
 #include "pipex.h"
 #include <sys/wait.h>
 #include <fcntl.h>
+
+/**
+ * changes the node cmd to its full path.
+ * return 1 when resolved, 0 if error
+ * supported:
+ * - ruta relativa o absoluta (empieza con /)
+ * - si es relativo: si es comando built-in o no
+ * 
+ */
+int	solve_path(t_cmdnode *node, char *env[])
+{
+	char		*cmd_path;	
+
+	if (!node->cmd)
+		return (0);
+	if (node->cmd[0] == '/')
+		return (1);
+	else
+	{
+		if (check_builtin(*node) >= 0)
+			return (1);
+		cmd_path = find_path(node->cmd, env);
+		if (!cmd_path)
+		{
+			my_perror_arg("command not found 🌸", node->cmd);
+			return (0);
+		}
+		free(node->cmd);
+		node->cmd = cmd_path;
+		return (1);
+	}
+}
+
+int	exec_builtin(t_cmdnode node, t_shcontext *env)
+{
+	int			i;
+	const t_FP	built_ins[7] = {&exec_echo, &exec_exit,
+		&exec_pwd, &exec_export, &exec_unset, &exec_env, &exec_cd};
+
+	i = check_builtin(node);
+	if (i >= 0)
+		built_ins[i](node, env);
+	return (0);
+}
 
 /**
  * infile? then file is new in
@@ -79,25 +123,33 @@ void	process_outfiles(int n, t_outfile *outfiles)
 	debug("exit outfiles\n");
 }
 
-void	process_and_execs(t_cmdnode node, t_shcontext env)
+int	process_and_execs(t_cmdnode node, t_shcontext *env)
 {
 	process_infiles(node.redir.n_in, node.redir.infiles);
 	process_outfiles(node.redir.n_out, node.redir.outfiles);
+
 	debug_str("ARGV 0:", node.argv[0]); //
-	execve(node.cmd, node.argv, (char *const *)env.env);
+	if (check_builtin(node) >= 0)
+		return (exec_builtin(node, env)); //TODO
+	else
+	{
+		execve(node.cmd, node.argv, (char *const *)env->env);
+		return (0);
+	}
 }
 
-
-void	child_executes(t_cmdnode node, t_shcontext env)
+/**
+ * 	process files and pipes (if files, use files!)	
+ */
+void	my_exec(t_cmdnode node, t_shcontext *env)
 {
 	int	pipefd[2];
 	int	pid;
-	int	status; // salida!!
+	int	status;
 
-	// process files and pipes (if files, use files!)	
-	if (pipe(pipefd)  == -1)
+	debug_str("executing", node.cmd); //
+	if (pipe(pipefd) == -1)
 		my_perror_exit("pipe failed");
-	// dup2(fd[0], STDIN_FILENO);
 	pid = fork();
 	if (pid == -1)
 		my_perror_exit("error: fork failed.");
@@ -110,150 +162,46 @@ void	child_executes(t_cmdnode node, t_shcontext env)
 		if (!node.last_node)
 			dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
-		process_and_execs(node, env);
+		status = process_and_execs(node, env);
+		exit(status);
 	}
 	else
 	{
 		close(pipefd[1]);
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
-		debug("parent waiting"); //
 		if (wait(&status) == -1)
 			my_perror_exit("wait error");
 		//if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
 		//	return ;
-		debug ("parent waited!"); //
 	}
 }
 
-int	exec_builtin(t_cmdnode node, t_shcontext *env)
-{
-	int			i;
-	const t_FP	built_ins[7] = {&exec_echo, &exec_exit,
-		&exec_pwd, &exec_export, &exec_unset, &exec_env, &exec_cd};
-
-	i = check_builtin(node);
-	if (i >= 0)
-		built_ins[i](node, env);
-	return (0);
-}
-
-void	my_exec(t_cmdnode node, t_shcontext *env)
-{
-	debug("-- begin execution --\n");
-	if (check_builtin(node) >= 0)
-		exec_builtin(node, env);
-	else
-	{
-		debug_str("executing", node.cmd);
-		child_executes(node, *env);
-	}
-}
 /**
- * diferenciar entre:
- * - ruta relativa o absoluta (empieza con /)
- * - si es relativo: si es comando built-in o no
- * - argv[0] falta
- * 
+ * execute
+ * it marks the last node
  */
-int	solve_path(t_cmdnode *node, char *env[])
-{
-	char		*cmd_path;	
-
-	//debug("-- solve path --");
-	//debug_str("cmd 1 BEFORE", (*node).cmd);
-	if (!node->cmd)
-		return (0);
-	if (node->cmd[0] == '/')
-		return (1);
-	else
-	{
-		if (check_builtin(*node) >= 0)
-		{
-			//debug_str("cmd 1 AFTER BUILTIN", (*node).cmd);
-			return (1);
-		}
-		cmd_path = find_path(node->cmd, env);
-		if (!cmd_path)
-		{
-			my_perror_arg("command path not found 🌸", node->cmd);
-			return (0);
-		}
-		//debug_str("cmd", node->cmd);
-		//debug_str("before: aarg0", node->argv[0]);
-		free(node->cmd); //
-		node->cmd = cmd_path;
-		//node->argv[0] = node->cmd;
-		//debug_str("cmd 1 AFTER", (*node).cmd);
-		//debug_str("after: arg0", node->argv[0]);
-		return (1);
-	}
-}
-
-/**
- * it creates a pipe so the output of the command is redirected to the pipe, 
- * and the parent can have access to it. The parent should set the read from 
- * the pipe by default, so the next execution reads from it. The parent should 
- * wait for child to terminate, so it is finished before more commands execute.
- * child: > pipe, exec
- * parent: < pipe, wait
-*/
-/*
-void	my_piped_exec(t_cmdnode node, t_env env)
-{
-	int	pipefd[2];
-	int	pid;
-	int	status;
-
-	if (pipe(pipefd) == -1)
-		exit(1); //my_exit("pipe could not be created");
-	pid = fork();
-	if (pid < 0)
-		exit(1); //my_exit("fork error");
-	if (pid == 0)
-	{
-		close_and_dup(pipefd, 1);
-		my_exec(node, env);
-	}
-	else
-	{
-		close_and_dup(pipefd, 0);
-		if (wait(&status) == -1)
-			my_exit("wait error");
-		if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
-		{
-			exit(1);
-			//printerr_cur_cmd(node.cmd); 
-			//error handlingmy_exit("child did not success");
-		}
-	}
-}
-*/
-
 void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 {
 	int	i;
 	int	default_in;
 	int	default_out;
-	// int fd[2];
 
 	default_in = dup(STDIN_FILENO);
 	default_out = dup(STDOUT_FILENO);
 	i = 0;
-	while (i < n_nodes) // node1 | nodeUlt
-	{
-		
-		
-		debug_int("new node-------------------", i);
-		if (i == n_nodes - 1)
-			nodes[i].last_node = 1;
-		
-		if (solve_path(&(nodes[i]), env->env))
-			my_exec(nodes[i], env);
-
-		
-		i++;
-	}
+	if (n_nodes == 1 && check_builtin(nodes[i]) >= 0)
+		process_and_execs(nodes[i], env);
+	else
+		while (i < n_nodes)
+		{
+			debug_int("new node-------------------", i); //
+			if (i == n_nodes - 1)
+				nodes[i].last_node = 1;
+			if (solve_path(&(nodes[i]), env->env))
+				my_exec(nodes[i], env);
+			i++;
+		}
 	dup2(default_in, STDIN_FILENO);
 	dup2(default_out, STDOUT_FILENO);
 	debug("exit pipex\n");

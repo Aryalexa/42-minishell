@@ -4,7 +4,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
-void	child_executes(int ultimo, char *cmd, char *argv[], char *env[])
+void	my_exec(int ultimo, char *cmd, char *argv[], char *env[])
 {
     int pipefd[2];
 	int	pid;
@@ -61,9 +61,9 @@ int main(int argc, char *argv[], char *env[])
 	char *cmd2 = "/usr/bin/wc";
     char *argv2[] = {"wc", "-l", NULL};
     
-    child_executes(0, cmd1, argv1, env);
+    my_exec(0, cmd1, argv1, env);
     
-    child_executes(1, cmd2, argv2, env);
+    my_exec(1, cmd2, argv2, env);
 
 
 }

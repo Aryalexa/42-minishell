@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 14:26:09 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 19:33:04 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,6 @@ typedef struct s_shcontext
 
 }	t_shcontext;
 
-typedef void	(*t_FP) (t_cmdnode node, t_shcontext *env);
+typedef int	(*t_FP) (t_cmdnode node, t_shcontext *env);
 
 #endif

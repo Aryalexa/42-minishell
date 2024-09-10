@@ -4,7 +4,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
-void	child_executes(char *cmd, char *argv[], char *env[])
+void	my_exec(char *cmd, char *argv[], char *env[])
 {
     
 	int	pid;
@@ -58,10 +58,10 @@ int main(int argc, char *argv[], char *env[])
     char *argv2[] = {"wc", "-l", NULL};
 
     dup2(pipefd[1], STDOUT_FILENO);
-    child_executes(cmd1, argv1, env);
+    my_exec(cmd1, argv1, env);
     dup2(pipefd[0], STDIN_FILENO);
     
-    child_executes(cmd2, argv2, env);
+    my_exec(cmd2, argv2, env);
     dup2(pipefd[0], STDIN_FILENO);
 
 

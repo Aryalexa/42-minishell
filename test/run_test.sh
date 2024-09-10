@@ -5,6 +5,7 @@ CUSTOM_SHELL="./minishell"  # Your custom shell executable
 
 # Directory containing test cases
 TEST_DIR="test/tests"
+echo "🍓 🍓 Test 🍓 🍓"
 
 # Loop over each test case
 for test_file in "$TEST_DIR"/*.commands; do

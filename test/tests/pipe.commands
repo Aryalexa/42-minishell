@@ -1,0 +1,8 @@
+echo pipe testing
+echo sdf | exit
+echo "cat | cat | ls"
+ls -l | wc -l
+echo dfdf | cat
+pwd | wc
+pwd | exit
+echo ok

@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 19:39:51 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	env_del_one(t_shcontext *env, char *var)
 	env->n_env--;
 }
 
-void	exec_unset(t_cmdnode node, t_shcontext *env)
+int	exec_unset(t_cmdnode node, t_shcontext *env)
 {
 	int	i;
 
@@ -49,4 +49,5 @@ void	exec_unset(t_cmdnode node, t_shcontext *env)
 			env_del_one(env, node.argv[i]);
 		i++;
 	}
+	return (0);
 }
