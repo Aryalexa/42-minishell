@@ -1,0 +1,6 @@
+echo heredoc
+<< a | cat
+student
+and
+a
+ls

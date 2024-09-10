@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/13 19:28:31 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-void	exec_pwd(t_cmdnode node, t_env *env)
+void	exec_pwd(t_cmdnode node, t_shcontext *env)
 {
 	char	cwd[PATH_MAX];
 

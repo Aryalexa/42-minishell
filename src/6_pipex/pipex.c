@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/05 18:25:06 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 15:42:26 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,14 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
+/**
+ * infile? then file is new in
+ */
 void	process_infiles(int n, t_infile	*infiles)
 {
 	int			j;
 	int			fdin;
 
-	///// save heredoc fds
 	j = 0;
 	while (j < n)
 	{
@@ -32,7 +34,6 @@ void	process_infiles(int n, t_infile	*infiles)
 			infiles[j].fd = here_doc(infiles[j].filename_delim);
 		j++;
 	}
-	/////
 	j = 0;
 	while (j < n)
 	{
@@ -45,15 +46,16 @@ void	process_infiles(int n, t_infile	*infiles)
 		{
 			fdin = open(infiles[j].filename_delim, O_RDONLY);
 			if (fdin < 0)
-				my_exit("*input file error at open");
+				my_perror_exit("*input file error at open");
 			dup2(fdin, STDIN_FILENO);
 			close(fdin);
 		}
 		j++;
 	}
-	debug("exit infiles\n");
 }
-
+/**
+ * outfile? then file new out
+ */
 void	process_outfiles(int n, t_outfile *outfiles)
 {
 	int	j;
@@ -69,7 +71,7 @@ void	process_outfiles(int n, t_outfile *outfiles)
 			fdout = open(outfiles[j].filename,
 					O_RDWR | O_CREAT | O_TRUNC, 0777);
 		if (fdout < 0)
-			my_exit("error at open an outfile");
+			my_perror_exit("error at open an outfile");
 		dup2(fdout, STDOUT_FILENO);
 		close(fdout);
 		j++;
@@ -77,7 +79,16 @@ void	process_outfiles(int n, t_outfile *outfiles)
 	debug("exit outfiles\n");
 }
 
-void	child_executes(t_cmdnode node, t_env env)
+void	process_and_execs(t_cmdnode node, t_shcontext env)
+{
+	process_infiles(node.redir.n_in, node.redir.infiles);
+	process_outfiles(node.redir.n_out, node.redir.outfiles);
+	debug_str("ARGV 0:", node.argv[0]); //
+	execve(node.cmd, node.argv, (char *const *)env.env);
+}
+
+
+void	child_executes(t_cmdnode node, t_shcontext env)
 {
 	int	pipefd[2];
 	int	pid;
@@ -99,10 +110,7 @@ void	child_executes(t_cmdnode node, t_env env)
 		if (!node.last_node)
 			dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
-		process_infiles(node.redir.n_in, node.redir.infiles); // infile? file is new in
-		process_outfiles(node.redir.n_out, node.redir.outfiles); // outfile? file new out
-		debug_str("ARGV 0:", node.argv[0]); //
-		execve(node.cmd, node.argv, (char *const *)env.env);
+		process_and_execs(node, env);
 	}
 	else
 	{
@@ -114,41 +122,23 @@ void	child_executes(t_cmdnode node, t_env env)
 			my_perror_exit("wait error");
 		//if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
 		//	return ;
-		debug("parent waited!"); //
+		debug ("parent waited!"); //
 	}
 }
 
-
-int	check_builtin(t_cmdnode node)
+int	exec_builtin(t_cmdnode node, t_shcontext *env)
 {
 	int			i;
-
-	const char	built_ins_names[7][7] = {"echo", "exit", "pwd",
-		"export", "unset", "env", "cd"};
-	i = 0;
-	while (i < 7) // number of builtins
-	{
-		if (ft_strcmp(node.cmd, (char *)built_ins_names[i]) == 0)
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-int	exec_builtin(t_cmdnode node, t_env *env)
-{
-	int			i;
-
-	const t_FP	built_ins[7] = {&exec_echo, &exec_exit, 
+	const t_FP	built_ins[7] = {&exec_echo, &exec_exit,
 		&exec_pwd, &exec_export, &exec_unset, &exec_env, &exec_cd};
+
 	i = check_builtin(node);
-	if(i >= 0)
+	if (i >= 0)
 		built_ins[i](node, env);
 	return (0);
 }
 
-
-void	my_exec(t_cmdnode node, t_env *env)
+void	my_exec(t_cmdnode node, t_shcontext *env)
 {
 	debug("-- begin execution --\n");
 	if (check_builtin(node) >= 0)
@@ -240,7 +230,7 @@ void	my_piped_exec(t_cmdnode node, t_env env)
 }
 */
 
-void	my_pipex(int n_nodes, t_cmdnode nodes[], t_env *env)
+void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 {
 	int	i;
 	int	default_in;

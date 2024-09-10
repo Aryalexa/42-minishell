@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/05 19:49:45 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	expand_dollar_simple(char *code, int *i, char **val, char q_char)
 	return (0);
 }
 
-char	*get_env_var(char *var_key, t_env *env)
+char	*get_env_var(char *var_key, t_shcontext *env)
 {
 	char	*var_value;
 	char	*aux;
@@ -47,7 +47,7 @@ char	*get_env_var(char *var_key, t_env *env)
 	return (var_value);
 }
 
-int	expand_dollar(char *code, int *i, char **val, t_env *env)
+int	expand_dollar(char *code, int *i, char **val, t_shcontext *env)
 {
 	char	*var;
 	int		j;
@@ -68,7 +68,7 @@ int	expand_dollar(char *code, int *i, char **val, t_env *env)
 	return (ft_strlen(*val));
 }
 
-int	expand_quotes(char *code, int *i, char	**val, t_env *env)
+int	expand_quotes(char *code, int *i, char	**val, t_shcontext *env)
 {
 	int		j;
 	char	*dollar_val;
@@ -99,13 +99,13 @@ int	expand_quotes(char *code, int *i, char	**val, t_env *env)
 }
 
 /**
- * modify the code to its expansion
+ * read the code and returns the expanded version
  * cases:
  * - " -> interprete
  * - $
  * - no nulo
  */
-char	*expand_token_val(char *code, t_env *env)
+char	*expand_token_val(char *code, t_shcontext *env)
 {
 	int		i;
 	char	*val;

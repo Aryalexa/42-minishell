@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:01:03 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/05 17:26:47 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_tkdata
 
 int		lexer(const char *input, t_token *tokens);
 int		parse_tokens(t_token *tokens, int n_tokens,
-			t_cmdnode *nodes, t_env *env);
+			t_cmdnode *nodes, t_shcontext *env);
 void	print_nodes(t_cmdnode *nodes, int n);
 void	print_tokens(t_token *tokens, int n);
 void	print_token(t_token token);

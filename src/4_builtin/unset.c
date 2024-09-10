@@ -6,13 +6,13 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/05 19:15:54 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-void	env_del_one(t_env *env, char *var)
+void	env_del_one(t_shcontext *env, char *var)
 {
 	char	**copy;
 	int		i;
@@ -38,7 +38,7 @@ void	env_del_one(t_env *env, char *var)
 	env->n_env--;
 }
 
-void	exec_unset(t_cmdnode node, t_env *env)
+void	exec_unset(t_cmdnode node, t_shcontext *env)
 {
 	int	i;
 

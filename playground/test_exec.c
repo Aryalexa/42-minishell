@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:44:11 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/05 11:16:18 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 13:50:26 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,5 +153,5 @@ int	main(int argc, char *argv[], char *envp[])
 	crea_ls_arg(nodes);
 
 	print_nodes(nodes, 1);
-	my_pipex(1, nodes, env);
+	run_exec(1, nodes, env);
 }

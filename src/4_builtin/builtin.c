@@ -6,13 +6,13 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/05 19:11:54 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
-int	envvar_index(char *key_srch, t_env *env)
+int	envvar_index(char *key_srch, t_shcontext *env)
 {
 	int		i;
 	char	*key;
@@ -36,7 +36,7 @@ int	envvar_index(char *key_srch, t_env *env)
 /**
  * replace env var in env
  */
-void	update_envvar(char *key, char *value, t_env *env)
+void	update_envvar(char *key, char *value, t_shcontext *env)
 {
 	int		i;
 	char	*line;

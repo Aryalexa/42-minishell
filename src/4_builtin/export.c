@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/05 19:20:37 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	print_export_style(char *line)
 	}
 }
 
-void	env_add_one(t_env *env, char *var)
+void	env_add_one(t_shcontext *env, char *var)
 {
 	char	**copy;
 	int		i;
@@ -68,7 +68,7 @@ void	get_kv(char *line, char **key, char **value)
 	}
 }
 
-void	process_assignment(char *statement, t_env *env)
+void	process_assignment(char *statement, t_shcontext *env)
 {
 	char	*key;
 	char	*value;
@@ -90,7 +90,7 @@ void	process_assignment(char *statement, t_env *env)
 // si hay =, separar -> key, val = sep(line)
 // 		si key existe -> sust
 // 		else crear
-void	exec_export(t_cmdnode node, t_env *env)
+void	exec_export(t_cmdnode node, t_shcontext *env)
 {
 	int		i;
 

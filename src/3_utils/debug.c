@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:45:44 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/05 13:50:35 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	debug_str(char *name_desc, char* str)
 	//reset 1
 }
 
-void debug_env(t_env *env)
+void debug_env(t_shcontext *env)
 {
 	
 	int	i;

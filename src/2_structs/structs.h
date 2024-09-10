@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/05 17:35:09 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:26:09 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define MAX_NODES	100
 # define MAX_ARGS	100
 # define MAX_FILES	100
-# define DEBUG		1
+# define DEBUG		0
 
 typedef enum e_built_ins
 {
@@ -74,14 +74,15 @@ typedef struct s_cmdnode
 	int		last_node;
 }	t_cmdnode;
 
-typedef struct s_env
+typedef struct s_shcontext
 {
-	char		**env;
+	char		**env;		// null ended
 	int			n_env;
-	char		**envp;	//ORIGINAL
+	char		**o_env;	//ORIGINAL
+	int			status;
 
-}	t_env;
+}	t_shcontext;
 
-typedef void	(*t_FP) (t_cmdnode node, t_env *env);
+typedef void	(*t_FP) (t_cmdnode node, t_shcontext *env);
 
 #endif

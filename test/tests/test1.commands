@@ -1,0 +1,5 @@
+echo "# Commands to test"
+echo 'Hello, World!'
+cd /tmp
+pwd
+ls -l | grep "test"

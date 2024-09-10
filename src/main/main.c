@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/05 17:34:50 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	**create_env(char *env_src[], int *save_size)
 	return (env);
 }
 
-int	run_parser(char *input, t_cmdnode *nodes, t_env *env)
+int	run_parser(char *input, t_cmdnode *nodes, t_shcontext *env)
 {
 	int		n_t;
 	int		n_n;
@@ -55,34 +55,44 @@ int	run_parser(char *input, t_cmdnode *nodes, t_env *env)
 	return (n_n);
 }
 
-int	main(int argc, char **argv, char *envp[])
+void	run_command(char *input, t_shcontext *env)
 {
-	t_env 		env;
-	char		*input;
 	t_cmdnode	nodes[MAX_NODES];
 	int			n_nodes;
 
-	env.envp = envp;
+	n_nodes = run_parser(input, nodes, env);
+	if (n_nodes < 0)
+		ft_printf("syntax error: no exec\n");
+	else
+	{
+		debug(ANSI_COLOR_CYAN "execution call\n" ANSI_COLOR_RESET); //
+		run_exec(n_nodes, nodes, env);
+		free_nodes(n_nodes, nodes);
+	}
+}
+
+int	main(int argc, char **argv, char *envp[])
+{
+	t_shcontext		env;
+	char		*input;
+
+	env.o_env = envp;
 	env.env = create_env(envp, &env.n_env);
 
 	(void)argc;
 	(void)argv;
 	while (1)
 	{
-		input = readline(ANSI_COLOR_MAGENTA "minishell> " ANSI_COLOR_RESET);
-		if (input)
-			add_history(input);
-		
-		//Ctrl+D and NULL management to exit program //if (input == NULL)
-		n_nodes = run_parser(input, nodes, &env); // solo lee env
-		if (n_nodes < 0)
-			ft_printf("syntax error: no exec\n");
-		else
+		if (isatty(STDIN_FILENO))
 		{
-			ft_printf(ANSI_COLOR_CYAN "execution call\n" ANSI_COLOR_RESET);
-			my_pipex(n_nodes, nodes, &env);
-			free_nodes(n_nodes, nodes);
+			input = readline(ANSI_COLOR_MAGENTA "minishell> " ANSI_COLOR_RESET);
+			if (input)
+				add_history(input);
 		}
+		else
+			input = get_next_line(STDIN_FILENO);
+		//Ctrl+D and NULL management to exit program //if (input == NULL)
+		run_command(input, &env);
 		free(input);
 	}
 	return (0);

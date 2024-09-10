@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:57:31 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/13 18:51:55 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/10 15:38:22 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@
 # include <fcntl.h>
 
 //UTILS
-void	my_exit(char *msg);
+int		check_builtin(t_cmdnode node);
 char	*find_path(char *cmd, char *env[]);
 void	printerr_cur_cmd(char *cmd);
 void	close_and_dup(int pipefd[], int is_child);
 int		here_doc(char *delimiter);
 //PIPEX
-void	my_pipex(int n_nodes, t_cmdnode nodes[], t_env *env);
+void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env);
 
 #endif

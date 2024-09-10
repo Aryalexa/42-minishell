@@ -3,19 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/07/16 15:02:52 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/10 15:40:57 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	my_exit(char *msg)
+int	check_builtin(t_cmdnode node)
 {
-	perror(msg);
-	exit(1);
+	int			i;
+	const char	built_ins_names[7][7] = {"echo", "exit", "pwd",
+		"export", "unset", "env", "cd"};
+
+	i = 0;
+	while (i < 7) // number of builtins
+	{
+		if (ft_strcmp(node.cmd, (char *)built_ins_names[i]) == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
 char	*find_path(char *cmd, char *env[])

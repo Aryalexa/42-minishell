@@ -6,13 +6,13 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:58:04 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/05 17:25:46 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-int	check_word_and_vars(t_token token, t_cmdnode *node, t_env *env)
+int	check_word_and_vars(t_token token, t_cmdnode *node, t_shcontext *env)
 {
 	char	*new_val;
 	if (token.type == TKN_WORD || token.type == TKN_ENVAR)
@@ -42,7 +42,7 @@ int	check_word_and_vars(t_token token, t_cmdnode *node, t_env *env)
 	return (0);
 }
 
-void	read_file(t_token token, t_cmdnode *node, int is_infile, t_env *env)
+void	read_file(t_token token, t_cmdnode *node, int is_infile, t_shcontext *env)
 {
 	char	*new_val;
 
@@ -50,17 +50,17 @@ void	read_file(t_token token, t_cmdnode *node, int is_infile, t_env *env)
 		new_val = expand_token_val(token.val, env);
 	if (is_infile)
 	{
-		ft_printf("infile found: %s\n", new_val);
+		debug_str("infile found", new_val);
 		node->redir.infiles[node->redir.n_in].filename_delim = new_val;
 	}
 	else
 	{
-		ft_printf("outfile found: %s\n", new_val);
+		debug_str("outfile found", new_val);
 		node->redir.outfiles[node->redir.n_out].filename = new_val;
 	}
 }
 
-int	check_infiles(t_tkdata *tkd, t_cmdnode *node, t_env *env)
+int	check_infiles(t_tkdata *tkd, t_cmdnode *node, t_shcontext *env)
 {
 	if (tkd->tokens[*(tkd->cur)].type == TKN_LT
 		|| tkd->tokens[*(tkd->cur)].type == TKN_HRDC)
@@ -89,7 +89,7 @@ int	check_infiles(t_tkdata *tkd, t_cmdnode *node, t_env *env)
 	return (0);
 }
 
-int	check_outfiles(t_tkdata *tkd, t_cmdnode *node, t_env *env)
+int	check_outfiles(t_tkdata *tkd, t_cmdnode *node, t_shcontext *env)
 {
 	if (tkd->tokens[*(tkd->cur)].type == TKN_GT
 		|| tkd->tokens[*(tkd->cur)].type == TKN_APPD)
@@ -144,7 +144,7 @@ int	check_pipe(t_token *tokens, int t, int n_tokens, int *n)
  * builds command nodes
  * returns number of nodes
  */
-int	parse_tokens(t_token *tokens, int n_tokens, t_cmdnode *nodes, t_env *env)
+int	parse_tokens(t_token *tokens, int n_tokens, t_cmdnode *nodes, t_shcontext *env)
 {
 	int	t;
 	int	n;
