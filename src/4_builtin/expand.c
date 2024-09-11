@@ -6,11 +6,27 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/11 13:41:53 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/11 14:01:10 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
+
+char	*get_env_var(char *var_key, t_shcontext *env)
+{
+	char	*var_value;
+	char	*aux;
+	int		j;
+
+	var_value = NULL;
+	j = envvar_index(var_key, env);
+	if (j == -1)
+		return ((char *) my_calloc(1, 1));
+	get_kv(env->env[j], &aux, &var_value);
+	free(aux);
+	return (var_value);
+}
+
 /**
  * if quotes are open, q_char is " OR ' , otherwise NULL
  */
@@ -31,22 +47,10 @@ int	expand_dollar_simple(char *code, int *i, char **val, char q_char)
 	}
 	return (0);
 }
-
-char	*get_env_var(char *var_key, t_shcontext *env)
-{
-	char	*var_value;
-	char	*aux;
-	int		j;
-
-	var_value = NULL;
-	j = envvar_index(var_key, env);
-	if (j == -1)
-		return ((char *) my_calloc(1, 1));
-	get_kv(env->env[j], &aux, &var_value);
-	free(aux);
-	return (var_value);
-}
-
+/**
+ * expands code and saves it in val
+ * returns the lenght of val
+ */
 int	expand_dollar(char *code, int *i, char **val, t_shcontext *env)
 {
 	char	*var;
@@ -59,6 +63,12 @@ int	expand_dollar(char *code, int *i, char **val, t_shcontext *env)
 		(*i)++;
 		free(var);
 		return (0);
+	}
+	else if (code[*i + 1] == '?')
+	{
+		(*i) += 2;
+		*val = ft_itoa(env->status);
+		return (ft_strlen(*val));
 	}
 	(*i)++;
 	while (code[*i] && !is_reserved_all(code[*i]) && !ft_isspace(code[*i]))

@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 19:21:18 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/11 15:12:02 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	check_builtin(t_cmdnode node)
 	const char	built_ins_names[7][7] = {"echo", "exit", "pwd",
 		"export", "unset", "env", "cd"};
 
+	if (!node.cmd)
+		return (-1);
 	i = 0;
 	while (i < 7) // number of builtins
 	{

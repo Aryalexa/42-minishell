@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/11 13:42:01 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/11 17:11:05 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct s_cmdnode
 	char	*argv[MAX_ARGS];		// list of args
 	t_redir	redir;
 	int		last_node;
+	int		pid;
 }	t_cmdnode;
 
 typedef struct s_shcontext

@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/11 14:06:54 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	main(int argc, char **argv, char *envp[])
 
 	env.o_env = envp;
 	env.env = create_env(envp, &env.n_env);
+	env.status = 0;
 
 	(void)argc;
 	(void)argv;

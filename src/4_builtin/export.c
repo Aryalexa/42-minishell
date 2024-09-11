@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 19:39:26 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/11 17:14:30 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,32 @@ void	process_assignment(char *statement, t_shcontext *env)
 	free(key);
 	free(value);
 }
+int export_vars(t_cmdnode node, t_shcontext *env)
+{
+	int		i;
+	int		status;
+	
+	i = 1;
+	status = 0;
+	while (i < node.argc)
+	{
+		if (node.argv[i][0] == '='
+			|| ft_isdigit(node.argv[i][0]) || ft_strchr(node.argv[i], '-'))
+		{
+			my_perror_arg("error. Not a valid identifier", node.argv[i]);
+			status = 1;
+		}
+		else
+		{
+			if (ft_strchri(node.argv[i], '=') != -1)
+				process_assignment(node.argv[i], env);
+			else if (envvar_index(node.argv[i], env) == -1)
+				env_add_one(env, node.argv[i]);
+		}
+		i++;
+	}
+	return(status);
+}
 
 // si no hay igual > key = line
 // 		si key existe -> nada
@@ -99,22 +125,9 @@ int	exec_export(t_cmdnode node, t_shcontext *env)
 		i = 0;
 		while (env->env[i])
 			print_export_style(env->env[i++]);
+		return (0);
 	}
 	else
-	{
-		i = 1;
-		while (i < node.argc)
-		{
-			if (node.argv[i][0] == '='
-				|| ft_isdigit(node.argv[i][0]) || ft_strchr(node.argv[i], '-'))
-				my_perror_arg("error. Not a valid identifier", node.argv[i]);
-			else if (ft_strchri(node.argv[i], '=') != -1)
-				process_assignment(node.argv[i], env);
-			else if (envvar_index(node.argv[i], env) == -1)
-				env_add_one(env, node.argv[i]);
-			i++;
-		}
-	}
-	return (0);
+		return(export_vars(node, env));
 }
 

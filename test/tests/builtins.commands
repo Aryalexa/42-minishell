@@ -11,4 +11,18 @@ echo "$MARIA $MAY"
 echo "$NUEVO $USER"
 echo $NUEVO $USER
 env | grep MARIA
+echo "cd sr 🌼"
+echo $?
+echo "cd sr df 🌼"
+echo $?
+touch readonly.txt
+chmod 444 readonly.txt
+echo "'FALLO' > readonly.txt 🌼"
+echo $?
+echo "export = ABC 🌼"
+echo $?
+echo "export ABC = 🌼"
+echo $?
+echo hola
+echo $?
 echo fin
