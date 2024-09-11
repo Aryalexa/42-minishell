@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/11 13:41:53 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,10 @@ int	expand_quotes(char *code, int *i, char	**val, t_shcontext *env)
 			free(dollar_val);
 		}
 		else
-			(*val)[j++] = code[(*i)++];
+		{
+			*val = ft_strappendc_inplace(*val, code[(*i)++]);
+			j++;
+		}
 	}
 	(*val)[j] = '\0';
 	(*i)++;

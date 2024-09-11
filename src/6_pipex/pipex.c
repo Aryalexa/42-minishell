@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 20:01:39 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/11 13:11:12 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,8 +170,8 @@ void	my_exec(t_cmdnode node, t_shcontext *env)
 		close(pipefd[1]);
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
-		if (wait(&status) == -1)
-			my_perror_exit("wait error");
+		// if (wait(&status) == -1)
+		// 	my_perror_exit("wait error");
 		//if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
 		//	return ;
 	}
@@ -193,6 +193,7 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 	if (n_nodes == 1 && check_builtin(nodes[i]) >= 0)
 		process_and_execs(nodes[i], env);
 	else
+	{
 		while (i < n_nodes)
 		{
 			debug_int("new node-------------------", i); //
@@ -202,6 +203,8 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 				my_exec(nodes[i], env);
 			i++;
 		}
+		while (wait(NULL) > 0);
+	}
 	dup2(default_in, STDIN_FILENO);
 	dup2(default_out, STDOUT_FILENO);
 	debug("exit pipex\n");

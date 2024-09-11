@@ -7,5 +7,8 @@ export | grep MARIA
 env | grep MA | sort
 unset MARIA
 echo $MARIA $MAY
+echo "$MARIA $MAY"
+echo "$NUEVO $USER"
+echo $NUEVO $USER
 env | grep MARIA
 echo fin
