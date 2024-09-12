@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/11 17:23:04 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/12 18:14:22 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@
  * - si es relativo: si es comando built-in o no
  * 
  */
-int	solve_path(t_cmdnode *node, char *env[])
+int	solve_path(t_cmdnode *node, char *env[], int *status)
 {
 	char		*cmd_path;	
 
 	if (!node->cmd)
-		return (0);
+		return (1);
 	if (node->cmd[0] == '/')
 		return (1);
 	else
@@ -43,6 +43,7 @@ int	solve_path(t_cmdnode *node, char *env[])
 		if (!cmd_path)
 		{
 			my_perror_arg("command not found 🌸", node->cmd);
+			*status = 127;
 			return (0);
 		}
 		free(node->cmd);
@@ -72,12 +73,6 @@ int	process_infiles(int n, t_infile	*infiles)
 	int			fdin;
 
 	j = 0;
-	while (j < n)
-	{
-		if (infiles[j].type == F_HEREDOC)
-			infiles[j].fd = here_doc(infiles[j].filename_delim);
-		j++;
-	}
 	j = 0;
 	while (j < n)
 	{
@@ -131,7 +126,7 @@ int	process_outfiles(int n, t_outfile *outfiles)
 int	process_and_execs(t_cmdnode node, t_shcontext *env)
 {
 	int st;
-	
+
 	st = process_infiles(node.redir.n_in, node.redir.infiles);
 	if (st != 0)
 		return (st);
@@ -170,8 +165,6 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 		my_perror_exit("error: fork failed.");
 	if (pid == 0)
 	{
-		// lectura: pipe con contenido
-		// escritura SDTOUT
 		debug("child execs"); //
 		close(pipefd[0]);
 		if (!node->last_node)
@@ -195,6 +188,31 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 	}
 }
 
+
+void process_heredocs(int n_nodes, t_cmdnode *nodes)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < n_nodes)
+	{
+		debug_int("NODO:", i);
+		j = 0;
+		while (j < nodes[i].redir.n_in)
+		{
+			if (nodes[i].redir.infiles[j].type == F_HEREDOC)
+			{
+				nodes[i].redir.infiles[j].fd
+					= here_doc(nodes[i].redir.infiles[j].filename_delim);
+			}
+			j++;
+		}
+		i++;
+	}
+
+}
+
 /**
  * execute
  * it marks the last node
@@ -206,9 +224,12 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 	int	default_out;
 	int	status;
 
+	status = 0;
 	default_in = dup(STDIN_FILENO);
 	default_out = dup(STDOUT_FILENO);
 	i = 0;
+
+	process_heredocs(n_nodes, nodes);
 	if (n_nodes == 1 && check_builtin(nodes[i]) >= 0)
 		env->status = process_and_execs(nodes[i], env);
 	else
@@ -218,7 +239,7 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 			debug_int("new node-------------------", i); //
 			if (i == n_nodes - 1)
 				nodes[i].last_node = 1;
-			if (solve_path(&(nodes[i]), env->env))
+			if (solve_path(&(nodes[i]), env->env, &status))
 				my_exec(&(nodes[i]), env);
 			i++;
 		}

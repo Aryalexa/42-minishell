@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/11 14:01:10 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/12 17:06:37 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	expand_dollar(char *code, int *i, char **val, t_shcontext *env)
 	{
 		(*i) += 2;
 		*val = ft_itoa(env->status);
+		free(var);
 		return (ft_strlen(*val));
 	}
 	(*i)++;
