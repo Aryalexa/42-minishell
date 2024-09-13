@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/12 18:24:44 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/13 17:47:25 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,27 @@ char	*get_env_var(char *var_key, t_shcontext *env)
 
 /**
  * if quotes are open, q_char is " OR ' , otherwise NULL
+ * - input= $<quote> - we came from open quotes
+ * - input = $<quote> - new open quotes
+ * - input = $\0 OR $<reserved> OR $<space>
+ * 
  */
 int	expand_dollar_simple(char *code, int *i, char **val, char q_char)
 {
 	//ft_printf("---🍇in:expand_dollar code:%s\n", code);
-	if (!code[*i + 1] || is_reserved_all(code[*i + 1]))
+	if (!code[*i + 1] || is_reserved_all(code[*i + 1])
+		|| ft_isspace(code[*i + 1]))
 	{
+		debug_str("input:", &code[*i]);
 		if (code[*i + 1] == q_char)
 			*val = ft_strdup("$");
-		//ft_printf("----just one dollar!\n");
 		else if (is_quote(code[*i + 1]))
 			*val = ft_strdup("");
 		else
+		{
+			debug("qchar entro!");
 			*val = ft_strdup("$");
-		//ft_printf("---🍇out:expand_dollar\n");
+		}
 		return (1);
 	}
 	return (0);
@@ -58,7 +65,8 @@ int	expand_dollar(char *code, int *i, char **val, t_shcontext *env)
 
 	var = my_calloc(ft_strlen(code) + 1, 1);
 	j = 0;
-	if (!code[*i + 1] || is_reserved_all(code[*i + 1]))
+	if (!code[*i + 1] || is_reserved_all(code[*i + 1])
+		|| ft_isspace(code[*i + 1]))
 	{
 		(*i)++;
 		free(var);

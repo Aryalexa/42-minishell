@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/12 17:58:34 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/13 18:30:28 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,42 +104,97 @@ int	read_line(char **line)
 		i++;
 		r = read(0, &c, 1);
 	}
-	buffer[i] = '\n';
-	buffer[++i] = '\0';
+	// buffer[i] = '\n';
+	// buffer[++i] = '\0';
+	buffer[i] = '\0';
 	*line = buffer;
-	free(buffer);
+	//free(buffer);
 	return (r);
 }
 
-int	here_doc(char *delimiter)
+int	expand_dollar_simplehd(char *code, int *i, char **val)
+{
+	if (!code[*i + 1] || !ft_isalnum(code[*i + 1]))
+	{
+		*val = ft_strdup("$");
+		return (1);
+	}
+	return (0);
+}
+
+/**
+ * substitute line with its expanded version.
+ * It also saves a '\n' at the end
+ * line "hola $USER at $HOME"
+ * new_line "hola username ar home/username"
+ */
+void	expand_heredoc(char **line, t_shcontext *env)
+{
+	int		i;
+	char	*new_line;
+	char	*dollar_exp;
+	int		j;
+
+	i = 0;
+	new_line = my_calloc(ft_strlen(*line) + 1, 1);
+	j = 0;
+	while ((*line)[i])
+	{
+		if ((*line)[i] == '$')
+		{
+			j += expand_dollar_simplehd(*line, &i, &dollar_exp);
+			j += expand_dollar(*line, &i, &dollar_exp, env);
+			new_line = ft_strjoin_inplace(&new_line, dollar_exp);
+			free(dollar_exp);
+		}
+		else
+		{
+			new_line = ft_strappendc_inplace(new_line, (*line)[i++]);
+			j++;
+		}
+	}
+	new_line = ft_strappendc_inplace(new_line, '\n');
+	free(*line);
+	*line = new_line;
+}
+
+int	here_doc(char *delimiter, t_shcontext *env)
 {
 	pid_t	pid;
 	int		pipe_fd[2];
 	char	*line;
 
 	if (pipe(pipe_fd) == -1)
-		exit(1); // TODO
+		exit(1);
 	pid = fork();
 	if (pid == 0)
 	{
 		close(pipe_fd[0]);
 		while (read_line(&line))
 		{
-			// write(2, line, ft_strlen(line));
-			// write(1, "]", 1);
-			line[ft_strlen(line) - 1] = '\0';
-			if (ft_strcmp(line, delimiter) == 0)
+			debug_str("line=", line);
+			debug_int("str(line)=", ft_strlen(line));
+			debug_str("delimeter=", delimiter);
+			debug_int("str(delimiter)=", ft_strlen(delimiter));
+			debug_int("compare", ft_strncmp(line, delimiter, 2));  //
+			//line[ft_strlen(line) - 1] = '\0';
+			if (ft_strncmp(line, delimiter, 2) == 0)
 				exit(0);
-			line[ft_strlen(line)] = '\n';
+			debug("BEFORE EXPAND HEREDOC");
+			expand_heredoc(&line, env);
+			debug("SALIO DEL EXPAND HEREDOC");
+			debug_str("line", line);  //
+			//line[ft_strlen(line) - 1] = '\n';
+			
 			write(pipe_fd[1], line, ft_strlen(line));
+			//write(pipe_fd[1], "\n", 1);
+			free(line);
 		}
 		return (0);
 	}
 	else
 	{
 		close(pipe_fd[1]);
-		//dup2(pipe_fd[0], STDIN_FILENO);
-		wait(NULL);
-		return (pipe_fd[0]);
+		return (wait(NULL), pipe_fd[0]);
 	}
 }

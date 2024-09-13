@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:57:31 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 15:38:22 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/13 14:57:18 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		check_builtin(t_cmdnode node);
 char	*find_path(char *cmd, char *env[]);
 void	printerr_cur_cmd(char *cmd);
 void	close_and_dup(int pipefd[], int is_child);
-int		here_doc(char *delimiter);
+int		here_doc(char *delimiter, t_shcontext *env);
 //PIPEX
 void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env);
 

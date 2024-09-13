@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/12 18:14:22 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/13 16:21:51 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,8 +143,9 @@ int	process_and_execs(t_cmdnode node, t_shcontext *env)
 	else
 	{
 		debug_str("cmd:", node.cmd);
-		execve(node.cmd, node.argv, (char *const *)env->env);
-		return (0);
+		if (node.cmd)
+			execve(node.cmd, node.argv, (char *const *)env->env);
+		return (env->status);
 	}
 }
 
@@ -189,7 +190,7 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 }
 
 
-void process_heredocs(int n_nodes, t_cmdnode *nodes)
+void process_heredocs(int n_nodes, t_cmdnode *nodes, t_shcontext *env)
 {
 	int	i;
 	int	j;
@@ -204,7 +205,7 @@ void process_heredocs(int n_nodes, t_cmdnode *nodes)
 			if (nodes[i].redir.infiles[j].type == F_HEREDOC)
 			{
 				nodes[i].redir.infiles[j].fd
-					= here_doc(nodes[i].redir.infiles[j].filename_delim);
+					= here_doc(nodes[i].redir.infiles[j].filename_delim, env);
 			}
 			j++;
 		}
@@ -229,7 +230,7 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 	default_out = dup(STDOUT_FILENO);
 	i = 0;
 
-	process_heredocs(n_nodes, nodes);
+	process_heredocs(n_nodes, nodes, env);
 	if (n_nodes == 1 && check_builtin(nodes[i]) >= 0)
 		env->status = process_and_execs(nodes[i], env);
 	else

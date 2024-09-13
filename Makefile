@@ -14,6 +14,7 @@ LIBFT_DIR  = $(SRCDIR)/1_libft
 LIBFT	= $(LIBFT_DIR)/libft.a
 
 SRCS = $(filter-out $(wildcard $(LIBFT_DIR)/*.c), $(shell find $(SRCDIR) -name '*.c'))
+# ls src/*/*
 # SRCS	=	3_utils/utils.c \
 # 			3_utils/debug.c \
 # 			3_utils/error.c \
