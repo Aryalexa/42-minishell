@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/12 17:06:37 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/12 18:24:44 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ int	expand_dollar(char *code, int *i, char **val, t_shcontext *env)
 		return (ft_strlen(*val));
 	}
 	(*i)++;
-	while (code[*i] && !is_reserved_all(code[*i]) && !ft_isspace(code[*i]))
+	//while (code[*i] && !is_reserved_all(code[*i]) && !ft_isspace(code[*i]))
+	while (code[*i] && ft_isalnum(code[*i]))
 		var[j++] = code[(*i)++];
 	*val = get_env_var(var, env);
 	free(var);

@@ -10,6 +10,8 @@ echo $MARIA $MAY
 echo "$MARIA $MAY"
 echo "$NUEVO $USER"
 echo $NUEVO $USER
+export AA=$HOME$HOME
+echo $USER.$HOMEhddfdf5.$HOME
 env | grep MARIA
 echo "cd sr 🌼"
 echo $?

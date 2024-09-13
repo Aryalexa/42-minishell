@@ -1,6 +1,4 @@
 echo heredoc
-<< a | cat
-student
-and
-a
+echo "<< a | cat 🌼 "
 ls
+echo "- [x] ls | cat << a | echo hola | <<  a | << h cat > out | exit 🌼 "
