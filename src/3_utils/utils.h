@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/18 16:32:23 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,15 @@ int		is_reserved_all(char c);
 int		is_quote(char c);
 void	debug(char *msg);
 void	debug_int(char *fdname, int fdint);
-void	debug_str(char *name_desc, char* str);
-void    debug_env(t_shcontext *env);
+void	debug_str(char *name_desc, char *str);
+void	debug_env(t_shcontext *env);
 void	swap_and_free_strings(char **s1, char **s2);
 void	free_node(t_cmdnode node);
 void	free_nodes(int n_nodes, t_cmdnode *nodes);
+void	signal_main(void);
+void	signal_father(void);
+void	signal_child(void);
+void	signal_heredoc(void);
+void	signal_ignore(void);
 
 #endif

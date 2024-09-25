@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/12 17:10:39 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/18 16:17:33 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,26 +73,27 @@ void	run_command(char *input, t_shcontext *env)
 
 int	main(int argc, char **argv, char *envp[])
 {
-	t_shcontext		env;
+	t_shcontext	env;
 	char		*input;
 
 	env.o_env = envp;
 	env.env = create_env(envp, &env.n_env);
 	env.status = 0;
-
 	(void)argc;
 	(void)argv;
 	while (1)
 	{
+		signal_main();
 		if (isatty(STDIN_FILENO))
 		{
 			input = readline(ANSI_COLOR_MAGENTA "minishell> " ANSI_COLOR_RESET);
-			if (input)
+			if (!input)
+				my_perror_exit("exit");
+			else
 				add_history(input);
 		}
 		else
 			input = get_next_line(STDIN_FILENO);
-		//Ctrl+D and NULL management to exit program //if (input == NULL)
 		run_command(input, &env);
 		free(input);
 	}

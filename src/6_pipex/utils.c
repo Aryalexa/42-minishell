@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/13 18:30:28 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/18 16:26:18 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,7 @@ int	here_doc(char *delimiter, t_shcontext *env)
 	pid = fork();
 	if (pid == 0)
 	{
+		signal_heredoc();
 		close(pipe_fd[0]);
 		while (read_line(&line))
 		{

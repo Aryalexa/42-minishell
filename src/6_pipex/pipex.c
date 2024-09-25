@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/13 16:21:51 by macastro         ###   ########.fr       */
+/*   Updated: 2024/09/18 16:35:23 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,7 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 		my_perror_exit("error: fork failed.");
 	if (pid == 0)
 	{
+		signal_child();
 		debug("child execs"); //
 		close(pipefd[0]);
 		if (!node->last_node)
@@ -178,6 +179,7 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 	}
 	else
 	{
+		signal_father();
 		node->pid = pid;	
 		close(pipefd[1]);
 		dup2(pipefd[0], STDIN_FILENO);
@@ -202,6 +204,7 @@ void process_heredocs(int n_nodes, t_cmdnode *nodes, t_shcontext *env)
 		j = 0;
 		while (j < nodes[i].redir.n_in)
 		{
+		signal_ignore();
 			if (nodes[i].redir.infiles[j].type == F_HEREDOC)
 			{
 				nodes[i].redir.infiles[j].fd
