@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/18 16:35:23 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/25 17:29:56 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,8 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 	if (pid == 0)
 	{
 		signal_child();
+		debug("🌵EXE child - signal_child");
+
 		debug("child execs"); //
 		close(pipefd[0]);
 		if (!node->last_node)
@@ -180,6 +182,8 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 	else
 	{
 		signal_father();
+		debug("🌵EXE parent - signal_father");
+
 		node->pid = pid;	
 		close(pipefd[1]);
 		dup2(pipefd[0], STDIN_FILENO);
@@ -204,7 +208,6 @@ void process_heredocs(int n_nodes, t_cmdnode *nodes, t_shcontext *env)
 		j = 0;
 		while (j < nodes[i].redir.n_in)
 		{
-		signal_ignore();
 			if (nodes[i].redir.infiles[j].type == F_HEREDOC)
 			{
 				nodes[i].redir.infiles[j].fd
@@ -214,7 +217,6 @@ void process_heredocs(int n_nodes, t_cmdnode *nodes, t_shcontext *env)
 		}
 		i++;
 	}
-
 }
 
 /**

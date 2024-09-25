@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:48:10 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/18 16:17:16 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/25 16:34:12 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	my_handler_father(int signum)
 	if (signum == SIGINT)
 		printf("\n");
 	else
+	// 131
 		ft_printf("Quit (core dumped)\n");
 }
 

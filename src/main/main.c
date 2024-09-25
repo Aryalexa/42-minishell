@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/18 16:17:33 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/25 16:14:19 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int	main(int argc, char **argv, char *envp[])
 	while (1)
 	{
 		signal_main();
+		debug("🌵MAIN - signal_main");
 		if (isatty(STDIN_FILENO))
 		{
 			input = readline(ANSI_COLOR_MAGENTA "minishell> " ANSI_COLOR_RESET);

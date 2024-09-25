@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/18 16:26:18 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/09/25 17:37:43 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ int	here_doc(char *delimiter, t_shcontext *env)
 	if (pid == 0)
 	{
 		signal_heredoc();
+		debug("1 🌵HD child - signal_heredoc");
 		close(pipe_fd[0]);
 		while (read_line(&line))
 		{
@@ -191,10 +192,17 @@ int	here_doc(char *delimiter, t_shcontext *env)
 			//write(pipe_fd[1], "\n", 1);
 			free(line);
 		}
-		return (0);
+		if (!line[0])
+		{
+			ft_putstr_fd("🔴EOFFFFF", 2);
+		}
+		exit(0);
 	}
 	else
 	{
+		signal_ignore();
+		debug("🌵HD parent - signal_ignore");
+
 		close(pipe_fd[1]);
 		return (wait(NULL), pipe_fd[0]);
 	}
