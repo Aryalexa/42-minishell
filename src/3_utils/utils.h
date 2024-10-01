@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/18 16:32:23 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/01 21:32:16 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "../1_libft/libft.h"
 # include "../2_structs/structs.h"
+# include <sys/ioctl.h>
 
 # define ANSI_COLOR_RED     "\x1b[31m"
 # define ANSI_COLOR_GREEN   "\x1b[32m"

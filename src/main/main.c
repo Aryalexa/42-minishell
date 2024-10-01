@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/25 16:14:19 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/01 21:30:20 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+// int	g_sigintsrc;
 /**
  * the original env that main receives has a null terminator
  * This creates a copy and returns the env and the number of items.
@@ -79,8 +80,9 @@ int	main(int argc, char **argv, char *envp[])
 	env.o_env = envp;
 	env.env = create_env(envp, &env.n_env);
 	env.status = 0;
-	(void)argc;
-	(void)argv;
+	// g_sigintsrc = 0;
+	// debug("g_sigintsrc = 0");
+	(void)argc, (void)argv;
 	while (1)
 	{
 		signal_main();

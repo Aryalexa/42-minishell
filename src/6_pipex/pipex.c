@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/25 17:29:56 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/01 21:30:08 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
  */
 int	solve_path(t_cmdnode *node, char *env[], int *status)
 {
-	char		*cmd_path;	
+	char		*cmd_path;
 
 	if (!node->cmd)
 		return (1);
@@ -145,7 +145,9 @@ int	process_and_execs(t_cmdnode node, t_shcontext *env)
 		debug_str("cmd:", node.cmd);
 		if (node.cmd)
 			execve(node.cmd, node.argv, (char *const *)env->env);
+		debug_int("execve failed, status:", env->status);
 		return (env->status);
+		// return (127);
 	}
 }
 
@@ -196,7 +198,7 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 }
 
 
-void process_heredocs(int n_nodes, t_cmdnode *nodes, t_shcontext *env)
+int process_heredocs(int n_nodes, t_cmdnode *nodes, t_shcontext *env)
 {
 	int	i;
 	int	j;
@@ -212,10 +214,61 @@ void process_heredocs(int n_nodes, t_cmdnode *nodes, t_shcontext *env)
 			{
 				nodes[i].redir.infiles[j].fd
 					= here_doc(nodes[i].redir.infiles[j].filename_delim, env);
+				if (env->status == 130)
+					return (0);
 			}
 			j++;
 		}
 		i++;
+	}
+	return (1);
+}
+/**
+ * 
+	if (WIFEXITED(status)) // returns true if the child terminated normally
+	-> // returns the exit status of the child.
+	else if (WIFSIGNALED(status)) // child terminated, bc signal not handled
+	-> //  signal that terminated the child process
+	else if (WIFSTOPPED(status)) // returns a nonzero value if the child process is stopped
+	->  //  signal that caused the child process to stop
+	else
+	-> status
+
+ */
+int	get_signal_status(int status)
+{
+	if (WIFEXITED(status))
+	{
+		debug_int("child terminated . WEXITSTATUS(status)", WEXITSTATUS(status));
+		return (WEXITSTATUS(status));
+		// debug_int("child terminated . status", status);
+		// if (g_sigintsrc == 1)
+		// {
+		// 	debug_int("heredoc", g_sigintsrc);
+		// 	g_sigintsrc = 0;
+		// 	debug("g_sigintsrc = 0");
+		// 	return (130);
+		// }
+		// else
+		// {
+		// 	debug_int("cat", g_sigintsrc);
+		// 	return (WEXITSTATUS(status));
+		// }
+	}
+	else if (WIFSIGNALED(status))
+	{
+		debug_int("child singnal not-h term. status:", 128 + WTERMSIG(status));
+		return (128 + WTERMSIG(status));
+	}
+	// else if (WIFSTOPPED(status)) // status == 127
+	// {
+	// 	debug_int("child stopped. status:", 128 + WSTOPSIG(status));
+	// 	return (status);
+	// }
+	else
+	{
+		debug_int("else. status:", status);
+		return (status);
 	}
 }
 
@@ -235,7 +288,8 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 	default_out = dup(STDOUT_FILENO);
 	i = 0;
 
-	process_heredocs(n_nodes, nodes, env);
+	if(!process_heredocs(n_nodes, nodes, env))
+		return ;
 	if (n_nodes == 1 && check_builtin(nodes[i]) >= 0)
 		env->status = process_and_execs(nodes[i], env);
 	else
@@ -258,7 +312,9 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 			debug_int("wait - Status:", status);
 			i++;
 		}
-		env->status = status % 255;
+		debug_int("🐥status after wait BEFORE: ", status);
+		env->status = get_signal_status(status) % 255;
+		debug_int("🐥status after wait: ", env->status);
 	}
 	dup2(default_in, STDIN_FILENO);
 	dup2(default_out, STDOUT_FILENO);

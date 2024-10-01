@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/25 16:15:05 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/01 21:30:27 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define MAX_NODES	100
 # define MAX_ARGS	100
 # define MAX_FILES	100
-# define DEBUG		1
+# define DEBUG		0
 
 typedef enum e_built_ins
 {
@@ -88,6 +88,7 @@ typedef struct s_shcontext
 
 }	t_shcontext;
 
+// extern int	g_sigintsrc;
 typedef int	(*t_FP) (t_cmdnode node, t_shcontext *env);
 
 #endif

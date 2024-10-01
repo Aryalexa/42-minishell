@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/25 17:37:43 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/01 21:42:16 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,7 @@ int	here_doc(char *delimiter, t_shcontext *env)
 	if (pid == 0)
 	{
 		signal_heredoc();
+		//parar ejecucion
 		debug("1 🌵HD child - signal_heredoc");
 		close(pipe_fd[0]);
 		while (read_line(&line))
@@ -192,10 +193,9 @@ int	here_doc(char *delimiter, t_shcontext *env)
 			//write(pipe_fd[1], "\n", 1);
 			free(line);
 		}
-		if (!line[0])
-		{
-			ft_putstr_fd("🔴EOFFFFF", 2);
-		}
+		// if (!line[0])
+			// ft_putstr_fd("🔴EOFFFFF", 2); // 
+		my_perror_arg("\nwarning: heredoc delimited by EOF. Wanted", delimiter);
 		exit(0);
 	}
 	else

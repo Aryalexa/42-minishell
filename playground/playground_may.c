@@ -1,10 +1,10 @@
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdlib.h>
+// #include <stdio.h>
+// #include <readline/readline.h>
+// #include <readline/history.h>
+// #include <stdlib.h>
 
-//#include <stdio.h>
-#include <unistd.h>
+// #include <stdio.h>
+// #include <unistd.h>
 // void test_terminal_tty()
 // {
 // 	char *name = ttyname(STDIN_FILENO);
@@ -22,37 +22,43 @@
 	
 // }
 
-// #include <stdio.h>
-// #include <unistd.h>
-// #include <termios.h>
-// #include <sys/ioctl.h>
-// // disable echo
-// void test_iotcl()
-// {
-// 	struct termios term;
+#include <stdio.h>
+#include <unistd.h>
+#include <termios.h>
+#include <sys/ioctl.h>
+// disable echo
+void test_iotcl_1()
+{
+	struct termios term;
 
-// 	// Get the current terminal attributes using ioctl
-// 	if (ioctl(STDIN_FILENO, TIOCGETA, &term) == -1)
-// 		perror("ioctl TCGETS");
-// 	// Disable echo
-// 	term.c_lflag &= ~ECHO;
-// 	// Set the terminal attributes using ioctl
-// 	if (ioctl(STDIN_FILENO, TIOCSETA, &term) == -1)
-// 		perror("ioctl TCSETS");
+	// Get the current terminal attributes using ioctl
+	if (ioctl(STDIN_FILENO, TCGETS, &term) == -1)
+		perror("ioctl TCGETS");
 
-// 	printf("Echo is now off. Type something: ");
-// 	char buffer[100];
-// 	fgets(buffer, sizeof(buffer), stdin);
-// 	printf("\nYou typed: %s\n", buffer);
+	// Disable echo
+	term.c_lflag &= ~ECHO;
+	// Set the terminal attributes using ioctl
+	if (ioctl(STDIN_FILENO, TCSETS, &term) == -1)
+		perror("ioctl TCSETS");
 
-// 	// Restore original settings
-// 	if (ioctl(STDIN_FILENO, TIOCGETA, &term) == -1)
-// 		perror("ioctl TCGETS");
-// 	term.c_lflag |= ECHO;
-// 	if (ioctl(STDIN_FILENO, TIOCSETA, &term) == -1)
-// 		perror("ioctl TCSETS");
+	printf("Echo is now off. Type something: ");
+	char buffer[100];
+	fgets(buffer, sizeof(buffer), stdin);
+	printf("\nYou typed: %s\n", buffer);
 
-// }
+	// Restore original settings
+	if (ioctl(STDIN_FILENO, TCGETS, &term) == -1)
+		perror("ioctl TCGETS");
+	term.c_lflag |= ECHO;
+	if (ioctl(STDIN_FILENO, TCSETS, &term) == -1)
+		perror("ioctl TCSETS");
+}
+
+void test_ioctl_2()
+{
+	ioctl(0, TIOCSTI, "\n");
+
+}
 
 // #include <stdio.h>
 // #include <unistd.h>
@@ -171,23 +177,23 @@ string, preparing it for the next call to tgetstr.
 
 
 
-int main(void) {
-    while (1) {
-        char *input = readline("Enter a command: ");
-        printf("You entered: %s\n", input);
-        //rl_on_new_line();
-    }
-    return 0;
-}
+// int main(void) {
+//     while (1) {
+//         char *input = readline("Enter a command: ");
+//         printf("You entered: %s\n", input);
+//         //rl_on_new_line();
+//     }
+//     return 0;
+// }
 
-/*
+
 int main()
 {
 	//test_terminal();
 	//test_env();
-	//test_iotcl();
+	test_iotcl();
 	// test_tc_getset_att();
-	test_terminfo();
-}*/
+	//test_terminfo();
+}
 
 // gcc playground/playground_may.c -lreadline -lncurses
