@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/01 21:42:16 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/01 22:15:34 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ int	here_doc(char *delimiter, t_shcontext *env)
 	pid_t	pid;
 	int		pipe_fd[2];
 	char	*line;
+	int		status;
 
 	if (pipe(pipe_fd) == -1)
 		exit(1);
@@ -170,7 +171,6 @@ int	here_doc(char *delimiter, t_shcontext *env)
 	if (pid == 0)
 	{
 		signal_heredoc();
-		//parar ejecucion
 		debug("1 🌵HD child - signal_heredoc");
 		close(pipe_fd[0]);
 		while (read_line(&line))
@@ -204,6 +204,14 @@ int	here_doc(char *delimiter, t_shcontext *env)
 		debug("🌵HD parent - signal_ignore");
 
 		close(pipe_fd[1]);
-		return (wait(NULL), pipe_fd[0]);
+		// return (wait(NULL), pipe_fd[0]);
+		waitpid(pid, &status, 0);  // Wait for the child process to finish
+
+		if (status == 33280)  // Si el hijo terminó por señal -> 33280 % 250 == 130
+		{
+			env->status = 130;
+			return (-1);  // Devolvemos un valor que indica fallo
+		}
+		return (pipe_fd[0]);
 	}
 }
