@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/01 22:15:34 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/02 13:37:50 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,29 +87,28 @@ int	read_line(char **line)
 {
 	char	*buffer;
 	int		i;
-	int		r;
+	int		n_read;
 	char	c;
 
-	i = 0;
-	r = 0;
-	buffer = (char *)malloc(10000);
-	if (!buffer)
-		return (-1);
+	buffer = (char *)my_calloc(10000, 1);
 	write(1, "> ", 2);
-	r = read(0, &c, 1);
-	while (r && c != '\n' && c != '\0')
+	i = 0;
+	n_read = 0;
+	n_read = read(0, &c, 1);
+	if (c == '\0')
+		return (0);
+	while (c != '\n')
 	{
 		if (c != '\n' && c != '\0')
 			buffer[i] = c;
 		i++;
-		r = read(0, &c, 1);
+		n_read = read(0, &c, 1);
+		if (n_read == 0)
+			c = '\0';
 	}
-	// buffer[i] = '\n';
-	// buffer[++i] = '\0';
 	buffer[i] = '\0';
 	*line = buffer;
-	//free(buffer);
-	return (r);
+	return (n_read);
 }
 
 int	expand_dollar_simplehd(char *code, int *i, char **val)
@@ -175,10 +174,10 @@ int	here_doc(char *delimiter, t_shcontext *env)
 		close(pipe_fd[0]);
 		while (read_line(&line))
 		{
-			debug_str("line=", line);
-			debug_int("str(line)=", ft_strlen(line));
-			debug_str("delimeter=", delimiter);
-			debug_int("str(delimiter)=", ft_strlen(delimiter));
+			debug_str("line=", line); //
+			debug_int("str(line)=", ft_strlen(line)); //
+			debug_str("delimeter=", delimiter); //
+			debug_int("str(delimiter)=", ft_strlen(delimiter)); //
 			debug_int("compare", ft_strncmp(line, delimiter, 2));  //
 			//line[ft_strlen(line) - 1] = '\0';
 			if (ft_strncmp(line, delimiter, 2) == 0)
@@ -194,7 +193,7 @@ int	here_doc(char *delimiter, t_shcontext *env)
 			free(line);
 		}
 		// if (!line[0])
-			// ft_putstr_fd("🔴EOFFFFF", 2); // 
+		// 	ft_putstr_fd("🔴EOFFFFF", 2); // 
 		my_perror_arg("\nwarning: heredoc delimited by EOF. Wanted", delimiter);
 		exit(0);
 	}

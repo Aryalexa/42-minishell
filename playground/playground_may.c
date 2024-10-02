@@ -60,33 +60,33 @@ void test_ioctl_2()
 
 }
 
-// #include <stdio.h>
-// #include <unistd.h>
-// #include <termios.h>
-// // disable echo
-// void test_tc_getset_att()
-// {
-// 	struct termios term;
+#include <stdio.h>
+#include <unistd.h>
+#include <termios.h>
+// disable echo
+void test_tc_getset_att()
+{
+	struct termios term;
 
-// 	// Get the current terminal attributes
-// 	if (tcgetattr(STDIN_FILENO, &term) == -1)
-// 		perror("tcgetattr");
+	// Get the current terminal attributes
+	if (tcgetattr(STDIN_FILENO, &term) == -1)
+		perror("tcgetattr");
 
-// 	// Disable echo
-// 	term.c_lflag &= ~ECHO;
-// 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
-// 		perror("tcsetattr");
+	// Disable echo
+	term.c_lflag &= ~ECHO;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+		perror("tcsetattr");
 
-// 	printf("Echo is now off. Type something: ");
-// 	char buffer[100];
-// 	fgets(buffer, sizeof(buffer), stdin);
-// 	printf("\nYou typed: %s\n", buffer);
+	printf("Echo is now off. Type something: ");
+	char buffer[100];
+	fgets(buffer, sizeof(buffer), stdin);
+	printf("\nYou typed: %s\n", buffer);
 
-// 	// Restore original settings
-// 	term.c_lflag |= ECHO;
-// 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
-// 		perror("tcsetattr");
-// }
+	// Restore original settings
+	term.c_lflag |= ECHO;
+	if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1)
+		perror("tcsetattr");
+}
 
 // void test_env()
 // {
@@ -191,7 +191,7 @@ int main()
 {
 	//test_terminal();
 	//test_env();
-	test_iotcl();
+	test_iotcl_1();
 	// test_tc_getset_att();
 	//test_terminfo();
 }
