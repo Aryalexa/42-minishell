@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 13:30:17 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 18:09:59 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	export_vars(t_cmdnode node, t_shcontext *env)
 		if (node.argv[i][0] == '='
 			|| ft_isdigit(node.argv[i][0]) || ft_strchr(node.argv[i], '-'))
 		{
-			my_perror_arg("error. Not a valid identifier", node.argv[i]);
+			my_perr_arg("error. Not a valid identifier", node.argv[i]);
 			status = 1;
 		}
 		else

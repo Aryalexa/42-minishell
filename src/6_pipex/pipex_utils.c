@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 16:04:58 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 18:09:59 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	solve_path(t_cmdnode *node, char *env[], int *status)
 		cmd_path = find_path(node->cmd, env);
 		if (!cmd_path)
 		{
-			my_perror_arg("command not found 🌸", node->cmd);
+			my_perr_arg("command not found 🌸", node->cmd);
 			*status = 127;
 			return (0);
 		}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 15:43:14 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 17:33:41 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 18:24:24 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,37 @@ void	expand_heredoc(char **line, t_shcontext *env)
 	*line = new_line;
 }
 
-int	here_doc(char *delimiter, t_shcontext *env)
+void	here_doc_child(char *del, int pipe_fd[2], t_shcontext *env)
+{
+	char	*line;
+
+	signal_heredoc();
+	debug("🌵HD child - signal_heredoc"); //
+	close(pipe_fd[0]);
+	while (1)
+	{
+		line = readline(ANSI_COLOR_GREEN "> " ANSI_COLOR_RESET);
+		if (!line)
+			my_perr_arg_exit(
+				"warning: heredoc delimited by EOF. Wanted", del);
+		if (ft_strncmp(line, del, 2) == 0)
+			exit(0);
+		expand_heredoc(&line, env);
+		write(pipe_fd[1], line, ft_strlen(line));
+		free(line);
+	}
+}
+
+/**
+ * HEREDOC process
+ * It uses a pipe.
+ * @arg del: delimiter
+ * @arg env: context variable
+ */
+int	here_doc(char *del, t_shcontext *env)
 {
 	pid_t	pid;
 	int		pipe_fd[2];
-	char	*line;
 	int		status;
 
 	if (pipe(pipe_fd) == -1)
@@ -88,22 +114,8 @@ int	here_doc(char *delimiter, t_shcontext *env)
 	pid = fork();
 	if (pid == 0)
 	{
-		signal_heredoc();
-		debug("1 🌵HD child - signal_heredoc");
-		close(pipe_fd[0]);
-		// while (read_line(&line))
-		while (readline(line))
-		{
-			if (ft_strncmp(line, delimiter, 2) == 0)
-				exit(0);
-			expand_heredoc(&line, env);
-			write(pipe_fd[1], line, ft_strlen(line));
-			free(line);
-		}
-		// if (!line[0])
-		// 	ft_putstr_fd("🔴EOFFFFF", 2); // 
-		my_perror_arg("\nwarning: heredoc delimited by EOF. Wanted", delimiter);
-		exit(0);
+		here_doc_child(del, pipe_fd, env);
+		return (0);
 	}
 	else
 	{
@@ -111,11 +123,9 @@ int	here_doc(char *delimiter, t_shcontext *env)
 		debug("🌵HD parent - signal_ignore"); //
 		close(pipe_fd[1]);
 		waitpid(pid, &status, 0);
-		if (status == 33280) // Si el hijo terminó por señal -> 33280 % 250 == 130
-		{
-			env->status = 130;
+		env->status = status % 255;
+		if (env->status == 130)
 			return (-1);
-		}
 		return (pipe_fd[0]);
 	}
 }

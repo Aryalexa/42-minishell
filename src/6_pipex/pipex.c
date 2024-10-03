@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 16:40:04 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 18:33:25 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,10 @@ int	process_outfiles(int n, t_outfile *outfiles)
 	return (0);
 }
 
+/**
+ * Process infiles, outfiles and execution.
+ * @return exit status
+ */
 int	process_and_execs(t_cmdnode node, t_shcontext *env)
 {
 	int	st;
@@ -114,7 +118,7 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 		my_perror_exit("error: fork failed.");
 	if (pid == 0)
 	{
-		signal_child(); //
+		signal_child();
 		debug("🌵EXE child - signal_child"); //
 		close(pipefd[0]);
 		if (!node->last_node)
@@ -125,7 +129,7 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 	}
 	else
 	{
-		signal_father(); //
+		signal_father();
 		debug("🌵EXE parent - signal_father"); //
 		node->pid = pid;
 		close(pipefd[1]);
@@ -148,13 +152,13 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 	status = 0;
 	default_in = dup(STDIN_FILENO);
 	default_out = dup(STDOUT_FILENO);
-	i = 0;
 	if (!process_heredocs(n_nodes, nodes, env))
 		return ;
-	if (n_nodes == 1 && check_builtin(nodes[i]) >= 0)
-		env->status = process_and_execs(nodes[i], env);
+	if (n_nodes == 1 && check_builtin(nodes[0]) >= 0)
+		env->status = process_and_execs(nodes[0], env);
 	else
 	{
+		i = 0;
 		while (i < n_nodes)
 		{
 			debug_int("new node-------------------", i); //
@@ -168,12 +172,12 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 		while (i < n_nodes)
 		{
 			waitpid(nodes[i].pid, &status, 0);
-			debug_int("wait - Status:", status);
+			debug_int("wait - Status:", status); //
 			i++;
 		}
-		debug_int("🐥status after wait BEFORE: ", status);
+		debug_int("🐥status after wait BEFORE: ", status); //
 		env->status = get_signal_status(status) % 255;
-		debug_int("🐥status after wait: ", env->status);
+		debug_int("🐥status after wait: ", env->status); //
 	}
 	dup2(default_in, STDIN_FILENO);
 	dup2(default_out, STDOUT_FILENO);

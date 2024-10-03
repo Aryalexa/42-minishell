@@ -3,14 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:45:44 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/02 18:36:31 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 18:09:59 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
+
+void	my_perror(char *msg)
+{
+	write(2, msg, ft_strlen(msg));
+	write(2, "\n", 1);
+}
 
 void	my_perror_exit(char *msg)
 {
@@ -19,18 +25,21 @@ void	my_perror_exit(char *msg)
 	exit(1);
 }
 
-void	my_perror(char *msg)
-{
-	write(2, msg, ft_strlen(msg));
-	write(2, "\n", 1);
-}
-
-void	my_perror_arg(char *msg, char *var_name)
+void	my_perr_arg(char *msg, char *var_name)
 {
 	write(2, msg, ft_strlen(msg));
 	write(2, ": ", 2);
 	write(2, var_name, ft_strlen(var_name));
 	write(2, "\n", 1);
+}
+
+void	my_perr_arg_exit(char *msg, char *var_name)
+{
+	write(2, msg, ft_strlen(msg));
+	write(2, ": ", 2);
+	write(2, var_name, ft_strlen(var_name));
+	write(2, "\n", 1);
+	exit(1);
 }
 
 /**
