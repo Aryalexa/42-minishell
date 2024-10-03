@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 21:47:15 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 23:58:53 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_shcontext
 	int			n_env;		// number of env vars
 	char		**o_env;	//ORIGINAL
 	int			status;
+	char		open_quote;
 
 }	t_shcontext;
 

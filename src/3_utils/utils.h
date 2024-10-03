@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 18:09:59 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/04 00:02:19 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ void	my_perr_arg(char *msg, char *var_name);
 void	my_perr_arg_exit(char *msg, char *var_name);
 void	*my_malloc(size_t size);
 void	*my_calloc(size_t count, size_t size);
-int		is_reserved(char c);
-int		is_reserved_all(char c);
-int		is_quote(char c);
+int		isreserved(char c);
+int		isreservedall(char c);
+int		isquote(char c);
 void	debug(char *msg);
 void	debug_int(char *fdname, int fdint);
 void	debug_str(char *name_desc, char *str);

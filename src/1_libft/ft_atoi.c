@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 20:09:09 by macastro          #+#    #+#             */
-/*   Updated: 2023/06/13 20:09:12 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/04 00:03:14 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "libft.h"
+
 
 /*
 	The atoi() function converts the initial portion of the string pointed to
@@ -25,7 +25,7 @@ int	ft_atoi(const char *str)
 	number = 0;
 	sign = 1;
 	i = 0;
-	while (ft_isspace(str[i]))
+	while (isspace(str[i]))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
@@ -50,7 +50,7 @@ int	ft_atoi_hex(const char *str, int b)
 	number = 0;
 	sign = 1;
 	i = 0;
-	while (ft_isspace(str[i]))
+	while (isspace(str[i]))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{

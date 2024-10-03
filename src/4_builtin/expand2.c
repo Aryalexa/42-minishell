@@ -1,37 +1,14 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   expand2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/16 14:46:28 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/04 00:02:19 by macastro         ###   ########.fr       */
+/*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
+/*   Updated: 2024/10/03 22:06:57 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "utils.h"
-
-/**
- * is <, > or |
- */
-int	isreserved(char c)
-{
-	return (c == '<' || c == '>' || c == '|');
-}
-
-/**
- * is <, >, |, " or '
- */
-int	isreservedall(char c)
-{
-	return (c == '<' || c == '>' || c == '|'
-		|| c == '"' || c == '\'');
-}
-
-int	isquote(char c)
-{
-	return (c == '"' || c == '\'');
-}
-
+#include "builtin.h"
 

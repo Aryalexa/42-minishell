@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 15:43:14 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 20:26:10 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 22:12:12 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	expand_heredoc(char **line, t_shcontext *env)
 		if ((*line)[i] == '$')
 		{
 			j += expand_dollar_simplehd(*line, &i, &dollar_exp);
-			j += expand_dollar(*line, &i, &dollar_exp, env);
+			j += expand_dollar_aux(*line, &i, &dollar_exp, env);
 			new_line = ft_strjoin_inplace(&new_line, dollar_exp);
 			free(dollar_exp);
 		}

@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:57:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 20:26:03 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/04 00:03:14 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*read_word(const char *input, int *i)
 	q_char = '\0';
 	j = *i;
 	while (input[j]
-		&& ((!q_char && !(is_reserved(input[j]) || ft_isspace(input[j])))
+		&& ((!q_char && !(isreserved(input[j]) || isspace(input[j])))
 			|| q_char))
 	{
 		if (!q_char && (input[j] == '"' || input[j] == '\''))

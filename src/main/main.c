@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 21:45:57 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 23:59:09 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static t_shcontext	create_env(char *envp[])
 	env.o_env = envp;
 	env.env = dup_env(envp, &env.n_env);
 	env.status = 0;
+	env.open_quote = '\0';
 	return (env);
 }
 

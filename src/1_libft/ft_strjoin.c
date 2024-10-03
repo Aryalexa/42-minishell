@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/04 19:47:46 by macastro          #+#    #+#             */
-/*   Updated: 2024/07/15 14:56:40 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/04 00:07:28 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,22 @@ char	*ft_strjoin_inplace(char **s1, const char *s2)
 
 	joined = ft_strjoin(*s1, s2);
 	free(*s1);
+	*s1 = joined;
+	return (*s1);
+}
+
+/**
+ * Returns a the same s1 pointer, but now pointing to the concatenation.
+ * Memory safe (it makes a free of the previous value);
+ * And also frees s2.
+*/
+char	*ft_strjoin_inplace2(char **s1, char **s2)
+{
+	char	*joined;
+
+	joined = ft_strjoin(*s1, s2);
+	free(*s1);
+	free(*s2);
 	*s1 = joined;
 	return (*s1);
 }

@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:48:47 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 19:57:08 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 22:12:12 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int		exec_export(t_cmdnode node, t_shcontext *env);
 int		exec_unset(t_cmdnode node, t_shcontext *env);
 int		exec_pwd(t_cmdnode node, t_shcontext *env);
 char	*expand_text(char *code, t_shcontext *env);
-int		expand_dollar(char *code, int *i, char **val, t_shcontext *env);
+int		expand_dollar_aux(char *code, int *i, char **val, t_shcontext *env);
+int		expand_dollar_simple(char *text, int *i, char **val, char q_char);
 int		envvar_index(char *key_srch, t_shcontext *env);
 void	update_envvar(char *key, char *value, t_shcontext *env);
 void	get_kv(char *line, char **key, char **value);
