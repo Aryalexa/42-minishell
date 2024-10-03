@@ -6,39 +6,39 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 15:43:14 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 16:06:29 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:33:41 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	read_line(char **line)
-{
-	char	*buffer;
-	int		i;
-	int		n_read;
-	char	c;
+// int	read_line(char **line)
+// {
+// 	char	*buffer;
+// 	int		i;
+// 	int		n_read;
+// 	char	c;
 
-	buffer = (char *)my_calloc(10000, 1);
-	write(1, "> ", 2);
-	i = 0;
-	n_read = 0;
-	n_read = read(0, &c, 1);
-	if (c == '\0')
-		return (0);
-	while (c != '\n')
-	{
-		if (c != '\n' && c != '\0')
-			buffer[i] = c;
-		i++;
-		n_read = read(0, &c, 1);
-		if (n_read == 0)
-			c = '\0';
-	}
-	buffer[i] = '\0';
-	*line = buffer;
-	return (n_read);
-}
+// 	buffer = (char *)my_calloc(10000, 1);
+// 	write(1, "> ", 2);
+// 	i = 0;
+// 	n_read = 0;
+// 	n_read = read(0, &c, 1);
+// 	if (c == '\0')
+// 		return (0);
+// 	while (c != '\n')
+// 	{
+// 		if (c != '\n' && c != '\0')
+// 			buffer[i] = c;
+// 		i++;
+// 		n_read = read(0, &c, 1);
+// 		if (n_read == 0)
+// 			c = '\0';
+// 	}
+// 	buffer[i] = '\0';
+// 	*line = buffer;
+// 	return (n_read);
+// }
 
 /**
  * substitute line with its expanded version.
@@ -91,7 +91,8 @@ int	here_doc(char *delimiter, t_shcontext *env)
 		signal_heredoc();
 		debug("1 🌵HD child - signal_heredoc");
 		close(pipe_fd[0]);
-		while (read_line(&line))
+		// while (read_line(&line))
+		while (readline(line))
 		{
 			if (ft_strncmp(line, delimiter, 2) == 0)
 				exit(0);

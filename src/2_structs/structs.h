@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/02 18:36:30 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:52:23 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ typedef struct s_shcontext
 
 }	t_shcontext;
 
-// extern int	g_sigintsrc;
+extern int	g_sigintsrc;
 typedef int	(*t_FP) (t_cmdnode node, t_shcontext *env);
 
 #endif

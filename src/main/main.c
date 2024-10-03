@@ -6,13 +6,14 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 15:37:43 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:33:04 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	g_sigintsrc;
+int	g_sigintsrc;
+
 /**
  * the original env that main receives has a null terminator
  * This creates a copy and returns the env and the number of items.
@@ -79,14 +80,17 @@ int	main(int argc, char **argv, char *envp[])
 	env.o_env = envp;
 	env.env = create_env(envp, &env.n_env);
 	env.status = 0;
-	// g_sigintsrc = 0;
+	g_sigintsrc = 0;
 	(void)argc, (void)argv;
 	while (1)
 	{
+		g_sigintsrc = 0;
 		signal_main();
 		if (isatty(STDIN_FILENO))
 		{
 			input = readline(ANSI_COLOR_MAGENTA "minishell> " ANSI_COLOR_RESET);
+			if (g_sigintsrc == 1)
+				env.status = 130;
 			if (!input)
 				my_perror_exit("exit");
 			else

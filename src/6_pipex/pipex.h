@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:57:31 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 16:09:19 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:43:25 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ void	close_and_dup(int pipefd[], int is_child);
 int     expand_dollar_simplehd(char *code, int *i, char **val);
 int		here_doc(char *delimiter, t_shcontext *env);
 int		solve_path(t_cmdnode *node, char *env[], int *status);
-int		read_line(char **line);
 void	expand_heredoc(char **line, t_shcontext *env);
 int		process_heredocs(int n_nodes, t_cmdnode *nodes, t_shcontext *env);
 int		here_doc(char *delimiter, t_shcontext *env);
 int		get_signal_status(int status);
+// int		read_line(char **line);
 //PIPEX
 void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env);
 

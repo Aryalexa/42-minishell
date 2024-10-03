@@ -6,23 +6,21 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:48:10 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/02 18:37:17 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:32:04 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
-//exit_status = 130; !!
-// debug("g_sigintsrc = 1");
-// g_sigintsrc = 1;
+// rl_on_new_line();
+// rl_replace_line("", 0);
+// rl_redisplay();
 
 void	my_handler_c(int signum)
 {
 	(void)signum;
-	ft_printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	g_sigintsrc = 1;
+	ioctl(0, TIOCSTI, "\n");
 }
 
 void	my_handler_father(int signum)
