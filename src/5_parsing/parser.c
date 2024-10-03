@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:58:04 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/12 17:37:47 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:50:36 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,18 @@
 int	check_word_and_vars(t_token token, t_cmdnode *node, t_shcontext *env)
 {
 	char	*new_val;
+
 	if (token.type == TKN_WORD || token.type == TKN_ENVAR)
 	{
-		//ft_printf("token BEFORE: %s, %i\n", token.val, token.type);
 		new_val = expand_token_val(token.val, env);
-		//ft_printf("token AFTER: %s\n", token.val);
 		if (!node->cmd)
 		{
-			// ft_printf("cmd found: %s\n", token.val); //
 			node->cmd = new_val;
 			node->argv[0] = ft_strdup(new_val);
 			node->argc = 1;
 		}
 		else
 		{
-			// ft_printf("arg found: %s\n", token.val); //
 			node->argv[node->argc] = new_val;
 			node->argc++;
 			if (node->argc >= MAX_ARGS)
@@ -40,24 +37,6 @@ int	check_word_and_vars(t_token token, t_cmdnode *node, t_shcontext *env)
 		}
 	}
 	return (0);
-}
-
-void	read_file(t_token token, t_cmdnode *node, int is_infile, t_shcontext *env)
-{
-	char	*new_val;
-
-	if (token.type == TKN_WORD || token.type == TKN_ENVAR)
-		new_val = expand_token_val(token.val, env);
-	if (is_infile)
-	{
-		debug_str("infile found", new_val);
-		node->redir.infiles[node->redir.n_in].filename_delim = new_val;
-	}
-	else
-	{
-		debug_str("outfile found", new_val);
-		node->redir.outfiles[node->redir.n_out].filename = new_val;
-	}
 }
 
 int	check_infiles(t_tkdata *tkd, t_cmdnode *node, t_shcontext *env)
@@ -144,12 +123,13 @@ int	check_pipe(t_token *tokens, int t, int n_tokens, int *n)
  * builds command nodes
  * returns number of nodes
  */
-int	parse_tokens(t_token *tokens, int n_tokens, t_cmdnode *nodes, t_shcontext *env)
+int	parse_tokens(t_token *tokens, int n_tokens,
+	t_cmdnode *nodes, t_shcontext *env)
 {
-	int	t;
-	int	n;
-	int	ok;
-	t_tkdata tkdata;
+	int			t;
+	int			n;
+	int			ok;
+	t_tkdata	tkdata;
 
 	ft_memset(nodes, '\0', sizeof(t_cmdnode) * MAX_NODES);
 	n = 0;

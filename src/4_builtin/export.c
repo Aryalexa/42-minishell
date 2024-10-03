@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/11 17:14:30 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 13:30:17 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
-
-void	print_export_style(char *line)
-{
-	int	i;
-
-	ft_printf("declare -x ");
-	i = ft_strchri(line, '=');
-	if (i == -1)
-		ft_printf("%s\n", line);
-	else
-	{
-		write(1, line, i + 1);
-		ft_printf("\"%s\"\n", line + i + 1);
-	}
-}
 
 void	env_add_one(t_shcontext *env, char *var)
 {
@@ -45,7 +30,6 @@ void	env_add_one(t_shcontext *env, char *var)
 	env->env = copy;
 	env->n_env++;
 }
-
 
 /**
  * "key=value" -> key, value
@@ -74,8 +58,6 @@ void	process_assignment(char *statement, t_shcontext *env)
 	char	*value;
 
 	get_kv(statement, &key, &value);
-	debug_str("key", key); //
-	debug_str("value", value); //
 	if (envvar_index(key, env) != -1)
 		update_envvar(key, value, env);
 	else
@@ -83,11 +65,12 @@ void	process_assignment(char *statement, t_shcontext *env)
 	free(key);
 	free(value);
 }
-int export_vars(t_cmdnode node, t_shcontext *env)
+
+int	export_vars(t_cmdnode node, t_shcontext *env)
 {
 	int		i;
 	int		status;
-	
+
 	i = 1;
 	status = 0;
 	while (i < node.argc)
@@ -107,7 +90,7 @@ int export_vars(t_cmdnode node, t_shcontext *env)
 		}
 		i++;
 	}
-	return(status);
+	return (status);
 }
 
 // si no hay igual > key = line
@@ -128,6 +111,5 @@ int	exec_export(t_cmdnode node, t_shcontext *env)
 		return (0);
 	}
 	else
-		return(export_vars(node, env));
+		return (export_vars(node, env));
 }
-

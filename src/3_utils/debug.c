@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:45:44 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/02 18:35:56 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@ void	debug(char *msg)
 	write(2, msg, ft_strlen(msg));
 	write(2, "\n", 1);
 	ft_putstr_fd("" ANSI_COLOR_RESET, 2);
-	//1 > 2
-	// ft_printf
-	//reset 1
 }
 
 void	debug_int(char *name_desc, int n)
@@ -35,12 +32,9 @@ void	debug_int(char *name_desc, int n)
 	ft_putnbr_fd(n, 2);
 	write(2, "\n", 1);
 	ft_putstr_fd("" ANSI_COLOR_RESET, 2);
-	//1 > 2
-	// ft_printf
-	//reset 1
 }
 
-void	debug_str(char *name_desc, char* str)
+void	debug_str(char *name_desc, char *str)
 {
 	if (!DEBUG)
 		return ;
@@ -50,14 +44,10 @@ void	debug_str(char *name_desc, char* str)
 	ft_putstr_fd(str, 2);
 	write(2, "\n", 1);
 	ft_putstr_fd("" ANSI_COLOR_RESET, 2);
-	//1 > 2
-	// ft_printf
-	//reset 1
 }
 
-void debug_env(t_shcontext *env)
+void	debug_env(t_shcontext *env)
 {
-	
 	int	i;
 
 	if (!DEBUG)
@@ -70,5 +60,4 @@ void debug_env(t_shcontext *env)
 		i++;
 	}
 	ft_putstr_fd("" ANSI_COLOR_RESET, 2);
-
 }

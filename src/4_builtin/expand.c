@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/13 17:47:25 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 13:30:49 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ char	*get_env_var(char *var_key, t_shcontext *env)
  */
 int	expand_dollar_simple(char *code, int *i, char **val, char q_char)
 {
-	//ft_printf("---🍇in:expand_dollar code:%s\n", code);
 	if (!code[*i + 1] || is_reserved_all(code[*i + 1])
 		|| ft_isspace(code[*i + 1]))
 	{
@@ -54,6 +53,7 @@ int	expand_dollar_simple(char *code, int *i, char **val, char q_char)
 	}
 	return (0);
 }
+
 /**
  * expands code and saves it in val
  * returns the lenght of val
@@ -80,7 +80,6 @@ int	expand_dollar(char *code, int *i, char **val, t_shcontext *env)
 		return (ft_strlen(*val));
 	}
 	(*i)++;
-	//while (code[*i] && !is_reserved_all(code[*i]) && !ft_isspace(code[*i]))
 	while (code[*i] && ft_isalnum(code[*i]))
 		var[j++] = code[(*i)++];
 	*val = get_env_var(var, env);
@@ -99,7 +98,6 @@ int	expand_quotes(char *code, int *i, char	**val, t_shcontext *env)
 	(*i)++;
 	dollar_val = NULL;
 	*val = my_calloc(ft_strchri(&code[*i], q_char) + 1, 1);
-	//ft_printf("---🍏in: expand_quotes\n"); //
 	while (code[*i] != q_char)
 	{
 		if (q_char == '"' && code[*i] == '$')
@@ -117,7 +115,6 @@ int	expand_quotes(char *code, int *i, char	**val, t_shcontext *env)
 	}
 	(*val)[j] = '\0';
 	(*i)++;
-	//ft_printf("---🍏out: expand_quotes, val:%s\n", *val); //
 	return (ft_strlen(*val));
 }
 

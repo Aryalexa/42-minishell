@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/01 21:52:44 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/02 18:36:30 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include "../1_libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
-
 
 # define MAX_NODES	100
 # define MAX_ARGS	100

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:45:44 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/21 13:02:38 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/02 18:36:31 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ void	my_perror_arg(char *msg, char *var_name)
 	write(2, var_name, ft_strlen(var_name));
 	write(2, "\n", 1);
 }
-
-
 
 /**
  * 0 -in

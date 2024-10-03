@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 14:25:59 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 13:29:12 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,19 @@ void	update_envvar(char *key, char *value, t_shcontext *env)
 	free(aux);
 	free(env->env[i]);
 	env->env[i] = line;
+}
+
+void	print_export_style(char *line)
+{
+	int	i;
+
+	ft_printf("declare -x ");
+	i = ft_strchri(line, '=');
+	if (i == -1)
+		ft_printf("%s\n", line);
+	else
+	{
+		write(1, line, i + 1);
+		ft_printf("\"%s\"\n", line + i + 1);
+	}
 }

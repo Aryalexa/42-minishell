@@ -6,63 +6,13 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/01 22:08:44 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:58:23 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <string.h>
-// #include <unistd.h>
-// #include <sys/types.h>
 #include "pipex.h"
 #include <sys/wait.h>
 #include <fcntl.h>
-
-/**
- * changes the node cmd to its full path.
- * return bool: 1 when resolved, 0 if error
- * supported:
- * - ruta relativa o absoluta (empieza con /)
- * - si es relativo: si es comando built-in o no
- * 
- */
-int	solve_path(t_cmdnode *node, char *env[], int *status)
-{
-	char		*cmd_path;
-
-	if (!node->cmd)
-		return (1);
-	if (node->cmd[0] == '/')
-		return (1);
-	else
-	{
-		if (check_builtin(*node) >= 0)
-			return (1);
-		cmd_path = find_path(node->cmd, env);
-		if (!cmd_path)
-		{
-			my_perror_arg("command not found 🌸", node->cmd);
-			*status = 127;
-			return (0);
-		}
-		free(node->cmd);
-		node->cmd = cmd_path;
-		return (1);
-	}
-}
-
-int	exec_builtin(t_cmdnode node, t_shcontext *env)
-{
-	int			i;
-	const t_FP	built_ins[7] = {&exec_echo, &exec_exit,
-		&exec_pwd, &exec_export, &exec_unset, &exec_env, &exec_cd};
-
-	i = check_builtin(node);
-	if (i >= 0)
-		return (built_ins[i](node, env));
-	return (0);
-}
 
 /**
  * infile? then file is new in
@@ -93,6 +43,7 @@ int	process_infiles(int n, t_infile	*infiles)
 	}
 	return (0);
 }
+
 /**
  * outfile? then file new out
  */
@@ -125,7 +76,7 @@ int	process_outfiles(int n, t_outfile *outfiles)
 
 int	process_and_execs(t_cmdnode node, t_shcontext *env)
 {
-	int st;
+	int	st;
 
 	st = process_infiles(node.redir.n_in, node.redir.infiles);
 	if (st != 0)
@@ -133,7 +84,6 @@ int	process_and_execs(t_cmdnode node, t_shcontext *env)
 	st = process_outfiles(node.redir.n_out, node.redir.outfiles);
 	if (st != 0)
 		return (st);
-	debug_str("ARGV 0:", node.argv[0]); //
 	if (check_builtin(node) >= 0)
 	{
 		st = exec_builtin(node, env);
@@ -147,7 +97,6 @@ int	process_and_execs(t_cmdnode node, t_shcontext *env)
 			execve(node.cmd, node.argv, (char *const *)env->env);
 		debug_int("execve failed, status:", env->status);
 		return (env->status);
-		// return (127);
 	}
 }
 
@@ -160,7 +109,6 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 	int	pid;
 	int	status;
 
-	debug_str("executing", node->cmd); //
 	if (pipe(pipefd) == -1)
 		my_perror_exit("pipe failed");
 	pid = fork();
@@ -168,107 +116,23 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 		my_perror_exit("error: fork failed.");
 	if (pid == 0)
 	{
-		signal_child();
-		debug("🌵EXE child - signal_child");
-
-		debug("child execs"); //
+		signal_child(); //
+		debug("🌵EXE child - signal_child"); //
 		close(pipefd[0]);
 		if (!node->last_node)
 			dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
 		status = process_and_execs(*node, env);
-		debug_str("? - Command:", node->cmd); //
-		debug_int("? --->Status", status); //
 		exit(status);
 	}
 	else
 	{
-		signal_father();
-		debug("🌵EXE parent - signal_father");
-
-		node->pid = pid;	
+		signal_father(); //
+		debug("🌵EXE parent - signal_father"); //
+		node->pid = pid;
 		close(pipefd[1]);
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
-		// if (wait(&status) == -1)
-		// 	my_perror_exit("wait error");
-		//if (!WIFEXITED(status) || WEXITSTATUS(status) != 0)
-		//	return ;
-	}
-}
-
-
-int process_heredocs(int n_nodes, t_cmdnode *nodes, t_shcontext *env)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < n_nodes)
-	{
-		debug_int("NODO:", i);
-		j = 0;
-		while (j < nodes[i].redir.n_in)
-		{
-			if (nodes[i].redir.infiles[j].type == F_HEREDOC)
-			{
-				nodes[i].redir.infiles[j].fd
-					= here_doc(nodes[i].redir.infiles[j].filename_delim, env);
-				if (env->status == 130)
-					return (0);
-			}
-			j++;
-		}
-		i++;
-	}
-	return (1);
-}
-/**
- * 
-	if (WIFEXITED(status)) // returns true if the child terminated normally
-	-> // returns the exit status of the child.
-	else if (WIFSIGNALED(status)) // child terminated, bc signal not handled
-	-> //  signal that terminated the child process
-	else if (WIFSTOPPED(status)) // returns a nonzero value if the child process is stopped
-	->  //  signal that caused the child process to stop
-	else
-	-> status
-
- */
-int	get_signal_status(int status)
-{
-	if (WIFEXITED(status))
-	{
-		debug_int("child terminated . WEXITSTATUS(status)", WEXITSTATUS(status));
-		return (WEXITSTATUS(status));
-		// debug_int("child terminated . status", status);
-		// if (g_sigintsrc == 1)
-		// {
-		// 	debug_int("heredoc", g_sigintsrc);
-		// 	g_sigintsrc = 0;
-		// 	debug("g_sigintsrc = 0");
-		// 	return (130);
-		// }
-		// else
-		// {
-		// 	debug_int("cat", g_sigintsrc);
-		// 	return (WEXITSTATUS(status));
-		// }
-	}
-	else if (WIFSIGNALED(status))
-	{
-		debug_int("child singnal not-h term. status:", 128 + WTERMSIG(status));
-		return (128 + WTERMSIG(status));
-	}
-	// else if (WIFSTOPPED(status)) // status == 127
-	// {
-	// 	debug_int("child stopped. status:", 128 + WSTOPSIG(status));
-	// 	return (status);
-	// }
-	else
-	{
-		debug_int("else. status:", status);
-		return (status);
 	}
 }
 
@@ -287,8 +151,7 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 	default_in = dup(STDIN_FILENO);
 	default_out = dup(STDOUT_FILENO);
 	i = 0;
-
-	if(!process_heredocs(n_nodes, nodes, env))
+	if (!process_heredocs(n_nodes, nodes, env))
 		return ;
 	if (n_nodes == 1 && check_builtin(nodes[i]) >= 0)
 		env->status = process_and_execs(nodes[i], env);
@@ -307,8 +170,6 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 		while (i < n_nodes)
 		{
 			waitpid(nodes[i].pid, &status, 0);
-			debug_str("wait - Command:", nodes[i].cmd); //
-			debug_int("wait - PID:", nodes[i].pid);
 			debug_int("wait - Status:", status);
 			i++;
 		}
@@ -318,5 +179,4 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 	}
 	dup2(default_in, STDIN_FILENO);
 	dup2(default_out, STDOUT_FILENO);
-	debug("exit pipex\n");//
 }

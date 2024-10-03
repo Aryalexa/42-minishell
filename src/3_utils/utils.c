@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:46:28 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/21 13:20:21 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/02 18:36:24 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	is_reserved(char c)
 		return (1);
 	return (0);
 }
+
 /**
  * is <, >, |, " or '
  */

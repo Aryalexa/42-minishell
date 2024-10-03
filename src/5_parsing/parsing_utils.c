@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:57:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/08/21 13:29:52 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:50:39 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,27 @@ void	free_tokens(t_token *tokens, int n_tokens)
 	i = 0;
 	while (i < n_tokens)
 	{
-		if(tokens[i].type == TKN_ENVAR ||tokens[i].type == TKN_WORD)
+		if (tokens[i].type == TKN_ENVAR || tokens[i].type == TKN_WORD)
 			free(tokens[i].val);
 		i++;
+	}
+}
+
+void	read_file(t_token token, t_cmdnode *node,
+	int is_infile, t_shcontext *env)
+{
+	char	*new_val;
+
+	if (token.type == TKN_WORD || token.type == TKN_ENVAR)
+		new_val = expand_token_val(token.val, env);
+	if (is_infile)
+	{
+		debug_str("infile found", new_val);
+		node->redir.infiles[node->redir.n_in].filename_delim = new_val;
+	}
+	else
+	{
+		debug_str("outfile found", new_val);
+		node->redir.outfiles[node->redir.n_out].filename = new_val;
 	}
 }

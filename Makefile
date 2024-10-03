@@ -29,11 +29,12 @@ SRCS = $(filter-out $(wildcard $(LIBFT_DIR)/*.c), $(shell find $(SRCDIR) -name '
 # 			4_builtin/cd.c \
 # 			4_builtin/env.c \
 # 			5_parsing/lexer.c \
-# 			5_parsing/lexer_utils.c \
+# 			5_parsing/parsing_utils.c \
 # 			5_parsing/parser.c \
 # 			5_parsing/parsing_print.c \
 # 			6_pipex/pipex.c \
-# 			6_pipex/utils.c \
+# 			6_pipex/pipex_utils.c \
+# 			6_pipex/pipex_utils2.c \
 # 			main/main.c
 # 			#main/test.c
 

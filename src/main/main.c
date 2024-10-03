@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/01 21:30:20 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:37:43 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void	run_command(char *input, t_shcontext *env)
 		ft_printf("syntax error: no exec\n");
 	else
 	{
-		debug(ANSI_COLOR_CYAN "execution call\n" ANSI_COLOR_RESET); //
 		run_exec(n_nodes, nodes, env);
 		free_nodes(n_nodes, nodes);
 	}
@@ -81,12 +80,10 @@ int	main(int argc, char **argv, char *envp[])
 	env.env = create_env(envp, &env.n_env);
 	env.status = 0;
 	// g_sigintsrc = 0;
-	// debug("g_sigintsrc = 0");
 	(void)argc, (void)argv;
 	while (1)
 	{
 		signal_main();
-		debug("🌵MAIN - signal_main");
 		if (isatty(STDIN_FILENO))
 		{
 			input = readline(ANSI_COLOR_MAGENTA "minishell> " ANSI_COLOR_RESET);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/11 16:40:37 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 13:27:12 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ int	checkpath(char	*path)
 	return (0);
 }
 
-
-char *get_path(char *key, t_shcontext *env)
+char	*get_path(char *key, t_shcontext *env)
 {
 	int		i;
 	char	*k;
@@ -35,8 +34,8 @@ char *get_path(char *key, t_shcontext *env)
 	get_kv(env->env[i], &k, &val);
 	free(k);
 	return (val);
-	// 
 }
+
 /**
  * Change directory.
  * it calls chdir and change the env var PWD
