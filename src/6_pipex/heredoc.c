@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 15:43:14 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 20:10:29 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 20:26:10 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ int	process_heredocs(int n_nodes, t_cmdnode *nodes, t_shcontext *env)
 	i = 0;
 	while (i < n_nodes)
 	{
-		debug_int("NODO:", i);
 		j = 0;
 		while (j < nodes[i].redir.n_in)
 		{

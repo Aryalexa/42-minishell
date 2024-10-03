@@ -6,13 +6,13 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 19:07:17 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 21:45:57 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_sigintsrc;
+int	g_sigint_i;
 
 /**
  * the original env that main receives has a null terminator
@@ -72,6 +72,8 @@ static void	run_command(char *input, t_shcontext *env)
 	t_cmdnode	nodes[MAX_NODES];
 	int			n_nodes;
 
+	if (!input || !input[0])
+		return ;
 	n_nodes = run_parser(input, nodes, env);
 	if (n_nodes < 0)
 		ft_printf("syntax error: no exec\n");
@@ -84,7 +86,9 @@ static void	run_command(char *input, t_shcontext *env)
 
 /**
  * MAIN
+ * - using terminal: isatty(STDIN_FILENO) == TRUE
  * - if input is null -> ctrl d -> exit
+ *
  */
 int	main(int argc, char **argv, char *envp[])
 {
@@ -95,12 +99,12 @@ int	main(int argc, char **argv, char *envp[])
 	(void)argc, (void)argv;
 	while (1)
 	{
-		g_sigintsrc = 0;
+		g_sigint_i = 0;
 		signal_main();
 		if (isatty(STDIN_FILENO))
 		{
 			input = readline(ANSI_COLOR_MAGENTA "minishell> " ANSI_COLOR_RESET);
-			if (g_sigintsrc == 1)
+			if (g_sigint_i == 1)
 				env.status = 130;
 			if (!input)
 				my_perror_exit("exit");

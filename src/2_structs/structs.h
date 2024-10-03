@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 16:52:23 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 21:47:15 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define MAX_NODES	100
 # define MAX_ARGS	100
 # define MAX_FILES	100
-# define DEBUG		1
+# define DEBUG		0
 
 typedef enum e_built_ins
 {
@@ -65,14 +65,14 @@ typedef struct s_redir
 	int			n_in;
 	t_infile	infiles[MAX_FILES];		// list of infiles
 	int			n_out;
-	t_outfile	outfiles[MAX_FILES];		// list of outfiles
+	t_outfile	outfiles[MAX_FILES];	// list of outfiles
 }	t_redir;
 
 typedef struct s_cmdnode
 {
-	char	*cmd;		// one command
-	int		argc;		// num of args
-	char	*argv[MAX_ARGS];		// list of args
+	char	*cmd;				// one command
+	int		argc;				// num of args
+	char	*argv[MAX_ARGS];	// list of args
 	t_redir	redir;
 	int		last_node;
 	int		pid;
@@ -81,13 +81,13 @@ typedef struct s_cmdnode
 typedef struct s_shcontext
 {
 	char		**env;		// null ended
-	int			n_env;
+	int			n_env;		// number of env vars
 	char		**o_env;	//ORIGINAL
 	int			status;
 
 }	t_shcontext;
 
-extern int	g_sigintsrc;
+extern int	g_sigint_i;		// flag for SIGINT when interactive
 typedef int	(*t_FP) (t_cmdnode node, t_shcontext *env);
 
 #endif

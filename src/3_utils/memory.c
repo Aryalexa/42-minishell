@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:46:28 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 13:48:12 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 20:32:59 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	free_nodes(int n_nodes, t_cmdnode *nodes)
 	int	i;
 
 	i = 0;
-	debug("free_nodes in\n");
 	while (i < n_nodes)
 	{
 		free_node(nodes[i]);

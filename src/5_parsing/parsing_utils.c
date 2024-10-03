@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:57:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 19:57:08 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 20:26:03 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,7 @@ void	read_file(t_token token, t_cmdnode *node,
 	if (token.type == TKN_WORD || token.type == TKN_ENVAR)
 		new_val = expand_text(token.val, env);
 	if (is_infile)
-	{
-		debug_str("infile found", new_val);
 		node->redir.infiles[node->redir.n_in].filename_delim = new_val;
-	}
 	else
-	{
-		debug_str("outfile found", new_val);
 		node->redir.outfiles[node->redir.n_out].filename = new_val;
-	}
 }

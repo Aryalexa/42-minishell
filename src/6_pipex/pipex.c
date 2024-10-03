@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 20:09:53 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 20:26:15 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	process_infiles(int n, t_infile	*infiles)
 
 /**
  * outfile? then file new out
+ * @return 0 if success, -1 otherwise
  */
 int	process_outfiles(int n, t_outfile *outfiles)
 {
@@ -70,7 +71,6 @@ int	process_outfiles(int n, t_outfile *outfiles)
 		close(fdout);
 		j++;
 	}
-	debug("exit outfiles\n");
 	return (0);
 }
 
@@ -95,7 +95,6 @@ int	process_and_execs(t_cmdnode node, t_shcontext *env)
 	}
 	else
 	{
-		debug_str("cmd:", node.cmd);
 		if (node.cmd)
 			execve(node.cmd, node.argv, (char *const *)env->env);
 		return (env->status);

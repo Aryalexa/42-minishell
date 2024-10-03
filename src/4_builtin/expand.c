@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 19:59:31 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 20:25:48 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,45 +34,41 @@ char	*get_env_var(char *var_key, t_shcontext *env)
  * - input = $\0 OR $<reserved> OR $<space>
  * 
  */
-int	expand_dollar_simple(char *code, int *i, char **val, char q_char)
+int	expand_dollar_simple(char *text, int *i, char **val, char q_char)
 {
-	if (!code[*i + 1] || is_reserved_all(code[*i + 1])
-		|| ft_isspace(code[*i + 1]))
+	if (!text[*i + 1] || is_reserved_all(text[*i + 1])
+		|| ft_isspace(text[*i + 1]))
 	{
-		debug_str("input:", &code[*i]);
-		if (code[*i + 1] == q_char)
+		if (text[*i + 1] == q_char)
 			*val = ft_strdup("$");
-		else if (is_quote(code[*i + 1]))
+		else if (is_quote(text[*i + 1]))
 			*val = ft_strdup("");
 		else
-		{
-			debug("qchar entro!");
 			*val = ft_strdup("$");
-		}
 		return (1);
 	}
 	return (0);
 }
 
 /**
- * expands code and saves it in val
+ * expands text and saves it in val
  * returns the lenght of val
  */
-int	expand_dollar(char *code, int *i, char **val, t_shcontext *env)
+int	expand_dollar(char *text, int *i, char **val, t_shcontext *env)
 {
 	char	*var;
 	int		j;
 
-	var = my_calloc(ft_strlen(code) + 1, 1);
+	var = my_calloc(ft_strlen(text) + 1, 1);
 	j = 0;
-	if (!code[*i + 1] || is_reserved_all(code[*i + 1])
-		|| ft_isspace(code[*i + 1]))
+	if (!text[*i + 1] || is_reserved_all(text[*i + 1])
+		|| ft_isspace(text[*i + 1]))
 	{
 		(*i)++;
 		free(var);
 		return (0);
 	}
-	else if (code[*i + 1] == '?')
+	else if (text[*i + 1] == '?')
 	{
 		(*i) += 2;
 		*val = ft_itoa(env->status);
@@ -80,36 +76,36 @@ int	expand_dollar(char *code, int *i, char **val, t_shcontext *env)
 		return (ft_strlen(*val));
 	}
 	(*i)++;
-	while (code[*i] && ft_isalnum(code[*i]))
-		var[j++] = code[(*i)++];
+	while (text[*i] && ft_isalnum(text[*i]))
+		var[j++] = text[(*i)++];
 	*val = get_env_var(var, env);
 	free(var);
 	return (ft_strlen(*val));
 }
 
-int	expand_quotes(char *code, int *i, char	**val, t_shcontext *env)
+int	expand_quotes(char *text, int *i, char	**val, t_shcontext *env)
 {
 	int		j;
 	char	*dollar_val;
 	char	q_char;
 
 	j = 0;
-	q_char = code[*i];
+	q_char = text[*i];
 	(*i)++;
 	dollar_val = NULL;
-	*val = my_calloc(ft_strchri(&code[*i], q_char) + 1, 1);
-	while (code[*i] != q_char)
+	*val = my_calloc(ft_strchri(&text[*i], q_char) + 1, 1);
+	while (text[*i] != q_char)
 	{
-		if (q_char == '"' && code[*i] == '$')
+		if (q_char == '"' && text[*i] == '$')
 		{
-			j += expand_dollar_simple(code, i, &dollar_val, q_char);
-			j += expand_dollar(code, i, &dollar_val, env);
+			j += expand_dollar_simple(text, i, &dollar_val, q_char);
+			j += expand_dollar(text, i, &dollar_val, env);
 			*val = ft_strjoin_inplace(val, dollar_val);
 			free(dollar_val);
 		}
 		else
 		{
-			*val = ft_strappendc_inplace(*val, code[(*i)++]);
+			*val = ft_strappendc_inplace(*val, text[(*i)++]);
 			j++;
 		}
 	}
@@ -120,7 +116,7 @@ int	expand_quotes(char *code, int *i, char	**val, t_shcontext *env)
 
 /**
  * Expand text.
- * read the text code and returns the expanded version
+ * read the text text and returns the expanded version
  * cases:
  * - " -> interprete
  * - $

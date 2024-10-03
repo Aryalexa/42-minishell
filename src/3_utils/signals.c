@@ -6,21 +6,26 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:48:10 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 20:47:37 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 21:49:16 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "utils.h"
 
-// rl_on_new_line();
-// rl_replace_line("", 0);
-// rl_redisplay();
-
+/**
+ * signal handler.
+ * RL config:
+ * - make "\n" the input
+ * - make rl start in new line
+ * - replace the input for ""
+ * - dislay the readline prompt
+ * Exit status:
+ * - SIGINT flag up 
+ */
 void	my_handler_c(int signum)
 {
 	(void)signum;
-	g_sigintsrc = 1;
-	//ioctl(0, TIOCSTI, "\n");
+	g_sigint_i = 1;
 	ft_printf("\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
