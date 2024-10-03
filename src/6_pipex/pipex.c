@@ -6,7 +6,7 @@
 /*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 15:58:23 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 16:40:04 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,15 +87,13 @@ int	process_and_execs(t_cmdnode node, t_shcontext *env)
 	if (check_builtin(node) >= 0)
 	{
 		st = exec_builtin(node, env);
-		debug_int("builtin status", st);
-		return (st); //TODO
+		return (st);
 	}
 	else
 	{
 		debug_str("cmd:", node.cmd);
 		if (node.cmd)
 			execve(node.cmd, node.argv, (char *const *)env->env);
-		debug_int("execve failed, status:", env->status);
 		return (env->status);
 	}
 }
