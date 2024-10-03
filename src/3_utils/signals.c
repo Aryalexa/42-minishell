@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 13:48:10 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 17:32:04 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 20:47:37 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ void	my_handler_c(int signum)
 {
 	(void)signum;
 	g_sigintsrc = 1;
-	ioctl(0, TIOCSTI, "\n");
+	//ioctl(0, TIOCSTI, "\n");
+	ft_printf("\n");
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
 }
 
 void	my_handler_father(int signum)
