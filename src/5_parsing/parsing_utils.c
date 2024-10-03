@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:57:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 15:50:39 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:57:08 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	read_file(t_token token, t_cmdnode *node,
 	char	*new_val;
 
 	if (token.type == TKN_WORD || token.type == TKN_ENVAR)
-		new_val = expand_token_val(token.val, env);
+		new_val = expand_text(token.val, env);
 	if (is_infile)
 	{
 		debug_str("infile found", new_val);

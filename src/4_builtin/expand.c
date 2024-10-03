@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 13:30:49 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:59:31 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,40 +119,41 @@ int	expand_quotes(char *code, int *i, char	**val, t_shcontext *env)
 }
 
 /**
- * read the code and returns the expanded version
+ * Expand text.
+ * read the text code and returns the expanded version
  * cases:
  * - " -> interprete
  * - $
  * - no nulo
  */
-char	*expand_token_val(char *code, t_shcontext *env)
+char	*expand_text(char *text, t_shcontext *env)
 {
 	int		i;
 	char	*val;
 	char	*aux_val;
 	int		j;
 
+	val = my_calloc(ft_strlen(text) + 1, 1);
 	i = 0;
-	val = my_calloc(ft_strlen(code) + 1, 1);
 	j = 0;
-	while (code[i])
+	while (text[i])
 	{
-		if (is_quote((code)[i]))
+		if (is_quote((text)[i]))
 		{
-			j += expand_quotes(code, &i, &aux_val, env);
+			j += expand_quotes(text, &i, &aux_val, env);
 			val = ft_strjoin_inplace(&val, aux_val);
 			free(aux_val);
 		}
-		else if ((code)[i] == '$')
+		else if ((text)[i] == '$')
 		{
-			j += expand_dollar_simple(code, &i, &aux_val, '\0');
-			j += expand_dollar(code, &i, &aux_val, env);
+			j += expand_dollar_simple(text, &i, &aux_val, '\0');
+			j += expand_dollar(text, &i, &aux_val, env);
 			val = ft_strjoin_inplace(&val, aux_val);
 			free(aux_val);
 		}
 		else
 		{
-			val = ft_strappendc_inplace(val, code[i++]);
+			val = ft_strappendc_inplace(val, text[i++]);
 			j++;
 		}
 	}

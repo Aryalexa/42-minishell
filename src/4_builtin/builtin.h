@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:48:47 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 13:28:54 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:57:08 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int		exec_env(t_cmdnode node, t_shcontext *env);
 int		exec_export(t_cmdnode node, t_shcontext *env);
 int		exec_unset(t_cmdnode node, t_shcontext *env);
 int		exec_pwd(t_cmdnode node, t_shcontext *env);
-char	*expand_token_val(char *code, t_shcontext *env);
+char	*expand_text(char *code, t_shcontext *env);
 int		expand_dollar(char *code, int *i, char **val, t_shcontext *env);
 int		envvar_index(char *key_srch, t_shcontext *env);
 void	update_envvar(char *key, char *value, t_shcontext *env);

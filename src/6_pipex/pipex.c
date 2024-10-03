@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 18:33:25 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 20:09:53 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 {
 	int	pipefd[2];
 	int	pid;
-	int	status;
 
 	if (pipe(pipefd) == -1)
 		my_perror_exit("pipe failed");
@@ -119,18 +118,15 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 	if (pid == 0)
 	{
 		signal_child();
-		debug("🌵EXE child - signal_child"); //
 		close(pipefd[0]);
 		if (!node->last_node)
 			dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[1]);
-		status = process_and_execs(*node, env);
-		exit(status);
+		exit(process_and_execs(*node, env));
 	}
 	else
 	{
 		signal_father();
-		debug("🌵EXE parent - signal_father"); //
 		node->pid = pid;
 		close(pipefd[1]);
 		dup2(pipefd[0], STDIN_FILENO);
@@ -161,7 +157,6 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 		i = 0;
 		while (i < n_nodes)
 		{
-			debug_int("new node-------------------", i); //
 			if (i == n_nodes - 1)
 				nodes[i].last_node = 1;
 			if (solve_path(&(nodes[i]), env->env, &status))
@@ -172,12 +167,9 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 		while (i < n_nodes)
 		{
 			waitpid(nodes[i].pid, &status, 0);
-			debug_int("wait - Status:", status); //
 			i++;
 		}
-		debug_int("🐥status after wait BEFORE: ", status); //
-		env->status = get_signal_status(status) % 255;
-		debug_int("🐥status after wait: ", env->status); //
+		env->status = get_real_exit_status(status) % 255;
 	}
 	dup2(default_in, STDIN_FILENO);
 	dup2(default_out, STDOUT_FILENO);

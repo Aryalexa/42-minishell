@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:56:54 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 15:50:38 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:33:33 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
  * tokenize $
  * 
  */
-int	lexer_aux1(const char *input, t_token *tokens, int *_i, int idx)
+static int	lexer_aux_dollar(const char *input, t_token *tokens,
+	int *_i, int idx)
 {
 	int	i;
 
@@ -36,7 +37,7 @@ int	lexer_aux1(const char *input, t_token *tokens, int *_i, int idx)
 /**
  * tokenize < << > >>
  */
-int	lexer_aux2(const char *input, t_token *tokens, int *_i, int idx)
+static int	lexer_aux_iof(const char *input, t_token *tokens, int *_i, int idx)
 {
 	int	i;
 
@@ -65,7 +66,8 @@ int	lexer_aux2(const char *input, t_token *tokens, int *_i, int idx)
 	return (++idx);
 }
 
-int	update_token(t_token *tokens, int t_i, t_tokenType type, char *value)
+static int	update_token(t_token *tokens, int t_i,
+	t_tokenType type, char *value)
 {
 	if (!value)
 		return (-1);
@@ -74,6 +76,13 @@ int	update_token(t_token *tokens, int t_i, t_tokenType type, char *value)
 	return (t_i + 1);
 }
 
+/**
+ * LEXER
+ * It reads the input and creates an array of tokens.
+ * It just classifies what it encounters in the input.
+ * It identifies some syntax errors.
+ * @return number of created tokens, -1 if error.
+ */
 int	lexer(const char *input, t_token *tokens)
 {
 	int	i;
@@ -87,14 +96,14 @@ int	lexer(const char *input, t_token *tokens)
 		while (ft_isspace(input[i]))
 			i++;
 		if (input[i] == '$')
-			t_i = lexer_aux1(input, tokens, &i, t_i);
+			t_i = lexer_aux_dollar(input, tokens, &i, t_i);
 		else if (input[i] == '|')
 		{
 			tokens[t_i++].type = TKN_PIPE;
 			i++;
 		}
 		else if (input[i] == '<' || input[i] == '>')
-			t_i = lexer_aux2(input, tokens, &i, t_i);
+			t_i = lexer_aux_iof(input, tokens, &i, t_i);
 		else if (input[i])
 			t_i = update_token(tokens, t_i, TKN_WORD, read_word(input, &i));
 		if (t_i >= MAX_TKNS)

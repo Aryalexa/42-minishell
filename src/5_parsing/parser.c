@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:58:04 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 15:50:36 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:57:08 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-int	check_word_and_vars(t_token token, t_cmdnode *node, t_shcontext *env)
+static int	check_word_and_vars(t_token token, t_cmdnode *node,
+	t_shcontext *env)
 {
 	char	*new_val;
 
 	if (token.type == TKN_WORD || token.type == TKN_ENVAR)
 	{
-		new_val = expand_token_val(token.val, env);
+		new_val = expand_text(token.val, env);
 		if (!node->cmd)
 		{
 			node->cmd = new_val;
@@ -39,7 +40,7 @@ int	check_word_and_vars(t_token token, t_cmdnode *node, t_shcontext *env)
 	return (0);
 }
 
-int	check_infiles(t_tkdata *tkd, t_cmdnode *node, t_shcontext *env)
+static int	check_infiles(t_tkdata *tkd, t_cmdnode *node, t_shcontext *env)
 {
 	if (tkd->tokens[*(tkd->cur)].type == TKN_LT
 		|| tkd->tokens[*(tkd->cur)].type == TKN_HRDC)
@@ -68,7 +69,7 @@ int	check_infiles(t_tkdata *tkd, t_cmdnode *node, t_shcontext *env)
 	return (0);
 }
 
-int	check_outfiles(t_tkdata *tkd, t_cmdnode *node, t_shcontext *env)
+static int	check_outfiles(t_tkdata *tkd, t_cmdnode *node, t_shcontext *env)
 {
 	if (tkd->tokens[*(tkd->cur)].type == TKN_GT
 		|| tkd->tokens[*(tkd->cur)].type == TKN_APPD)
@@ -97,7 +98,7 @@ int	check_outfiles(t_tkdata *tkd, t_cmdnode *node, t_shcontext *env)
 	return (0);
 }
 
-int	check_pipe(t_token *tokens, int t, int n_tokens, int *n)
+static int	check_pipe(t_token *tokens, int t, int n_tokens, int *n)
 {
 	if ((t == 0 && tokens[t].type == TKN_PIPE)
 		|| (t == n_tokens - 1 && tokens[t].type == TKN_PIPE))
@@ -120,11 +121,13 @@ int	check_pipe(t_token *tokens, int t, int n_tokens, int *n)
 }
 
 /**
- * builds command nodes
- * returns number of nodes
+ * PARSER
+ * It builds command nodes using the tokens.
+ * It identifies some syntax errors.
+ * @returns number of nodes created, -1 if grammar fails
  */
-int	parse_tokens(t_token *tokens, int n_tokens,
-	t_cmdnode *nodes, t_shcontext *env)
+int	parse_tokens(t_token *tokens, int n_tokens, t_cmdnode *nodes,
+	t_shcontext *env)
 {
 	int			t;
 	int			n;

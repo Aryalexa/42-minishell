@@ -6,39 +6,11 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 15:43:14 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 18:24:24 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/03 20:10:29 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-// int	read_line(char **line)
-// {
-// 	char	*buffer;
-// 	int		i;
-// 	int		n_read;
-// 	char	c;
-
-// 	buffer = (char *)my_calloc(10000, 1);
-// 	write(1, "> ", 2);
-// 	i = 0;
-// 	n_read = 0;
-// 	n_read = read(0, &c, 1);
-// 	if (c == '\0')
-// 		return (0);
-// 	while (c != '\n')
-// 	{
-// 		if (c != '\n' && c != '\0')
-// 			buffer[i] = c;
-// 		i++;
-// 		n_read = read(0, &c, 1);
-// 		if (n_read == 0)
-// 			c = '\0';
-// 	}
-// 	buffer[i] = '\0';
-// 	*line = buffer;
-// 	return (n_read);
-// }
 
 /**
  * substitute line with its expanded version.
@@ -81,7 +53,6 @@ void	here_doc_child(char *del, int pipe_fd[2], t_shcontext *env)
 	char	*line;
 
 	signal_heredoc();
-	debug("🌵HD child - signal_heredoc"); //
 	close(pipe_fd[0]);
 	while (1)
 	{
@@ -120,7 +91,6 @@ int	here_doc(char *del, t_shcontext *env)
 	else
 	{
 		signal_ignore();
-		debug("🌵HD parent - signal_ignore"); //
 		close(pipe_fd[1]);
 		waitpid(pid, &status, 0);
 		env->status = status % 255;
@@ -158,31 +128,20 @@ int	process_heredocs(int n_nodes, t_cmdnode *nodes, t_shcontext *env)
 
 /**
  * 
-	if (WIFEXITED(status)) // returns true if the child terminated normally
-	-> // returns the exit status of the child.
-	else if (WIFSIGNALED(status)) // child terminated, bc signal not handled
-	-> //  signal that terminated the child process
-	else if WIFSTOPPED(status) returns nonzero value if child process is stopped
-	->  //  signal that caused the child process to stop
-	else
-	-> status
+	if (WIFEXITED(status)) // child terminated normally?
+		-> WEXITSTATUS(status) // returns the exit status of the child.
+	else if (WIFSIGNALED(status)) // child terminated w signal not handled
+		-> 128 + WTERMSIG(status) //  signal that terminated the child process
+	else 
+		-> status // the same
 
  */
-int	get_signal_status(int status)
+int	get_real_exit_status(int status)
 {
 	if (WIFEXITED(status))
-	{
-		debug_int("child terminated . WEXITSTATUS(status)", WEXITSTATUS(status)); //
 		return (WEXITSTATUS(status));
-	}
 	else if (WIFSIGNALED(status))
-	{
-		debug_int("child singnal not-h term. status:", 128 + WTERMSIG(status)); //
 		return (128 + WTERMSIG(status));
-	}
 	else
-	{
-		debug_int("else. status:", status); //
 		return (status);
-	}
 }
