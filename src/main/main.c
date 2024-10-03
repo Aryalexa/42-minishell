@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 17:33:04 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:07:17 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	g_sigintsrc;
  * This creates a copy and returns the env and the number of items.
  * The copy does not have a null terminator.
  */
-char	**create_env(char *env_src[], int *save_size)
+static char	**dup_env(char *env_src[], int *save_size)
 {
 	char	**env;
 	int		size;
@@ -43,7 +43,17 @@ char	**create_env(char *env_src[], int *save_size)
 	return (env);
 }
 
-int	run_parser(char *input, t_cmdnode *nodes, t_shcontext *env)
+static t_shcontext	create_env(char *envp[])
+{
+	t_shcontext	env;
+
+	env.o_env = envp;
+	env.env = dup_env(envp, &env.n_env);
+	env.status = 0;
+	return (env);
+}
+
+static int	run_parser(char *input, t_cmdnode *nodes, t_shcontext *env)
 {
 	int		n_t;
 	int		n_n;
@@ -57,7 +67,7 @@ int	run_parser(char *input, t_cmdnode *nodes, t_shcontext *env)
 	return (n_n);
 }
 
-void	run_command(char *input, t_shcontext *env)
+static void	run_command(char *input, t_shcontext *env)
 {
 	t_cmdnode	nodes[MAX_NODES];
 	int			n_nodes;
@@ -72,15 +82,16 @@ void	run_command(char *input, t_shcontext *env)
 	}
 }
 
+/**
+ * MAIN
+ * - if input is null -> ctrl d -> exit
+ */
 int	main(int argc, char **argv, char *envp[])
 {
 	t_shcontext	env;
 	char		*input;
 
-	env.o_env = envp;
-	env.env = create_env(envp, &env.n_env);
-	env.status = 0;
-	g_sigintsrc = 0;
+	env = create_env(envp);
 	(void)argc, (void)argv;
 	while (1)
 	{
@@ -93,7 +104,7 @@ int	main(int argc, char **argv, char *envp[])
 				env.status = 130;
 			if (!input)
 				my_perror_exit("exit");
-			else
+			if (input[0] != '\0')
 				add_history(input);
 		}
 		else
