@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/07 17:19:51 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/07 19:26:04 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 	}
 }
 
-void	exec_node_loop(int n_nodes, t_cmdnode nodes[], t_shcontext *env,
+void	exec_pipe_loop(int n_nodes, t_cmdnode nodes[], t_shcontext *env,
 	int *status)
 {
 	int	i;
@@ -109,7 +109,7 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 		env->status = process_and_execs(nodes[0], env);
 	else
 	{
-		exec_node_loop(n_nodes, nodes, env, &status);
+		exec_pipe_loop(n_nodes, nodes, env, &status);
 		i = 0;
 		while (i < n_nodes)
 		{

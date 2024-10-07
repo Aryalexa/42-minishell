@@ -6,12 +6,15 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/07 16:51:21 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/07 19:18:09 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
+/**
+ * @return complete path or NULL if not found in PATH
+ */
 char	*find_path(char *cmd, char *env[])
 {
 	int		i;
@@ -19,8 +22,10 @@ char	*find_path(char *cmd, char *env[])
 	char	*cmd_path;
 
 	i = 0;
-	while (ft_strnstr(env[i], "PATH", 4) == NULL)
+	while (env[i] && ft_strnstr(env[i], "PATH", 4) == NULL)
 		i++;
+	if (!env[i])
+		return (NULL);
 	paths = ft_split(env[i] + 5, ':');
 	i = 0;
 	while (paths[i])
@@ -61,11 +66,11 @@ void	close_and_dup(int pipefd[], int is_child)
 
 /**
  * changes the node cmd to its full path.
- * return bool: 1 when resolved, 0 if error
  * supported:
- * - ruta relativa o absoluta (empieza con /)
- * - si es relativo: si es comando built-in o no
+ * - relative and absolute routes (abs routes start w /)
+ * - if relative: check if built-in or not
  * 
+ * @return bool: 1 when resolved, 0 if error
  */
 int	solve_path(t_cmdnode *node, char *env[], int *status)
 {

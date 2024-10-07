@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 15:43:14 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/07 16:46:16 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/07 19:09:35 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	here_doc_child(char *del, int pipe_fd[2], t_shcontext *env)
 		if (!line)
 			my_perr_arg_exit(
 				"warning: heredoc delimited by EOF. Wanted", del);
-		if (ft_strncmp(line, del, 2) == 0)
+		if (ft_strncmp(line, del, ft_strlen(del) + 1) == 0)
 			exit(0);
 		expand_heredoc(&line, env);
 		write(pipe_fd[1], line, ft_strlen(line));
