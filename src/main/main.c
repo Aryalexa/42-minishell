@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 23:59:09 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/07 20:14:16 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,25 @@ static char	**dup_env(char *env_src[], int *save_size)
 {
 	char	**env;
 	int		size;
+	int		i_src;
 
-	size = 0;
-	while (env_src[size] != NULL)
-		size++;
-	env = malloc((size + 1) * sizeof(char *));
+	i_src = 0;
+	while (env_src[i_src] != NULL)
+		i_src++;
+	env = malloc((i_src + 1) * sizeof(char *));
 	if (!env)
 		return (NULL);
 	size = 0;
-	while (env_src[size] != NULL)
+	i_src = 0;
+	while (env_src[i_src] != NULL)
 	{
-		env[size] = ft_strdup(env_src[size]);
-		if (env[size] == NULL)
-			return (NULL);
-		size++;
+		if (ft_strchr(env_src[i_src], '='))
+		{
+			env[size++] = ft_strdup(env_src[i_src]);
+			if (env[size - 1] == NULL)
+				return (NULL);
+		}
+		i_src++;
 	}
 	env[size] = NULL;
 	*save_size = size + 1;

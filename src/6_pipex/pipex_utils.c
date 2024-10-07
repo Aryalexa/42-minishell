@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/07 19:18:09 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/07 19:57:13 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ char	*find_path(char *cmd, char *env[])
 	char	**paths;
 	char	*cmd_path;
 
+	if (access(cmd, F_OK) == 0)
+		return (ft_strdup(cmd));
 	i = 0;
 	while (env[i] && ft_strnstr(env[i], "PATH", 4) == NULL)
 		i++;
