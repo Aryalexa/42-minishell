@@ -13,32 +13,36 @@ OBJDIR = build
 LIBFT_DIR  = $(SRCDIR)/1_libft
 LIBFT	= $(LIBFT_DIR)/libft.a
 
-SRCS = $(filter-out $(wildcard $(LIBFT_DIR)/*.c), $(shell find $(SRCDIR) -name '*.c'))
+#SRCS = $(filter-out $(wildcard $(LIBFT_DIR)/*.c), $(shell find $(SRCDIR) -name '*.c'))
 # ls src/*/*
-# SRCS	=	3_utils/utils.c \
-# 			3_utils/debug.c \
-# 			3_utils/error.c \
-# 			3_utils/memory.c \
-# 			4_builtin/builtin.c \
-# 			4_builtin/expand.c \
-# 			4_builtin/echo.c \
-# 			4_builtin/exit.c \
-# 			4_builtin/pwd.c \
-# 			4_builtin/unset.c \
-# 			4_builtin/export.c \
-# 			4_builtin/cd.c \
-# 			4_builtin/env.c \
-# 			5_parsing/lexer.c \
-# 			5_parsing/parsing_utils.c \
-# 			5_parsing/parser.c \
-# 			5_parsing/parsing_print.c \
-# 			6_pipex/pipex.c \
-# 			6_pipex/pipex_utils.c \
-# 			6_pipex/pipex_utils2.c \
-# 			main/main.c
-# 			#main/test.c
+SRCS	=	src/3_utils/utils.c \
+			src/3_utils/debug.c \
+ 			src/3_utils/error.c \
+ 			src/3_utils/memory.c \
+ 			src/3_utils/signals.c \
+ 			src/3_utils/signals2.c \
+ 			src/4_builtin/builtin.c \
+ 			src/4_builtin/expand.c \
+ 			src/4_builtin/expand2.c \
+ 			src/4_builtin/echo.c \
+ 			src/4_builtin/exit.c \
+ 			src/4_builtin/pwd.c \
+ 			src/4_builtin/unset.c \
+ 			src/4_builtin/export.c \
+ 			src/4_builtin/cd.c \
+ 			src/4_builtin/env.c \
+ 			src/5_parsing/lexer.c \
+ 			src/5_parsing/parsing_utils.c \
+ 			src/5_parsing/parser.c \
+ 			src/5_parsing/parsing_print.c \
+ 			src/6_pipex/pipex.c \
+ 			src/6_pipex/heredoc.c \
+ 			src/6_pipex/pipex_utils.c \
+ 			src/6_pipex/pipex_utils2.c \
+			src/main/main.c
+ 			#main/test.c
 
-$(info SRCS: $(SRCS))
+#$(info SRCS: $(SRCS))
 
 #OBJS	=  $(SRCS:.c=.o)
 # $(patsubst search_pattern, replace_pattern, text)
