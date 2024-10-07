@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 16:27:09 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 18:09:59 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/07 16:51:21 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,6 @@ void	close_and_dup(int pipefd[], int is_child)
 		dup2(pipefd[0], STDIN_FILENO);
 		close(pipefd[0]);
 	}
-}
-
-int	expand_dollar_simplehd(char *code, int *i, char **val)
-{
-	if (!code[*i + 1] || !ft_isalnum(code[*i + 1]))
-	{
-		*val = ft_strdup("$");
-		return (1);
-	}
-	return (0);
 }
 
 /**

@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:56:54 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/04 00:03:14 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/07 15:55:56 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	lexer(const char *input, t_token *tokens)
 	t_i = 0;
 	while (input[i] && t_i != -1)
 	{
-		while (isspace(input[i]))
+		while (is_space(input[i]))
 			i++;
 		if (input[i] == '$')
 			t_i = lexer_aux_dollar(input, tokens, &i, t_i);

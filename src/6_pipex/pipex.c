@@ -6,73 +6,13 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 20:26:15 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/07 17:19:51 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 #include <sys/wait.h>
 #include <fcntl.h>
-
-/**
- * infile? then file is new in
- */
-int	process_infiles(int n, t_infile	*infiles)
-{
-	int			j;
-	int			fdin;
-
-	j = 0;
-	j = 0;
-	while (j < n)
-	{
-		if (infiles[j].type == F_HEREDOC)
-		{
-			dup2(infiles[j].fd, STDIN_FILENO);
-			close(infiles[j].fd);
-		}
-		else
-		{
-			fdin = open(infiles[j].filename_delim, O_RDONLY);
-			if (fdin < 0)
-				return (my_perror("*input file error at open"), 1);
-			dup2(fdin, STDIN_FILENO);
-			close(fdin);
-		}
-		j++;
-	}
-	return (0);
-}
-
-/**
- * outfile? then file new out
- * @return 0 if success, -1 otherwise
- */
-int	process_outfiles(int n, t_outfile *outfiles)
-{
-	int	j;
-	int	fdout;
-
-	j = 0;
-	while (j < n)
-	{
-		if (outfiles[j].type == F_APPEND)
-			fdout = open(outfiles[j].filename,
-					O_RDWR | O_CREAT | O_APPEND, 0777);
-		else
-			fdout = open(outfiles[j].filename,
-					O_RDWR | O_CREAT | O_TRUNC, 0777);
-		if (fdout < 0)
-		{
-			my_perror("error at open an outfile");
-			return (1);
-		}
-		dup2(fdout, STDOUT_FILENO);
-		close(fdout);
-		j++;
-	}
-	return (0);
-}
 
 /**
  * Process infiles, outfiles and execution.
@@ -133,6 +73,22 @@ void	my_exec(t_cmdnode *node, t_shcontext *env)
 	}
 }
 
+void	exec_node_loop(int n_nodes, t_cmdnode nodes[], t_shcontext *env,
+	int *status)
+{
+	int	i;
+
+	i = 0;
+	while (i < n_nodes)
+	{
+		if (i == n_nodes - 1)
+			nodes[i].last_node = 1;
+		if (solve_path(&(nodes[i]), env->env, status))
+			my_exec(&(nodes[i]), env);
+		i++;
+	}
+}
+
 /**
  * execute
  * it marks the last node
@@ -153,15 +109,7 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 		env->status = process_and_execs(nodes[0], env);
 	else
 	{
-		i = 0;
-		while (i < n_nodes)
-		{
-			if (i == n_nodes - 1)
-				nodes[i].last_node = 1;
-			if (solve_path(&(nodes[i]), env->env, &status))
-				my_exec(&(nodes[i]), env);
-			i++;
-		}
+		exec_node_loop(n_nodes, nodes, env, &status);
 		i = 0;
 		while (i < n_nodes)
 		{

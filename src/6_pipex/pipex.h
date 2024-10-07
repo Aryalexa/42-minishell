@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:57:31 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 20:11:19 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/07 17:18:44 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,12 @@ int		exec_builtin(t_cmdnode node, t_shcontext *env);
 char	*find_path(char *cmd, char *env[]);
 void	printerr_cur_cmd(char *cmd);
 void	close_and_dup(int pipefd[], int is_child);
-int		expand_dollar_simplehd(char *code, int *i, char **val);
 int		here_doc(char *delimiter, t_shcontext *env);
 int		solve_path(t_cmdnode *node, char *env[], int *status);
 void	expand_heredoc(char **line, t_shcontext *env);
 int		process_heredocs(int n_nodes, t_cmdnode *nodes, t_shcontext *env);
+int		process_infiles(int n, t_infile	*infiles);
+int		process_outfiles(int n, t_outfile *outfiles);
 int		here_doc(char *delimiter, t_shcontext *env);
 int		get_real_exit_status(int status);
 

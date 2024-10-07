@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 15:43:14 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 22:12:12 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/07 16:46:16 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,18 @@ void	expand_heredoc(char **line, t_shcontext *env)
 	int		i;
 	char	*new_line;
 	char	*dollar_exp;
-	int		j;
 
 	new_line = my_calloc(ft_strlen(*line) + 1, 1);
 	i = 0;
-	j = 0;
 	while ((*line)[i])
 	{
 		if ((*line)[i] == '$')
 		{
-			j += expand_dollar_simplehd(*line, &i, &dollar_exp);
-			j += expand_dollar_aux(*line, &i, &dollar_exp, env);
-			new_line = ft_strjoin_inplace(&new_line, dollar_exp);
-			free(dollar_exp);
+			dollar_exp = expand_dollar(*line, &i, env);
+			new_line = ft_strjoin_inplace2(&new_line, &dollar_exp);
 		}
 		else
-		{
 			new_line = ft_strappendc_inplace(new_line, (*line)[i++]);
-			j++;
-		}
 	}
 	new_line = ft_strappendc_inplace(new_line, '\n');
 	free(*line);
