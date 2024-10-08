@@ -3,16 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
+/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/07 20:14:16 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/08 21:23:10 by msoriano         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	g_sigint_i;
+
+/**
+ * after dup, this function will read env til it finds "SHLVL"
+ * if it doesnt find any occurrences it will create SHLVL = 0
+ * if it does, shlvl + 1
+ */
+void	update_shlvl(char *envp[])
+{
+	int		i;
+	int		shlvl;
+
+	i = 0;
+	shlvl = 0;
+	while (envp[i] && ft_strnstr(envp[i], "SHLVL", 5) == NULL)
+		i++;
+	if (!envp[i])
+	{
+		shlvl = 0;
+		//writes on envp SHLVL=0;
+	}
+	else
+	{
+		shlvl = ft_atoi(&envp[i][6]) + 1;
+		//envp[i] is now envp[i] with new shlvl
+	}		
+	debug_int("shlvl", shlvl);
+	debug_str("shlvl_line", envp[i]);
+}
 
 /**
  * the original env that main receives has a null terminator
@@ -54,6 +82,7 @@ static t_shcontext	create_env(char *envp[])
 
 	env.o_env = envp;
 	env.env = dup_env(envp, &env.n_env);
+	update_shlvl(envp);
 	env.status = 0;
 	env.open_quote = '\0';
 	return (env);
