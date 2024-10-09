@@ -3,3 +3,7 @@ echo 'Hello, World!'
 cd /tmp
 pwd
 ls -l | grep "test"
+echo $"'hola'"
+echo "$'hola'"
+echo "'$USER'"
+echo '"$USER"'

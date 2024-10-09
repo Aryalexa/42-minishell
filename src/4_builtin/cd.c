@@ -6,20 +6,18 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/09 13:57:07 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/09 14:41:23 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtin.h"
 
 /**
- * get abs path
+ * check if path exists and we can access
  */
 int	checkpath(char	*path)
 {
-	if (access(path, F_OK) == 0)
-		return (1);
-	return (0);
+	return (access(path, F_OK) == 0);
 }
 
 char	*get_path(char *key, t_shcontext *env)
@@ -36,35 +34,36 @@ char	*get_path(char *key, t_shcontext *env)
 	return (val);
 }
 
-
+/**
+ * update cd env variables: PWD and OLDPWD
+ * - it distinguishes the case when doing "cd .." and parent does not exist.
+ */
 int	update_envvar_cd(t_shcontext *env)
 {
 	char	*cwd;
-	// char	*oldcwd;
+	char	*oldcwd;
 
-	// oldcwd = get_env_var("PWD", env);
+	oldcwd = get_env_var("PWD", env);
 	cwd = getcwd(NULL, 0);
-
 	if (!cwd)
 	{
 		my_perror("cd: error retrieving current directory: getcwd");
-		// update_envvar("OLDPWD", oldcwd, env);
-		// update_envvar("PWD", ft_strjoin_inplace(&oldcwd, "/.."), env);
-		update_envvar("PWD", "/..", env);
-		// free(oldcwd);
-		return (1);
+		update_envvar("OLDPWD", oldcwd, env);
+		update_envvar("PWD", ft_strjoin_inplace(&oldcwd, "/.."), env);
 	}
-	update_envvar("PWD", cwd, env);
-	// update_envvar("OLDPWD", oldcwd, env);
-	free(cwd);
-	// free(oldcwd);
+	else
+	{
+		update_envvar("PWD", cwd, env);
+		update_envvar("OLDPWD", oldcwd, env);
+		free(cwd);
+	}
+	free(oldcwd);
 	return (0);
 }
 
 /**
  * Change directory.
- * it calls chdir and change the env var PWD
- * 
+ * it calls chdir and updates the env vars PWD and OLDPWD
  * 
  */
 int	exec_cd(t_cmdnode node, t_shcontext *env)

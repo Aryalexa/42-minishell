@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/09/10 19:39:39 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/09 14:18:43 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 int	exec_pwd(t_cmdnode node, t_shcontext *env)
 {
-	char	cwd[PATH_MAX];
+	char	*pwd;
 
 	(void) node;
 	(void) env;
-	getcwd(cwd, PATH_MAX);
-	ft_putstr_fd(cwd, 1);
+	pwd = get_env_var("PWD", env);
+	ft_putstr_fd(pwd, 1);
 	write(1, "\n", 1);
+	free(pwd);
 	return (0);
 }

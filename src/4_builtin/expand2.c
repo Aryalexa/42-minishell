@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:47:13 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/07 17:11:18 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/09 18:32:13 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ char	*expand_dollar(char *text, int *i, t_shcontext *env)
 	if (!text[*i + 1] || isreservedall(text[*i + 1]) || is_space(text[*i + 1]))
 	{
 		(*i)++;
-		if (isquote(text[*i + 1]) && text[*i + 1] != env->open_quote)
+		if (!env->open_quote && isquote(text[*i])
+			&& text[*i] != env->open_quote)
 			val = ft_strdup("");
 		else
 			val = ft_strdup("$");

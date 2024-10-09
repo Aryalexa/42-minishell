@@ -1,6 +1,6 @@
 CC		= cc
 
-# FT_SAN = -fsanitize=address
+#FT_SAN = -g3 -fsanitize=address
 EXCFLGS = -lreadline -lncurses
 CFLAGS	= -Wall -Wextra -Werror $(FT_SAN)
 
@@ -22,23 +22,24 @@ SRCS	=	src/3_utils/utils.c \
  			src/3_utils/signals.c \
  			src/3_utils/signals2.c \
  			src/4_builtin/builtin.c \
+ 			src/4_builtin/cd.c \
+ 			src/4_builtin/echo.c \
+ 			src/4_builtin/env.c \
+ 			src/4_builtin/exit.c \
  			src/4_builtin/expand.c \
  			src/4_builtin/expand2.c \
- 			src/4_builtin/echo.c \
- 			src/4_builtin/exit.c \
+ 			src/4_builtin/export.c \
  			src/4_builtin/pwd.c \
  			src/4_builtin/unset.c \
- 			src/4_builtin/export.c \
- 			src/4_builtin/cd.c \
- 			src/4_builtin/env.c \
  			src/5_parsing/lexer.c \
- 			src/5_parsing/parsing_utils.c \
  			src/5_parsing/parser.c \
+ 			src/5_parsing/parsing_utils.c \
  			src/5_parsing/parsing_print.c \
- 			src/6_pipex/pipex.c \
  			src/6_pipex/heredoc.c \
+ 			src/6_pipex/pipex.c \
  			src/6_pipex/pipex_utils.c \
  			src/6_pipex/pipex_utils2.c \
+			src/main/context.c \
 			src/main/main.c
  			#main/test.c
 

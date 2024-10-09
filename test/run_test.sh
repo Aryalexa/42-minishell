@@ -21,7 +21,9 @@ for test_file in "$TEST_DIR"/*.commands; do
     bash < "$test_file" > "$bash_output" 2>&1
     
     # Wait for the custom shell to finish
-    wait
+    #wait
+    sleep 1
+
     # Compare outputs
     if diff "$custom_output" "$bash_output" > /dev/null; then
         echo "$test_name: PASS 💚"
