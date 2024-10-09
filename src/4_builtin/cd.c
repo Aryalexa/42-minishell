@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 13:27:12 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/09 13:57:07 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,31 @@ char	*get_path(char *key, t_shcontext *env)
 	return (val);
 }
 
+
+int	update_envvar_cd(t_shcontext *env)
+{
+	char	*cwd;
+	// char	*oldcwd;
+
+	// oldcwd = get_env_var("PWD", env);
+	cwd = getcwd(NULL, 0);
+
+	if (!cwd)
+	{
+		my_perror("cd: error retrieving current directory: getcwd");
+		// update_envvar("OLDPWD", oldcwd, env);
+		// update_envvar("PWD", ft_strjoin_inplace(&oldcwd, "/.."), env);
+		update_envvar("PWD", "/..", env);
+		// free(oldcwd);
+		return (1);
+	}
+	update_envvar("PWD", cwd, env);
+	// update_envvar("OLDPWD", oldcwd, env);
+	free(cwd);
+	// free(oldcwd);
+	return (0);
+}
+
 /**
  * Change directory.
  * it calls chdir and change the env var PWD
@@ -44,7 +69,6 @@ char	*get_path(char *key, t_shcontext *env)
  */
 int	exec_cd(t_cmdnode node, t_shcontext *env)
 {
-	char	cwd[PATH_MAX];
 	char	*new;
 
 	if (node.argc > 2)
@@ -66,7 +90,5 @@ int	exec_cd(t_cmdnode node, t_shcontext *env)
 		my_perror("Error. Failed to change directory.");
 		return (1);
 	}
-	getcwd(cwd, PATH_MAX);
-	update_envvar("PWD", cwd, env);
-	return (0);
+	return (update_envvar_cd(env));
 }

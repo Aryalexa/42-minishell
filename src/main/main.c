@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/08 21:23:10 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/09 12:38:25 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,27 +19,25 @@ int	g_sigint_i;
  * if it doesnt find any occurrences it will create SHLVL = 0
  * if it does, shlvl + 1
  */
-void	update_shlvl(char *envp[])
+void	update_shlvl(t_shcontext *envp)
 {
 	int		i;
-	int		shlvl;
+	char	*lvl;
 
 	i = 0;
-	shlvl = 0;
-	while (envp[i] && ft_strnstr(envp[i], "SHLVL", 5) == NULL)
+	while (envp->env[i] && ft_strnstr(envp->env[i], "SHLVL", 5) == NULL)
 		i++;
-	if (!envp[i])
+	if (!envp->env[i])
 	{
-		shlvl = 0;
-		//writes on envp SHLVL=0;
+		env_add_one(envp, "SHLVL");
+		update_envvar("SHLVL", "1", envp);
 	}
 	else
 	{
-		shlvl = ft_atoi(&envp[i][6]) + 1;
-		//envp[i] is now envp[i] with new shlvl
+		lvl = ft_itoa(ft_atoi(&envp->env[i][6]) + 1);
+		update_envvar("SHLVL", lvl, envp);
+		free(lvl);
 	}		
-	debug_int("shlvl", shlvl);
-	debug_str("shlvl_line", envp[i]);
 }
 
 /**
@@ -81,10 +79,13 @@ static t_shcontext	create_env(char *envp[])
 	t_shcontext	env;
 
 	env.o_env = envp;
+	debug("copy envp -> env");
 	env.env = dup_env(envp, &env.n_env);
-	update_shlvl(envp);
+	debug("update env");
+	update_shlvl(&env);
 	env.status = 0;
 	env.open_quote = '\0';
+	env.nopipe = 0;
 	return (env);
 }
 
@@ -114,9 +115,12 @@ static void	run_command(char *input, t_shcontext *env)
 		ft_printf("syntax error: no exec\n");
 	else
 	{
+		if (n_nodes == 1)
+			env->nopipe = 1;
 		run_exec(n_nodes, nodes, env);
 		free_nodes(n_nodes, nodes);
 	}
+	env->nopipe = 0;
 }
 
 /**
