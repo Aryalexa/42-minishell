@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:45:44 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 18:09:59 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/09 19:56:47 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,13 @@ void	my_perror_exit(char *msg)
 	write(2, msg, ft_strlen(msg));
 	write(2, "\n", 1);
 	exit(1);
+}
+
+void	my_perror_exit_ok(char *msg, int err)
+{
+	write(2, msg, ft_strlen(msg));
+	write(2, "\n", 1);
+	exit(err);
 }
 
 void	my_perr_arg(char *msg, char *var_name)

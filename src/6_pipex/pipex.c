@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:37:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/07 19:26:04 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/09 20:02:29 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,12 +110,11 @@ void	run_exec(int n_nodes, t_cmdnode nodes[], t_shcontext *env)
 	else
 	{
 		exec_pipe_loop(n_nodes, nodes, env, &status);
-		i = 0;
-		while (i < n_nodes)
-		{
+		signal_ignore();
+		i = -1;
+		while (++i < n_nodes)
 			waitpid(nodes[i].pid, &status, 0);
-			i++;
-		}
+		signal_father();
 		env->status = get_real_exit_status(status) % 255;
 	}
 	dup2(default_in, STDIN_FILENO);

@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/04 00:02:19 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/09 19:53:55 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # define ANSI_COLOR_RESET   "\x1b[0m"
 
 void	my_perror_exit(char *msg);
+void	my_perror_exit_ok(char *msg, int err);
 void	my_perror(char *msg);
 void	my_perr_arg(char *msg, char *var_name);
 void	my_perr_arg_exit(char *msg, char *var_name);

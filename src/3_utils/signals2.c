@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 16:11:18 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 21:49:13 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/09 19:57:18 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,12 @@ void	handler_heredoc(int signum)
 // 	ft_putstr_fd("recibido hijo\n", 2);
 // }
 
-//signal(SIGQUIT, hndlr_hijo);
 void	signal_heredoc(void)
 {
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, handler_heredoc);
 }
 
-//signal(SIGQUIT, hndlr_padre);
 void	signal_ignore(void)
 {
 	signal(SIGQUIT, SIG_IGN);
