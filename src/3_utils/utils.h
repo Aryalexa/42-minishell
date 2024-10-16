@@ -6,14 +6,13 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/09 19:53:55 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:49:20 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
 
-# include "../1_libft/libft.h"
 # include "../2_structs/structs.h"
 # include <sys/ioctl.h>
 

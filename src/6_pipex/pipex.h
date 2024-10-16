@@ -6,14 +6,13 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 19:57:31 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/07 17:18:44 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:49:56 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
-# include "../1_libft/libft.h"
 # include "../2_structs/structs.h"
 # include "../4_builtin/builtin.h"
 //#include <sys/types.h>

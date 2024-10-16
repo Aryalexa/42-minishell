@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msoriano <msoriano@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:01:03 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/03 16:08:31 by msoriano         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:49:43 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define PARSING_H
 # define MAX_TKNS   101
 
-# include "../1_libft/libft.h"
 # include "../2_structs/structs.h"
 # include "../3_utils/utils.h"
 # include "../4_builtin/builtin.h"

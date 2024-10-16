@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 13:45:39 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/09 11:50:16 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/16 18:51:22 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define STRUCTS_H
 
 # include <signal.h>
-# include "../1_libft/libft.h"
+# include "../../ext/libft/include/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
 
