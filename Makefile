@@ -52,8 +52,7 @@ OBJS = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRCS))
 
 all:		$(NAME) 
 
-${NAME}:	${OBJS}
-			${MAKE} -C $(LIBFT_DIR)
+${NAME}:	$(LIBFT) ${OBJS}
 			${CC} ${CFLAGS} $(OBJS) $(LIBFT) $(EXCFLGS) -o ${NAME}
 
 # bonus:		$(NAME_C)
@@ -63,7 +62,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 			$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR):
-			mkdir -p $(OBJDIR)
+			@mkdir -p $(OBJDIR)
 # .c.o:
 # 			$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) 
 
