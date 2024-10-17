@@ -4,3 +4,4 @@ echo "ls -l > /tmp/testfile 🌼"
 cat /tmp/testfile
 echo "rm /tmp/testfile"
 echo $USER
+exit

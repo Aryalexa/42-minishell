@@ -7,3 +7,4 @@ echo $"'hola'"
 echo "$'hola'"
 echo "'$USER'"
 echo '"$USER"'
+exit

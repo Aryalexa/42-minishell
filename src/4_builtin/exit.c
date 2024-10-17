@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/17 16:17:26 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:44:49 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	exec_exit(t_cmdnode node, t_shcontext *env)
 		st = env->status;
 	ft_free_arrstr(env->env);
 	free_node(node);
-	if (env->nopipe)
+	if (env->nopipe && isatty(STDIN_FILENO))
 		ft_printf("exit\n");
 	exit(st);
 }
