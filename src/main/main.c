@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:09:17 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/09 19:54:06 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:16:35 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	main(int argc, char **argv, char *envp[])
 			if (g_sigint_i == 1)
 				env.status = 130;
 			if (!input)
-				my_perror_exit_ok("exit", env.status);
+				my_perror_exit_st("exit", env.status);
 			if (input[0] != '\0')
 				add_history(input);
 		}

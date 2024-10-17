@@ -6,7 +6,7 @@
 /*   By: macastro <macastro@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/13 10:52:33 by msoriano          #+#    #+#             */
-/*   Updated: 2024/10/09 19:05:32 by macastro         ###   ########.fr       */
+/*   Updated: 2024/10/17 16:17:26 by macastro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,7 @@ int	exec_exit(t_cmdnode node, t_shcontext *env)
 		if (ft_atoi_secure(node.argv[1], &st))
 			st = st % 255;
 		else
-		{
-			my_perror("error exit: numeric argument required");
-			return (2);
-		}
+			my_perror_exit_st("exit\nerror exit: numeric argument required", 2);
 	}
 	else
 		st = env->status;

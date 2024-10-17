@@ -41,7 +41,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 			$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR):
-			mkdir -p $(OBJDIR)
+			@mkdir -p $(OBJDIR)
 
 clean:
 			$(RM) $(OBJDIR)
